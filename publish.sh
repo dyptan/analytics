@@ -1,14 +1,14 @@
 #!/bin/bash
-mvn clean package -DskipTests
 
-docker build --rm -f streamer/Dockerfile -t diptan/streamer:latest streamer
-docker build --rm -f trainer/Dockerfile -t diptan/trainer:latest trainer
-docker build --rm -f web/Dockerfile -t diptan/web:latest web
+for module in "$@" 
+do
 
-docker push diptan/web
-docker push diptan/trainer
-docker push diptan/streamer
+mvn clean package -DskipTests -pl $module
 
+docker build --rm -f $module/Dockerfile -t diptan/$module:latest $module
+
+docker push diptan/$module
+done
 # docker run -p 8081:8081 --name trainer diptan/trainer 
 # docker run -p 8080:8080 --name web diptan/web 
 # docker run --name treamer diptan/streamer

@@ -25,7 +25,7 @@
         <!--Scala Tests-->
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.version}</artifactId>
+            <artifactId>scalatest_${scala.major.version}</artifactId>
             <version>3.0.5</version>
             <scope>compile</scope>
         </dependency>
@@ -40,22 +40,22 @@
         <!--Spark-->
          <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_${scala.version}</artifactId>
+            <artifactId>spark-sql_${scala.major.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming-kafka-0-10_${scala.version}</artifactId>
+            <artifactId>spark-streaming-kafka-0-10_${scala.major.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql-kafka-0-10_${scala.version}</artifactId>
+            <artifactId>spark-sql-kafka-0-10_${scala.major.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-mllib_${scala.version}</artifactId>
+            <artifactId>spark-mllib_${scala.major.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
 
@@ -63,35 +63,35 @@
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-netty</artifactId>
-            <version>1.16.1</version>
+            <version>${grpc.version}</version>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
-            <version>1.16.1</version>
+            <version>${grpc.version}</version>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
-            <version>1.16.1</version>
+            <version>${grpc.version}</version>
         </dependency>
 
         <!--Spark HDFS-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
-            <version>2.7.2</version>
+            <version>${hadoop.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-mapreduce-client-core</artifactId>
-            <version>2.7.2</version>
+            <version>${hadoop.version}</version>
         </dependency>
 
         <!--Mongo-->
         <dependency>
             <groupId>org.mongodb.spark</groupId>
-            <artifactId>mongo-spark-connector_${scala.version}</artifactId>
+            <artifactId>mongo-spark-connector_${scala.major.version}</artifactId>
             <version>${spark.mongo.version}</version>
         </dependency>
 

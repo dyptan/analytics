@@ -21,7 +21,7 @@
 
     <dependency>
         <groupId>org.scalatest</groupId>
-        <artifactId>scalatest_${scala.version}</artifactId>
+        <artifactId>scalatest_${scala.major.version}</artifactId>
         <version>3.0.5</version>
         <scope>test</scope>
     </dependency>
@@ -35,33 +35,33 @@
 
     <dependency>
         <groupId>org.apache.spark</groupId>
-        <artifactId>spark-sql_${scala.version}</artifactId>
+        <artifactId>spark-sql_${scala.major.version}</artifactId>
         <version>${spark.version}</version>
     </dependency>
 
     <dependency>
         <groupId>org.apache.spark</groupId>
-        <artifactId>spark-mllib_${scala.version}</artifactId>
+        <artifactId>spark-mllib_${scala.major.version}</artifactId>
         <version>${spark.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.typesafe.akka</groupId>
-      <artifactId>akka-http_${scala.version}</artifactId>
+      <artifactId>akka-http_${scala.major.version}</artifactId>
       <version>${akka.http.version}</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>com.typesafe.akka</groupId>
-      <artifactId>akka-http-spray-json_${scala.version}</artifactId>
+      <artifactId>akka-http-spray-json_${scala.major.version}</artifactId>
       <version>${akka.http.version}</version>
       <scope>compile</scope>
     </dependency>
     
     <dependency>
       <groupId>com.typesafe.akka</groupId>
-      <artifactId>akka-stream_${scala.version}</artifactId>
+      <artifactId>akka-stream_${scala.major.version}</artifactId>
       <version>${akka.version}</version>
       <scope>compile</scope>
     </dependency>
@@ -97,7 +97,7 @@
                 </execution>
             </executions>
             <configuration>
-                <scalaVersion>2.11.12</scalaVersion>
+                <scalaVersion>${scala.version}</scalaVersion>
             </configuration>
         </plugin>
 

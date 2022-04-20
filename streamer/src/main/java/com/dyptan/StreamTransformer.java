@@ -51,24 +51,23 @@ public class StreamTransformer implements  Runnable{
     public StreamTransformer(int Id) {
         this.id = Id;
 
-        logger.info("Loading up Stream properties.");
-
+        logger.info("Loading Stream properties.");
 
         InputStream sparkDefaults = getClass().getClassLoader()
-                .getResourceAsStream("streamer.properties");
+                .getResourceAsStream("conf/streamer.properties");
 
-        Properties STREAM_CONFIG = new Properties();
+        Properties streamingConfig = new Properties();
         try {
-            STREAM_CONFIG.load(sparkDefaults);
+            streamingConfig.load(sparkDefaults);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 //      Setting up Stream properties
 
-        KAFKA_BOOTSTRAP_SERVER = STREAM_CONFIG.getProperty("source.kafka.bootstrap.server", "kafka:9092");
-        KAFKA_TOPIC = STREAM_CONFIG.getProperty("source.kafka.topic");
-        MODEL_PATH = STREAM_CONFIG.getProperty("model.path");
+        KAFKA_BOOTSTRAP_SERVER = streamingConfig.getProperty("source.kafka.bootstrap.server", "kafka:9092");
+        KAFKA_TOPIC = streamingConfig.getProperty("source.kafka.topic");
+        MODEL_PATH = streamingConfig.getProperty("model.path");
 
 
         if (MODEL_NAME==null) MODEL_NAME="trainedModel";
@@ -76,7 +75,7 @@ public class StreamTransformer implements  Runnable{
 //      Converting Java Properties to SparkConf
 
         Map<String, String> scalaProps = new HashMap<>();
-        scalaProps.putAll((Map)STREAM_CONFIG);
+        scalaProps.putAll((Map)streamingConfig);
 
         SparkConf sparkConf = new SparkConf();
         sparkConf.setAll(JavaConversions.mapAsScalaMap(scalaProps));

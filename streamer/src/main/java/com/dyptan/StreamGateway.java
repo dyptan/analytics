@@ -58,7 +58,7 @@ public class StreamGateway extends StreamerGatewayGrpc.StreamerGatewayImplBase {
         transformer = new StreamTransformer(1);
         while (Files.notExists(Paths.get(transformer.MODEL_PATH+transformer.MODEL_NAME))){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
                 logger.error("No model found in "+transformer.MODEL_PATH+transformer.MODEL_NAME);
 
             } catch (InterruptedException e) {

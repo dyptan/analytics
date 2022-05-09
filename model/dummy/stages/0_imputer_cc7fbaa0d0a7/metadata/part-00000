@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.ImputerModel","timestamp":1652126557956,"sparkVersion":"2.4.8","uid":"imputer_cc7fbaa0d0a7","paramMap":{"inputCols":["engine_cubic_cm","race_km","year"],"outputCols":["engine_cubic_cm","race_km","year"]},"defaultParamMap":{"strategy":"mean","missingValue":"NaN"}}

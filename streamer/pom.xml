@@ -151,6 +151,17 @@
                     <plugin>
                         <artifactId>maven-resources-plugin</artifactId>
                         <version>2.6</version>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/dist</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                </resource>
+                                <resource>
+                                    <directory>${project.parent.basedir}/model/</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>copy-resources</id>
@@ -158,15 +169,6 @@
                                 <goals>
                                     <goal>copy-resources</goal>
                                 </goals>
-                                <configuration>
-                                    <outputDirectory>${basedir}/target/dist</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>resources</directory>
-                                            <filtering>true</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

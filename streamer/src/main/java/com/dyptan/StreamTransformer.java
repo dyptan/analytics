@@ -67,10 +67,10 @@ public class StreamTransformer implements  Runnable{
 
         KAFKA_BOOTSTRAP_SERVER = streamingConfig.getProperty("source.kafka.bootstrap.server", "kafka:9092");
         KAFKA_TOPIC = streamingConfig.getProperty("source.kafka.topic");
-        MODEL_PATH = streamingConfig.getProperty("model.path");
+        MODEL_PATH = streamingConfig.getProperty("model.path", "model");
+        MODEL_NAME = streamingConfig.getProperty("model.name", "dummy");
 
 
-        if (MODEL_NAME==null) MODEL_NAME="trainedModel";
         if (KAFKA_TOPIC == null | MODEL_PATH == null) throw new RuntimeException("configuration not found");
 //      Converting Java Properties to SparkConf
 

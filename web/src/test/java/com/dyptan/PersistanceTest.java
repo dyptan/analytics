@@ -44,7 +44,7 @@ public class PersistanceTest {
 
         user.setUsername("admin");
         user.setPassword("admin");
-        Set roles = new HashSet();
+        Set<Roles> roles = new HashSet<>();
         roles.add(Roles.ADMIN);
         roles.add(Roles.USER);
         user.setRoles(roles);

@@ -33,7 +33,7 @@ jobs:
 
 
     - name: Build and push Web images
-      uses: docker/build-push-action@v1.1.1
+      uses: docker/build-push-action@v2
       with:
         username: diptan
         password: ${{ secrets.DOCKER_PASSWORD }}
@@ -42,7 +42,7 @@ jobs:
         path: web
 
     - name: Build and push Trainer images
-      uses: docker/build-push-action@v1.1.1
+      uses: docker/build-push-action@v2
       with:
         username: diptan
         password: ${{ secrets.DOCKER_PASSWORD }}
@@ -51,7 +51,7 @@ jobs:
         path: trainer
 
     - name: Build and push Streamer images
-      uses: docker/build-push-action@v1.1.1
+      uses: docker/build-push-action@2
       with:
         username: diptan
         password: ${{ secrets.DOCKER_PASSWORD }}

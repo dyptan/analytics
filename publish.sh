@@ -1,7 +1,7 @@
 #!/bin/bash
 
 publish_or_not=false
-if [[ $1 == "-p" ]]
+if [[ $0 == "-p" ]]
 then
 publish_or_not=true
 shift 1

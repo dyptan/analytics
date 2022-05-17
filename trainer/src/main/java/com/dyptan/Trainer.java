@@ -17,8 +17,11 @@ import org.apache.spark.sql.SparkSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import static scala.collection.JavaConversions.mapAsScalaMap;
@@ -28,19 +31,29 @@ public class Trainer {
 
     private PipelineModel pipelineModel = null;
     public SparkSession spark = null;
-    private Map<String, String> ES_CONFIG = new HashMap<String, String>();
+    private Map<String, String> elasticsearchConfig = new HashMap<String, String>();
     private Dataset<Row>[] splitDF = null;
-    private Properties prop = new Properties();
+    Properties trainerConfig = new Properties();
 
     public Trainer() throws IOException {
 
-        InputStream properties = getClass().getClassLoader()
-                .getResourceAsStream("trainer.properties");
+        // We need this to find the config file from env var when running from IDE
+        String configFile = Optional.ofNullable(System.getenv("CONF_FILE")).orElse("conf/trainer.properties");
+        logger.info("Loading config file from "+configFile);
 
-        prop.load(properties);
+        try {
+            trainerConfig.load(Files.newInputStream(Paths.get(configFile)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        InputStream properties = getClass().getClassLoader()
+//                .getResourceAsStream("trainer.properties");
+//
+//        prop.load(properties);
 
         Map<String, String> scalaProps = new HashMap<>();
-        scalaProps.putAll((Map)prop);
+        scalaProps.putAll( (Map) trainerConfig);
 
         SparkConf sparkConf = new SparkConf();
         sparkConf.setAll(mapAsScalaMap(scalaProps));
@@ -51,7 +64,7 @@ public class Trainer {
                 .config(sparkConf)
                 .getOrCreate();
 
-        ES_CONFIG.putAll((Map)prop);
+        elasticsearchConfig.putAll( (Map) trainerConfig);
 
         logger.info("Spark Started..");
     }
@@ -66,13 +79,13 @@ public class Trainer {
         properties.setProperty("ml.source.limit", String.valueOf(limit));
         properties.setProperty("ml.iterations", String.valueOf(iterations));
         //Override properties from config file
-        ES_CONFIG.putAll((Map) properties);
+        elasticsearchConfig.putAll((Map) properties);
     }
 
     public void train() {
         logger.info("Training Started..");
 
-        Dataset<Row> cars = spark.read().format("org.elasticsearch.spark.sql").options(ES_CONFIG)
+        Dataset<Row> cars = spark.read().format("org.elasticsearch.spark.sql").options(elasticsearchConfig)
                 .option("inferSchema", true)
                 .load();
 
@@ -86,7 +99,7 @@ public class Trainer {
                 "model",
                 "year",
                 "published")
-                .limit(Integer.valueOf(ES_CONFIG.getOrDefault("ml.source.limit", "100")));
+                .limit(Integer.valueOf(elasticsearchConfig.getOrDefault("ml.source.limit", "100")));
 
         logger.info("Pre-transformed data sample: \n"+selected.showString(10, 10, false));
         logger.info("Train dataset is limited to " + selected.count() + " rows");
@@ -104,7 +117,7 @@ public class Trainer {
 
         // Choosing a Model
         LinearRegression linearRegression = new LinearRegression();
-        linearRegression.setMaxIter(Integer.valueOf(ES_CONFIG.getOrDefault("ml.iterations", "100")));
+        linearRegression.setMaxIter(Integer.valueOf(elasticsearchConfig.getOrDefault("ml.iterations", "100")));
 
         Pipeline pipeline = new Pipeline()
                 .setStages(new PipelineStage[] {
@@ -141,7 +154,7 @@ public class Trainer {
     }
 
     public void save(String name) throws IOException {
-       String MODEL_PATH = prop.getProperty("model.path");
+       String MODEL_PATH = trainerConfig.getProperty("model.path");
         logger.info("Saving to "+MODEL_PATH);
             pipelineModel.write().overwrite().save(MODEL_PATH+name);
 

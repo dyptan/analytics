@@ -155,7 +155,7 @@
                             <outputDirectory>${basedir}/target/dist</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/resources</directory>
+                                    <directory>src/main/resources/conf/</directory>
                                 </resource>
                                 <resource>
                                     <directory>${project.parent.basedir}/model/</directory>
@@ -199,7 +199,7 @@
                                 <manifest>
                                     <addClasspath>true</addClasspath>
                                     <classpathPrefix>lib/</classpathPrefix>
-                                    <mainClass>com.dyptan.StreamLauncher</mainClass>
+                                    <mainClass>com.dyptan.StreamDriver</mainClass>
                                 </manifest>
                                 <manifestEntries>
                                     <Class-Path>.</Class-Path>

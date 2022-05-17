@@ -1,8 +1,7 @@
 package com.dyptan
 
-import java.io.InputStream
-import java.util.Properties
-
+import java.io.{IOException, InputStream}
+import java.util.{Optional, Properties}
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
@@ -12,6 +11,7 @@ import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import spray.json._
 
+import java.nio.file.{Files, Paths}
 import scala.concurrent.duration._
 
 object TrainerActor {
@@ -58,15 +58,18 @@ class TrainerActor extends Actor with ActorLogging {
 }
 
 class TrainerGateway {
-
   import org.slf4j.LoggerFactory
   val log = LoggerFactory.getLogger(classOf[TrainerGateway])
 
-  val propertiesFile: InputStream = getClass.getClassLoader.getResourceAsStream("trainer.properties")
-  val properties = new Properties()
-  // does not work with relative path
-//  val source = Source.fromFile("conf/trainer.properties")
-  properties.load(propertiesFile)
+  val trainerConfig = new Properties()
+  val configFile: String = Option(System.getenv("CONF_FILE")).getOrElse("conf/trainer.properties")
+  log.info("Loading config file from " + configFile)
+
+  try trainerConfig.load(Files.newInputStream(Paths.get(configFile)))
+  catch {
+    case e: IOException =>
+      e.printStackTrace()
+  }
 
     implicit val system = ActorSystem("TrainerGateway")
     implicit val materializer = ActorMaterializer()
@@ -116,10 +119,10 @@ class TrainerGateway {
         }
       }
 
-    val port = properties.getOrDefault("gateway.port", "8081").asInstanceOf[String].toInt
+    val port = trainerConfig.getOrDefault("gateway.port", "8081").asInstanceOf[String].toInt
 
     Http().bindAndHandle(trainerServerRoute, "0.0.0.0", port)
-    log.info("Trainer Gateway started to listen on port " + port)
+    log.info("Trainer Gateway (AKKA HTTP) started to listen on port " + port)
 
 }
 

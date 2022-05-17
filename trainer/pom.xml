@@ -117,10 +117,10 @@
                         <goal>copy-resources</goal>
                     </goals>
                     <configuration>
-                        <outputDirectory>${basedir}/target/dist</outputDirectory>
+                        <outputDirectory>${basedir}/target/dist/conf</outputDirectory>
                         <resources>
                             <resource>
-                                <directory>src/main/resources</directory>
+                                <directory>src/main/resources/conf</directory>
                             </resource>
                         </resources>
                     </configuration>

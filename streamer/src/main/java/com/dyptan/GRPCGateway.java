@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class StreamGateway extends StreamerGatewayGrpc.StreamerGatewayImplBase {
-    final static Logger logger = Logger.getLogger(StreamGateway.class.getName());
+public class GRPCGateway extends StreamerGatewayGrpc.StreamerGatewayImplBase {
+    final static Logger logger = Logger.getLogger(GRPCGateway.class.getName());
     public static StreamTransformer transformer;
     public static Thread detatchedTransformer;
 
@@ -54,17 +54,9 @@ public class StreamGateway extends StreamerGatewayGrpc.StreamerGatewayImplBase {
         return true;
     }
 
+    //The driver method for Streamer
     public static void init(){
         transformer = new StreamTransformer(1);
-        while (Files.notExists(Paths.get(transformer.MODEL_PATH+transformer.MODEL_NAME))){
-            try {
-                Thread.sleep(5000);
-                logger.error("No model found in "+transformer.MODEL_PATH+transformer.MODEL_NAME);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         detatchedTransformer = new Thread(transformer);
         detatchedTransformer.start();
     }

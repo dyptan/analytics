@@ -1,6 +1,8 @@
 FROM openjdk:8-jre-slim
-ADD target/dist/lib/ libs/
-ADD target/dist/*.properties conf/
-ADD target/dist/StreamTransformer.jar StreamTransformer.jar
-ADD target/dist/dummy/ defaultModel/
-ENTRYPOINT ["java", "-cp", "/libs/*:StreamTransformer.jar", "-Dlog4j.configuration=file:///conf/log4j.properties", "com.dyptan.StreamDriver"]
+ADD target/dist/lib/ streamer/lib/
+ADD target/dist/*.properties streamer/conf/
+ADD target/dist/StreamTransformer.jar streaer/StreamTransformer.jar
+ADD target/dist/dummy/ streamer/defaultModel/
+
+WORKDIR streamer
+ENTRYPOINT ["java", "-cp", "/lib/*:StreamTransformer.jar", "-Dlog4j.configuration=file:///conf/log4j.properties", "com.dyptan.StreamDriver"]

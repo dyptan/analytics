@@ -4,9 +4,9 @@ publish_or_not=false
 if [[ $1 == "-p" ]]
 then
 publish_or_not=true
+shift 1
 fi
 
-shift 1
 
 for module in "$@"
 

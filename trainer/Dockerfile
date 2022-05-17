@@ -1,8 +1,8 @@
 FROM openjdk:8-jre-slim
-ADD target/dist/lib /trainer/libs
-ADD target/dist/trainer.properties /trainer/conf
+ADD target/dist/lib /trainer/lib
+ADD target/dist/conf /trainer/conf
 ADD target/dist/Trainer.jar /trainer/bin/
 
 WORKDIR /trainer/
-ENTRYPOINT ["java", "-cp", "libs/*:conf/:bin/Trainer.jar", "com.dyptan.TrainerLauncher"]
+ENTRYPOINT ["java", "-cp", "lib/*:conf/:bin/Trainer.jar", "com.dyptan.TrainerLauncher"]
 EXPOSE 8081

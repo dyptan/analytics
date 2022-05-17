@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim
+FROM openjdk:11-jre-slim
 ADD target/dist/lib /trainer/lib
 ADD target/dist/conf /trainer/conf
 ADD target/dist/Trainer.jar /trainer/bin/

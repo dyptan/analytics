@@ -30,9 +30,7 @@ import java.util.Map;
 
 @Controller
 public class LoginController {
-
     Logger log = LogManager.getLogger(LoginController.class);
-
     @Autowired
     UserRepository userRepository;
     @Autowired

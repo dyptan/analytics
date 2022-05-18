@@ -40,7 +40,7 @@ public class UserController {
     @GetMapping("/user/{name}/filters")
     public List<Filter> getAllUserFilters(@PathVariable(name="name") String name){
         return userRepository.findByUsername(name)
-                    .map(user-> user.getFilters())
+                    .map(User::getFilters)
                 .orElseThrow(() -> new UsernameNotFoundException(name));
     }
 
@@ -53,14 +53,7 @@ public class UserController {
                 .orElseThrow(() -> new UsernameNotFoundException(name));
     }
 
-    // Deprecated - registration is now on login controller
-    @PostMapping(value = "/users", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public User createUser(@ModelAttribute User newUser) {
-        log.info("user added : " + newUser.getUsername());
-        return userRepository.save(newUser);
-    }
-
-    @PostMapping(value = "/user/{name}/filters",  consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/user/{name}/filters",  consumes = MediaType.APPLICATION_JSON_VALUE)
     public User createUserFilter(@PathVariable(name="name") String name, @RequestBody Filter newFilter) {
         User user = userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException(name));
         user.addFilter(newFilter);
@@ -78,7 +71,7 @@ public class UserController {
                                 }
                         )
                 .orElseGet(
-                        ()-> {return userRepository.save(newUser);}
+                        ()-> userRepository.save(newUser)
                         );
     }
 

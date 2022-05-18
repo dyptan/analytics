@@ -23,7 +23,7 @@ public class WebDriver
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, true);
+//        mapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, true);
         return mapper;
     }
 
@@ -32,10 +32,5 @@ public class WebDriver
         return new SearchRequest();
     }
 
-//    @Bean
-//    @Lazy
-//    public ModelTrainer modelTrainer() throws IOException {
-//        return new ModelTrainer();
-//    }
 }
 

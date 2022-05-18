@@ -3,12 +3,12 @@ package com.dyptan.controller;
 import com.dyptan.gen.proto.*;
 import com.dyptan.model.Car;
 import com.dyptan.model.Filter;
-
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -46,7 +43,7 @@ public class StreamingController {
 
     private Query query = new Query();
 
-    public StreamingController(ReactiveMongoTemplate mongoTemplate) throws IOException {
+    public StreamingController(ReactiveMongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 

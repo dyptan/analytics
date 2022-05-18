@@ -61,7 +61,9 @@ public class User {
     public void setFilters(List<Filter> filters) {
         this.filters = filters;
     }
-
+    public void setRoles(Set<Role.Roles> roles) {
+        this.roles = roles;
+    }
 
     public String toString() {
         return "User(username=" + this.getUsername() + ", password=" + this.getPassword() + ", filters=" + this.getFilters() + ", roles=" + this.getRoles() + ")";

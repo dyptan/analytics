@@ -18,16 +18,32 @@
     <packaging>jar</packaging>
     <version>1.5-SNAPSHOT</version>
 
+    <dependencyManagement>
+        <dependencies>
+            <!--Spark bring newer Janino lib 3.1 which is incompatible and
+            causes this java.lang.NoClassDefFoundError: org/codehaus/janino/InternalCompilerException
+            Need to lower the lib version to resolve it-->
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>commons-compiler</artifactId>
+                <version>3.0.16</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>3.0.16</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
-
 
         <!--Scala Tests-->
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.major.version}</artifactId>
             <version>3.0.5</version>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
 
         <!--Junit-->

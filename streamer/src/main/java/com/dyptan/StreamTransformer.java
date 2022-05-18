@@ -1,7 +1,6 @@
 package com.dyptan;
 
 import com.mongodb.spark.MongoSpark;
-import org.apache.hadoop.mapred.InvalidInputException;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.function.VoidFunction2;
@@ -11,18 +10,16 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.streaming.StreamingQuery;
 import org.apache.spark.sql.types.StructType;
-import scala.collection.JavaConversions;
+import static scala.collection.JavaConverters.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
-
+import java.util.concurrent.TimeoutException;
 
 import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.functions.from_json;
@@ -75,7 +72,7 @@ public class StreamTransformer implements  Runnable{
 
         if (Files.notExists(Paths.get(MODEL_PATH+"/"+MODEL_NAME))) {
             logger.error("Model does not exist: "+MODEL_PATH+MODEL_NAME);
-            logger.error("Falling back to default model");
+            logger.error("Falling back to default model: model/dummy");
             MODEL_PATH="model/";
             MODEL_NAME="dummy";
         } else if (Files.notExists(Paths.get(MODEL_PATH+MODEL_NAME))) {
@@ -88,11 +85,10 @@ public class StreamTransformer implements  Runnable{
         }
 
         //Converting Java Properties to SparkConf
-        Map<String, String> scalaProps = new HashMap<>();
-        scalaProps.putAll((Map)streamingConfig);
+        Map scalaProps = streamingConfig;
 
         SparkConf sparkConf = new SparkConf();
-        sparkConf.setAll(JavaConversions.mapAsScalaMap(scalaProps));
+        sparkConf.setAll(mapAsScalaMap(scalaProps));
 
         spark = SparkSession
                 .builder()
@@ -137,6 +133,7 @@ public class StreamTransformer implements  Runnable{
         Dataset<Row> filteredDf = streamPredictionsDF.drop("features");
 
 
+        try {
             query = filteredDf.writeStream()
     //                .outputMode("append").format("console")
                     .foreachBatch(
@@ -145,6 +142,9 @@ public class StreamTransformer implements  Runnable{
                         MongoSpark.save(records);
                     }
             ).start();
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
 
 
         try {

@@ -38,6 +38,7 @@
         <module>web</module>
         <module>streamer</module>
         <module>trainer</module>
+        <module>crawler</module>
     </modules>
 
 

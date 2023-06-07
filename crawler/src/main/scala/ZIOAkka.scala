@@ -1,5 +1,8 @@
 package com.dyptan.crawler
-import zio.ZIOAppDefault
+import zio.{Random, Schedule, ZIOAppDefault}
+import zio.kafka.producer.Producer
+import zio.kafka.serde.Serde
+import zio.stream.ZStream
 object ZIOAkka extends ZIOAppDefault {
 
   import com.typesafe.config.ConfigFactory

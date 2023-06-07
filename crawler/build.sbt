@@ -16,6 +16,10 @@ libraryDependencies ++= List(
   "io.circe" %% "circe-generic" % "0.14.1"
 )
 
+libraryDependencies ++= Seq(
+  "dev.zio" %% "zio-kafka"   % "2.3.1",
+//  "dev.zio" %% "zio-json"    % "0.1.5"
+)
 libraryDependencies += "dev.zio" %% "zio-akka-cluster" % "0.3.0"
 val circeVersion = "0.14.3"
 

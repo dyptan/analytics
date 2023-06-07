@@ -1,14 +1,11 @@
 package com.dyptan.crawler
-import zio.{Random, Schedule, ZIOAppDefault}
-import zio.kafka.producer.Producer
-import zio.kafka.serde.Serde
-import zio.stream.ZStream
+import zio.ZIOAppDefault
 object ZIOAkka extends ZIOAppDefault {
 
-  import com.typesafe.config.ConfigFactory
   import akka.actor.ActorSystem
-  import zio.{ZIO, ZLayer}
+  import com.typesafe.config.ConfigFactory
   import zio.akka.cluster.pubsub.PubSub
+  import zio.{ZIO, ZLayer}
 
   val configString =
     """

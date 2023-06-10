@@ -5,6 +5,7 @@ import com.typesafe.config.ConfigFactory
 import io.circe.generic.auto._
 import org.apache.kafka.common.Uuid
 import sttp.client3._
+import sttp.model._
 import sttp.client3.circe._
 import sttp.client3.httpclient.zio._
 import zio.akka.cluster.pubsub.PubSub
@@ -15,9 +16,29 @@ import zio.stream.ZStream
 import zio.{Console, Queue, ZIO, ZIOAppDefault, ZLayer}
 
 object Main extends ZIOAppDefault {
-  private val url = uri"https://developers.ria.com/auto/search?api_key=KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl&category_id=1&bodystyle%5B0%5D=3&bodystyle%5B4%5D=2&marka_id%5B0%5D=79&model_id%5B0%5D=0&s_yers%5B0%5D=2010&po_yers%5B0%5D=2017&marka_id%5B1%5D=84&model_id%5B1%5D=0&s_yers%5B1%5D=2012&po_yers%5B1%5D=2016&brandOrigin%5B0%5D=276&brandOrigin%5B1%5D=392&price_ot=1000&price_do=60000&currency=1&auctionPossible=1&state%5B0%5D=1&city%5B0%5D=0&state%5B1%5D=2&city%5B1%5D=0&state%5B2%5D=10&city%5B2%5D=0&abroad=2&custom=1&auto_options%5B477%5D=477&type%5B0%5D=1&type%5B1%5D=2&type%5B3%5D=4&type%5B7%5D=8&gearbox%5B0%5D=1&gearbox%5B1%5D=2&gearbox%5B2%5D=3&engineVolumeFrom=1.4&engineVolumeTo=3.2&powerFrom=90&powerTo=250&power_name=1&countpage=50&with_photo=1"
+  val infoBase = uri"https://developers.ria.com/auto/info?api_key=KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl"
+  val searchBase = uri"https://developers.ria.com/auto/info?api_key=KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl"
+  private val urlWithParameters = searchBase
+    .addParam("api_key", "KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl")
+    .addParam("category_id", "1")
+    uri"&category_id=1&" +
+      uri"bodystyle[0]=3&" +
+      uri"bodystyle[4]=2&" +
+      uri"marka_id[0]=79&" +
+      uri"model_id[0]=0&" +
+      uri"s_yers[0]=2010&" +
+      uri"po_yers[0]=2017&" +
+      uri"marka_id[1]=84&" +
+      uri"model_id[1]=0&" +
+      uri"s_yers[1]=2012&" +
+      uri"po_yers[1]=2016&" +
+      uri"brandOrigin[0]=276&" +
+      uri"brandOrigin[1]=392&" +
+      uri"price_ot=1000&price_do=60000&" +
+      uri"currency=1&auctionPossible=1&state[0]=1&city[0]=0&state[1]=2&city[1]=0&state[2]=10&city[2]=0&abroad=2&custom=1&auto_options[477]=477&type[0]=1&type[1]=2&type[3]=4&type[7]=8&gearbox[0]=1&gearbox[1]=2&gearbox[2]=3&engineVolumeFrom=1.4&engineVolumeTo=3.2&powerFrom=90&powerTo=250&power_name=1&countpage=50&with_photo=1"
+
   private val request = basicRequest
-    .get(url)
+    .get(urlWithParameters)
     .response(asJson[searchRoot])
   case class L2(ids: Array[String], count: Int)
   case class L1(search_result: L2)
@@ -98,9 +119,8 @@ object Main extends ZIOAppDefault {
       .mapZIO(_.commit)
       .drain
   private def fetch(id: String) = {
-    val urlbase = uri"https://developers.ria.com/auto/info?api_key=KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl"
     for {
-      response <- send(basicRequest.get(urlbase.addParam("auto_id", id)).response(asJson[advRoot]))
+      response <- send(basicRequest.get(infoBase.addParam("auto_id", id)).response(asJson[advRoot]))
       root <- ZIO.fromEither(response.body)
       data <- ZIO.succeed(root.toString)
       _ <- ZIO.debug(s"fetched from API: $data")

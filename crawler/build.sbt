@@ -17,7 +17,8 @@ libraryDependencies ++= List(
 libraryDependencies ++= Seq(
   "dev.zio" %% "zio-kafka"   % "2.3.1",
   "dev.zio" %% "zio-http" % "3.0.0-RC2",
-  "dev.zio" %% "zio-akka-cluster" % "0.3.0"
+  "dev.zio" %% "zio-akka-cluster" % "0.3.0",
+  "dev.zio" %% "zio-cache" % "0.2.3"
 )
 
 val circeVersion = "0.14.3"
@@ -26,3 +27,11 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic",
   "io.circe" %% "circe-parser"
 ).map(_ % circeVersion)
+
+
+libraryDependencies ++= Seq(
+  "dev.zio" %% "zio-test"          % "2.0.15" % Test,
+  "dev.zio" %% "zio-test-sbt"      % "2.0.15" % Test,
+  "dev.zio" %% "zio-test-magnolia" % "2.0.15" % Test
+)
+testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")

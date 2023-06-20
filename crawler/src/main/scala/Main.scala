@@ -21,7 +21,7 @@ import zio.{Console, Duration, Queue, Schedule, ZIO, ZIOApp, ZIOAppDefault, ZLay
 
 object Main extends ZIOAppDefault {
   private val authKey = model.QueryParams().param("api_key","KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl")
-  private val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
+  val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
   private val searchDefault = uri"https://developers.ria.com/auto/search?api_key=KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl&s_yers[0]=2010&po_yers[0]=2011&category_id=1&price_ot=30000&price_do=60000&countpage=100"
   val searchBase: Uri = uri"https://developers.ria.com/auto/search".addParams(authKey).addParam("countpage","100")
   var searchWithParameters: Uri = searchDefault

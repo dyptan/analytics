@@ -18,7 +18,7 @@ object Tests extends ZIOSpecDefault{
           for {
             adv <- ZIO.readFile("src/test/resources/search.json")
             decoded <- ZIO.fromEither(parser.decode[advRoot](adv))
-            _ <- ZIO.debug(s"got value ${decoded}")
+            _ <- ZIO.debug(s"got value $decoded")
 
           } yield assertTrue(decoded.autoData.year == 2013)
 

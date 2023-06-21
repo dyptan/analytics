@@ -1,94 +1,17 @@
 package com.dyptan.crawler
 
-import akka.actor.ActorSystem
-import com.typesafe.config.ConfigFactory
 import io.circe.generic.auto._
 import io.circe.parser.decode
-import org.apache.kafka.common.Uuid
 import sttp.client3.circe._
 import sttp.client3.httpclient.zio._
 import sttp.client3.{basicRequest, _}
-import sttp.model
-import sttp.model.Uri
 import zio.akka.cluster.pubsub.PubSub
 import zio.cache.{Cache, Lookup}
 import zio.http.{Request, Response, _}
-import zio.kafka.consumer.{Consumer, ConsumerSettings, Subscription}
-import zio.kafka.producer.{Producer, ProducerSettings}
-import zio.kafka.serde.Serde
-import zio.stream.ZStream
-import zio.{Console, Duration, Queue, Schedule, ZIO, ZIOApp, ZIOAppDefault, ZLayer}
+import zio.{Duration, Schedule, ZIO, ZIOApp, ZIOAppDefault}
 
 object Main extends ZIOAppDefault {
-  private val authKey = model.QueryParams().param("api_key","KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl")
-  val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
-  private val searchDefault = uri"https://developers.ria.com/auto/search?api_key=KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl&s_yers[0]=2010&po_yers[0]=2011&category_id=1&price_ot=30000&price_do=60000&countpage=100"
-  val searchBase: Uri = uri"https://developers.ria.com/auto/search".addParams(authKey).addParam("countpage","100")
-  var searchWithParameters: Uri = searchDefault
-
-  def searchRequest = basicRequest
-    .get(searchWithParameters)
-    .response(asJson[searchRoot])
-  case class L2(ids: Array[String], count: Int)
-  case class L1(search_result: L2)
-  case class searchRoot(result: L1)
-  case class Geography(stateId: Int, cityId: Int)
-  case class Details(year: Int, autoId: Int,
-                             raceInt: Int, fuelId: Int, gearBoxId: Int, driveId: Int)
-  case class advRoot(USD: Int, addDate: String, autoData: Details,
-                             markId: Int, modelId: Int, stateData: Geography)
-
-  private val configString: String =
-    """
-      |akka {
-      | actor {
-      |   provider = akka.cluster.ClusterActorRefProvider
-      |   }
-      | cluster {
-      |   min-nr-of-members=1
-      |   }
-      |}
-      |""".stripMargin
-
-  private val akkaConfig = ConfigFactory.parseString(configString)
-  val actorSystem: ZLayer[Any, Throwable, ActorSystem] =
-    ZLayer
-      .scoped(
-        ZIO.acquireRelease(ZIO.attempt(ActorSystem("Test", akkaConfig)))(sys => ZIO.fromFuture(_ => sys.terminate()).either)
-      )
-  def producerLayer =
-    ZLayer.scoped(
-      Producer.make(
-        settings = ProducerSettings(List("localhost:9092"))
-      )
-    )
-  def consumerLayer =
-    ZLayer.scoped(
-      Consumer.make(
-        ConsumerSettings(List("localhost:9092")).withGroupId("group")
-      )
-    )
-  def producer(records: Queue[String]): ZStream[Producer, Throwable, Nothing] =
-    ZStream.fromQueue(records)
-      .mapZIO { record =>
-        Producer.produce[Any, Long, String](
-          topic = "random",
-          key = Uuid.randomUuid().hashCode(),
-          value = record,
-          keySerializer = Serde.long,
-          valueSerializer = Serde.string
-        )
-      }
-      .drain
-  val consumer: ZStream[Consumer, Throwable, Nothing] =
-    Consumer
-      .plainStream(Subscription.topics("random"), Serde.long, Serde.string)
-      .tap(r => Console.printLine("Received on kafka: "+r.value))
-      .map(_.offset)
-      .aggregateAsync(Consumer.offsetBatches)
-      .mapZIO(_.commit)
-      .drain
-
+  import Conf._
   def fetchAndPublish(id: String, pubSub: PubSub[String]) = {
     for {
       response <- send(basicRequest.get(infoBase.addParam("auto_id", id)).response(asJson[advRoot]))
@@ -162,7 +85,7 @@ object Main extends ZIOAppDefault {
   }
 }
 object HttpServer extends ZIOAppDefault {
-  import Main._
+  import Conf._
   val http: Http[Any, Response, Request, Response] = Http.collectZIO[Request] {
     case req@Method.POST -> Root / "search" =>
       req.body.asString.mapBoth(_ => Response.status(Status.BadRequest), {

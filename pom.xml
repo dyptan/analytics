@@ -27,11 +27,12 @@
         <elasticsearch.version>6.2.4</elasticsearch.version>
         <postgresql.version>42.2.6</postgresql.version>
         <scala.major.version>2.12</scala.major.version>
-        <scala.version>2.12.15</scala.version>
+        <scala.version>2.12.17</scala.version>
         <akka.version>2.5.20</akka.version>
         <akka.http.version>10.1.7</akka.http.version>
         <hadoop.version>2.7.1</hadoop.version>
         <grpc.version>1.16.1</grpc.version>
+        <circe.version>0.14.3</circe.version>
     </properties>
 
     <modules>

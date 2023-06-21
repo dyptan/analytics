@@ -21,8 +21,66 @@
     <dependencies>
         <dependency>
             <groupId>com.softwaremill.sttp.client3</groupId>
-            <artifactId>core_2.12</artifactId>
-            <version>3.8.13</version>
+            <artifactId>circe_${scala.major.version}</artifactId>
+            <version>3.8.15</version>
+        </dependency>
+        <dependency>
+            <groupId>com.softwaremill.sttp.client3</groupId>
+            <artifactId>zio_${scala.major.version}</artifactId>
+            <version>3.8.15</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.zio</groupId>
+            <artifactId>zio-kafka_${scala.major.version}</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.zio</groupId>
+            <artifactId>zio-http_${scala.major.version}</artifactId>
+            <version>3.0.0-RC2</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.zio</groupId>
+            <artifactId>zio-test_${scala.major.version}</artifactId>
+            <version>2.0.15</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.zio</groupId>
+            <artifactId>zio-test-sbt_${scala.major.version}</artifactId>
+            <version>2.0.15</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.zio</groupId>
+            <artifactId>zio-test-magnolia_${scala.major.version}</artifactId>
+            <version>2.0.15</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.zio</groupId>
+            <artifactId>zio-akka-cluster_${scala.major.version}</artifactId>
+            <version>0.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.zio</groupId>
+            <artifactId>zio-cache_${scala.major.version}</artifactId>
+            <version>0.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>io.circe</groupId>
+            <artifactId>circe-core_${scala.major.version}</artifactId>
+            <version>${circe.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.circe</groupId>
+            <artifactId>circe-generic_${scala.major.version}</artifactId>
+            <version>${circe.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.circe</groupId>
+            <artifactId>circe-parser_${scala.major.version}</artifactId>
+            <version>${circe.version}</version>
         </dependency>
     </dependencies>
 
@@ -52,9 +110,6 @@
                 <resources>
                     <resource>
                         <directory>src/main/resources/conf/</directory>
-                    </resource>
-                    <resource>
-                        <directory>${project.parent.basedir}/model/</directory>
                     </resource>
                 </resources>
             </configuration>

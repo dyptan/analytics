@@ -47,11 +47,6 @@ public class Trainer {
             e.printStackTrace();
         }
 
-//        InputStream properties = getClass().getClassLoader()
-//                .getResourceAsStream("trainer.properties");
-//
-//        prop.load(properties);
-
         Map<String, String> scalaProps = new HashMap<>();
         scalaProps.putAll( (Map) trainerConfig);
 

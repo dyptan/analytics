@@ -62,7 +62,7 @@ object Main extends ZIOAppDefault {
           pageCount <- ZIO.succeed(root.result.search_result.count / 100 )
           _ <- recProduce(pageCount, pubSub)
         } yield ()
-        _ <- loop.repeat(Schedule.spaced(Duration.fromSeconds(5))).fork
+        _ <- loop.repeat(Schedule.spaced(Duration.fromSeconds(config.getInt("crawler/searchIntervalSec")))).fork
 
         loop = for {
           id <- idsQueue.take
@@ -70,11 +70,12 @@ object Main extends ZIOAppDefault {
           _ <- cache.get(id)
           hits <- cache.cacheStats.map(_.hits)
           misses <- cache.cacheStats.map(_.misses)
-          _ <- ZIO.debug(s"Number of cache hits: $hits")
-          _ <- ZIO.debug(s"Number of cache misses: $misses")
+          _ <- ZIO.logDebug(s"Number of cache hits: $hits")
+          _ <- ZIO.logDebug(s"Number of cache misses: $misses")
         } yield ()
         _ <- loop.forever.fork
-        _ <- producer(adsQueue).merge(consumer).runDrain
+        _ <- producer(adsQueue).runDrain
+//        _ <- producer(adsQueue).merge(consumer).runDrain
       } yield ()
 
     }.provide(
@@ -86,6 +87,7 @@ object Main extends ZIOAppDefault {
 }
 object HttpServer extends ZIOAppDefault {
   import Conf._
+  val port = config.getConfig("http").getInt("serverPort")
   val http: Http[Any, Response, Request, Response] = Http.collectZIO[Request] {
     case req@Method.POST -> Root / "search" =>
       req.body.asString.mapBoth(_ => Response.status(Status.BadRequest), {
@@ -100,9 +102,10 @@ object HttpServer extends ZIOAppDefault {
   override def run: ZIO[Any, Throwable, Unit] = {
     {
       for {
-        _ <- Server.serve(http).debug("http server started")
+        _ <- Server.serve(http).fork
+        _ <- ZIO.logDebug(s"Http server started on port: $port")
       } yield ()
-    }.provide(Server.defaultWithPort(8092))
+    }.provide(Server.defaultWithPort(port))
   }
 
 }

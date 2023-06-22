@@ -34,9 +34,6 @@ services:
       - elasticsearch
     depends_on:
       - elasticsearch
-  rsscollector:
-    build: ./logstash/docker
-    image: diptan/rsscollector
   mongo:
     build: ./mongo
     image: diptan/mongo

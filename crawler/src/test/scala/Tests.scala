@@ -1,6 +1,7 @@
 package com.dyptan.crawler
 
 import Conf._
+
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -10,6 +11,7 @@ object Tests extends ZIOSpecDefault{
 
   def spec =
     suite("ParseJsonSpec")(
+
       test("field matches expected value") {
         {
           for {

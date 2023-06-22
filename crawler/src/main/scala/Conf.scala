@@ -14,7 +14,8 @@ import zio.stream.ZStream
 import zio.{Queue, ZIO, ZLayer}
 
 object Conf {
-  private val authKey = model.QueryParams().param("api_key", "KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl")
+  val config = ConfigFactory.load("application.conf")
+  val authKey = model.QueryParams().param("api_key", "KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl")
   val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
   val searchBase = uri"https://developers.ria.com/auto/search".addParams(authKey).addParam("countpage", "100")
   val searchDefault = searchBase.addParams("category_id" -> "1", "s_yers[0]" -> "2000", "price_ot" -> "3000",
@@ -34,29 +35,16 @@ object Conf {
                      markId: Int, markNameEng: String, modelId: Int, modelNameEng: String, linkToView: String,
                      stateData: Geography)
 
-  private val configString: String =
-    """
-      |akka {
-      | actor {
-      |   provider = akka.cluster.ClusterActorRefProvider
-      |   }
-      | cluster {
-      |   min-nr-of-members=1
-      |   }
-      |}
-      |""".stripMargin
-
-  private val akkaConfig = ConfigFactory.parseString(configString)
   val actorSystem: ZLayer[Any, Throwable, ActorSystem] =
     ZLayer
       .scoped(
-        ZIO.acquireRelease(ZIO.attempt(ActorSystem("Test", akkaConfig)))(sys => ZIO.fromFuture(_ => sys.terminate()).either)
+        ZIO.acquireRelease(ZIO.attempt(ActorSystem("Test", config)))(sys => ZIO.fromFuture(_ => sys.terminate()).either)
       )
 
   def producerLayer =
     ZLayer.scoped(
       Producer.make(
-        settings = ProducerSettings(List("localhost:9092"))
+        settings = ProducerSettings(List(config.getConfig("producer").getString("kafkaServer")))
       )
     )
 
@@ -83,7 +71,6 @@ object Conf {
   val consumer: ZStream[Consumer, Throwable, Nothing] =
     Consumer
       .plainStream(Subscription.topics("random"), Serde.long, Serde.string)
-//      .tap(r => Console.printLine("Received on kafka: " + r.value))
       .map(_.offset)
       .aggregateAsync(Consumer.offsetBatches)
       .mapZIO(_.commit)

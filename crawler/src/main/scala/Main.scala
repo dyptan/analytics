@@ -62,7 +62,8 @@ object Main extends ZIOAppDefault {
           pageCount <- ZIO.succeed(root.result.search_result.count / 100 )
           _ <- recProduce(pageCount, pubSub)
         } yield ()
-        _ <- loop.repeat(Schedule.spaced(Duration.fromSeconds(config.getInt("crawler/searchIntervalSec")))).fork
+        _ <- loop.repeat(Schedule.spaced(
+          Duration.fromSeconds(config.getConfig("crawler").getInt("searchIntervalSec")))).fork
 
         loop = for {
           id <- idsQueue.take

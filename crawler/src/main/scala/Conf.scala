@@ -7,14 +7,15 @@ import org.apache.kafka.common.Uuid
 import sttp.client3.circe._
 import sttp.client3.{UriContext, basicRequest}
 import sttp.model
-import zio.kafka.consumer.{Consumer, ConsumerSettings, Subscription}
 import zio.kafka.producer.{Producer, ProducerSettings}
 import zio.kafka.serde.Serde
 import zio.stream.ZStream
 import zio.{Queue, ZIO, ZLayer}
 
+import java.io.File
+
 object Conf {
-  val config = ConfigFactory.load("application.conf")
+  val config = ConfigFactory.parseFile(new File("application.conf"))
   val authKey = model.QueryParams().param("api_key", "KoPvKSBRd5YTGGrePubrcokuqONxzHgFrBW8KHrl")
   val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
   val searchBase = uri"https://developers.ria.com/auto/search".addParams(authKey).addParam("countpage", "100")
@@ -38,7 +39,7 @@ object Conf {
   val actorSystem: ZLayer[Any, Throwable, ActorSystem] =
     ZLayer
       .scoped(
-        ZIO.acquireRelease(ZIO.attempt(ActorSystem("Test", config)))(sys => ZIO.fromFuture(_ => sys.terminate()).either)
+        ZIO.acquireRelease(ZIO.attempt(ActorSystem("Test", config.getConfig("akkaConf"))))(sys => ZIO.fromFuture(_ => sys.terminate()).either)
       )
 
   def producerLayer =
@@ -48,12 +49,12 @@ object Conf {
       )
     )
 
-  def consumerLayer =
-    ZLayer.scoped(
-      Consumer.make(
-        ConsumerSettings(List("localhost:9092")).withGroupId("group")
-      )
-    )
+//  def consumerLayer =
+//    ZLayer.scoped(
+//      Consumer.make(
+//        ConsumerSettings(List("localhost:9092")).withGroupId("group")
+//      )
+//    )
 
   def producer(records: Queue[String]): ZStream[Producer, Throwable, Nothing] =
     ZStream.fromQueue(records)
@@ -68,11 +69,11 @@ object Conf {
       }
       .drain
 
-  val consumer: ZStream[Consumer, Throwable, Nothing] =
-    Consumer
-      .plainStream(Subscription.topics("random"), Serde.long, Serde.string)
-      .map(_.offset)
-      .aggregateAsync(Consumer.offsetBatches)
-      .mapZIO(_.commit)
-      .drain
+//  val consumer: ZStream[Consumer, Throwable, Nothing] =
+//    Consumer
+//      .plainStream(Subscription.topics("random"), Serde.long, Serde.string)
+//      .map(_.offset)
+//      .aggregateAsync(Consumer.offsetBatches)
+//      .mapZIO(_.commit)
+//      .drain
 }

@@ -2,7 +2,6 @@ package com.dyptan;
 
 import com.dyptan.controller.LoginController;
 import com.dyptan.repository.UserRepository;
-import com.dyptan.service.SearchService;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,9 +31,6 @@ public class UITest {
 
     @MockBean
     UserRepository userRepository;
-
-    @MockBean
-    SearchService searchService;
 
     @Ignore
     @Test

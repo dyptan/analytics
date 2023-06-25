@@ -84,14 +84,14 @@ object Main extends ZIOAppDefault {
     }.provide(
       HttpClientZioBackend.layer(),
       producerLayer,
-      consumerLayer,
+//      consumerLayer,
       actorSystem)
   }.catchAll(t => ZIO.log(s"caught failure $t"))
 
 }
 object HttpServer extends ZIOAppDefault {
   import Conf._
-  val port = config.getConfig("http").getInt("serverPort")
+  val port = config.getConfig("httpConf").getInt("serverPort")
   val http: Http[Any, Response, Request, Response] = Http.collectZIO[Request] {
     case req@Method.POST -> Root / "search" =>
       req.body.asString.mapBoth(_ => Response.status(Status.BadRequest), {

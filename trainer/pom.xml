@@ -20,13 +20,6 @@
   <dependencies>
 
     <dependency>
-        <groupId>org.scalatest</groupId>
-        <artifactId>scalatest_${scala.major.version}</artifactId>
-        <version>3.0.5</version>
-        <scope>test</scope>
-    </dependency>
-
-    <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.13.1</version>
@@ -66,16 +59,11 @@
       <scope>compile</scope>
     </dependency>
 
-    <dependency>
-        <groupId>org.elasticsearch</groupId>
-        <artifactId>elasticsearch-spark-20_2.12</artifactId>
-        <version>7.17.3</version>
-    </dependency>
-      <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-common</artifactId>
-          <version>${hadoop.version}</version>
-      </dependency>
+<!--      <dependency>-->
+<!--          <groupId>org.apache.hadoop</groupId>-->
+<!--          <artifactId>hadoop-common</artifactId>-->
+<!--          <version>${hadoop.version}</version>-->
+<!--      </dependency>-->
 
   </dependencies>
 
@@ -83,12 +71,6 @@
 
   <build>
       <plugins>
-
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-
         <plugin>
             <groupId>org.scala-tools</groupId>
             <artifactId>maven-scala-plugin</artifactId>

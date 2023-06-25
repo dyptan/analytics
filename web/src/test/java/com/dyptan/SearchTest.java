@@ -1,8 +1,6 @@
 package com.dyptan;
 
-import com.dyptan.connector.SearchConnector;
 import com.dyptan.model.Filter;
-import com.dyptan.service.SearchService;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -12,7 +10,6 @@ import org.elasticsearch.search.SearchHit;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -29,10 +26,6 @@ import static junit.framework.TestCase.assertEquals;
 /// Integration tests suite
 public class SearchTest {
 
-    @Autowired
-    SearchService search;
-    @Autowired
-    SearchConnector connector;
 
     public static Filter getDummyFilter(){
         Filter filter = new Filter();

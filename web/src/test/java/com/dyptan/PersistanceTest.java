@@ -4,7 +4,6 @@ import com.dyptan.model.Filter;
 import com.dyptan.model.Role.Roles;
 import com.dyptan.model.User;
 import com.dyptan.repository.UserRepository;
-import com.dyptan.service.SearchService;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,8 +27,6 @@ public class PersistanceTest {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    SearchService searchService;
 
     @Ignore
     @Test

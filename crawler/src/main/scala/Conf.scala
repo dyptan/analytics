@@ -3,7 +3,7 @@ package com.dyptan.crawler
 import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 import io.circe.generic.auto._
-import org.apache.kafka.common.Uuid
+//import org.apache.kafka.common.Uuid
 import sttp.client3.circe._
 import sttp.client3.{UriContext, basicRequest}
 import sttp.model
@@ -61,7 +61,7 @@ object Conf {
       .mapZIO { record =>
         Producer.produce[Any, Long, String](
           topic = "random",
-          key = Uuid.randomUuid().hashCode(),
+          key = 123,
           value = record,
           keySerializer = Serde.long,
           valueSerializer = Serde.string

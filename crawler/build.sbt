@@ -5,7 +5,7 @@ ThisBuild / scalaVersion := "2.12.17"
 lazy val root = (project in file("."))
   .settings(
     name := "crawler",
-    idePackagePrefix := Some("com.dyptan.crawler")
+//    idePackagePrefix := Some("com.dyptan.crawler")
   )
 
 libraryDependencies ++= List(
@@ -34,3 +34,6 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-test-magnolia" % "2.0.15" % Test
 )
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
+
+unmanagedJars in Compile ++=
+  (file("/Users/user/IdeaProjects/analytics/zio-kafka/target/scala-2.13/") * "*.jar").classpath

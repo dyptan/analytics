@@ -7,7 +7,7 @@ import io.circe.generic.auto._
 import sttp.client3.circe._
 import sttp.client3.{UriContext, basicRequest}
 import sttp.model
-import zio.kafka.producer.{Producer, ProducerSettings}
+import zio.kafka.pubsublite.producer.{Producer, ProducerSettings}
 import zio.kafka.serde.Serde
 import zio.stream.ZStream
 import zio.{Queue, ZIO, ZLayer}
@@ -45,7 +45,7 @@ object Conf {
   def producerLayer =
     ZLayer.scoped(
       Producer.make(
-        settings = ProducerSettings(List(config.getConfig("producer").getString("kafkaServer")))
+        settings = ProducerSettings("europe-west9-a", 952438425179L, "random")
       )
     )
 

@@ -14,7 +14,7 @@ libraryDependencies ++= List(
 )
 
 libraryDependencies ++= Seq(
-  "dev.zio" %% "zio-kafka"   % "2.3.1",
+//  "dev.zio" %% "zio-kafka"   % "2.3.1",
   "dev.zio" %% "zio-http" % "3.0.0-RC2",
   "dev.zio" %% "zio-akka-cluster" % "0.3.0",
   "dev.zio" %% "zio-cache" % "0.2.3"
@@ -34,6 +34,3 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-test-magnolia" % "2.0.15" % Test
 )
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
-
-unmanagedJars in Compile ++=
-  (file("/Users/user/IdeaProjects/analytics/zio-kafka/target/scala-2.13/") * "*.jar").classpath

@@ -3,7 +3,7 @@ package com.dyptan.crawler
 import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 import io.circe.generic.auto._
-//import org.apache.kafka.common.Uuid
+import org.apache.kafka.common.Uuid
 import sttp.client3.circe._
 import sttp.client3.{UriContext, basicRequest}
 import sttp.model
@@ -11,6 +11,9 @@ import zio.kafka.pubsublite.producer.{Producer, ProducerSettings}
 import zio.kafka.serde.Serde
 import zio.stream.ZStream
 import zio.{Queue, ZIO, ZLayer}
+
+import com.google.cloud.pubsublite.kafka.{ ProducerSettings => GProducerSettings }
+import com.google.cloud.pubsublite.{ CloudZone, ProjectNumber, TopicName, TopicPath }
 
 import java.io.File
 
@@ -56,12 +59,19 @@ object Conf {
 //      )
 //    )
 
+  val kafkaTopic: String = {
+    TopicPath.newBuilder
+      .setLocation(CloudZone.parse("europe-west9-a"))
+      .setProject(ProjectNumber.of(952438425179L))
+      .setName(TopicName.of("random")).build.toString()
+  }
+
   def producer(records: Queue[String]): ZStream[Producer, Throwable, Nothing] =
     ZStream.fromQueue(records)
       .mapZIO { record =>
         Producer.produce[Any, Long, String](
-          topic = "random",
-          key = 123,
+          topic = kafkaTopic,
+          key = Uuid.randomUuid().hashCode(),
           value = record,
           keySerializer = Serde.long,
           valueSerializer = Serde.string

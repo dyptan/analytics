@@ -18,13 +18,36 @@
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
 
+   <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>libraries-bom</artifactId>
+                <version>26.18.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/dyptan/analytics</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>dev.zio</groupId>
             <artifactId>izumi-reflect_${scala.major.version}</artifactId>
             <version>2.3.8</version>
         </dependency>
-
         <dependency>
             <groupId>com.softwaremill.sttp.client3</groupId>
             <artifactId>circe_${scala.major.version}</artifactId>
@@ -35,10 +58,30 @@
             <artifactId>zio_${scala.major.version}</artifactId>
             <version>3.8.15</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>dev.zio</groupId>
             <artifactId>zio-kafka_${scala.major.version}</artifactId>
             <version>2.3.1</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>pubsublite-kafka</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>pubsublite-kafka-auth</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyptan</groupId>
+            <artifactId>zio-pubsublite</artifactId>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
@@ -177,6 +220,7 @@
             <version>3.5.0</version>
             <executions>
                 <execution>
+                    <id>shade-my-jar</id>
                     <phase>package</phase>
                     <goals>
                         <goal>shade</goal>
@@ -190,6 +234,7 @@
                             </includes>
                         </artifactSet>
                         <transformers>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                 <resource>reference.conf</resource>

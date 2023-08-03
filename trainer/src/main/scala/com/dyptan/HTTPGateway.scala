@@ -75,7 +75,7 @@ class TrainerGateway {
     implicit val materializer = ActorMaterializer()
     import TrainerActor._
     import system.dispatcher
-    implicit val defaultTimeout = Timeout(3000 seconds)
+    implicit val defaultTimeout = Timeout(3000.seconds)
 
     val trainerActor = system.actorOf(Props[TrainerActor], "TRainerActor")
 

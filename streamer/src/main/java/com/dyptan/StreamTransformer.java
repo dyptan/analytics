@@ -1,6 +1,5 @@
 package com.dyptan;
 
-import com.mongodb.spark.MongoSpark;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.function.VoidFunction2;
@@ -10,6 +9,9 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.streaming.StreamingQuery;
 import org.apache.spark.sql.types.StructType;
+import scala.Tuple2;
+import scala.collection.Iterable;
+
 import static scala.collection.JavaConverters.*;
 
 import java.io.IOException;
@@ -88,7 +90,7 @@ public class StreamTransformer implements  Runnable{
         Map scalaProps = streamingConfig;
 
         SparkConf sparkConf = new SparkConf();
-        sparkConf.setAll(mapAsScalaMap(scalaProps));
+        sparkConf.setAll((Iterable<Tuple2<String, String>>) mapAsScalaMapConverter(scalaProps).asScala());
 
         spark = SparkSession
                 .builder()
@@ -133,25 +135,13 @@ public class StreamTransformer implements  Runnable{
         Dataset<Row> filteredDf = streamPredictionsDF.drop("features");
 
 
-        try {
-            query = filteredDf.writeStream()
-    //                .outputMode("append").format("console")
-                    .foreachBatch(
-                    (VoidFunction2<Dataset<Row>, Long>) (records, batchId) -> {
-                        logger.warn(records.showString(10, 15, false));
-                        MongoSpark.save(records);
-                    }
-            ).start();
-        } catch (TimeoutException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        try {
-            query.awaitTermination();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        filteredDf.writeStream().format("mongodb")
+            .option("checkpointLocation", "/tmp/")
+            .option("forceDeleteTempCheckpointLocation", "true")
+            .option("spark.mongodb.connection.uri", "<mongodb-connection-string>")
+            .option("spark.mongodb.database", "<database-name>")
+            .option("spark.mongodb.collection", "<collection-name>")
+            .outputMode("append");
 
     }
 

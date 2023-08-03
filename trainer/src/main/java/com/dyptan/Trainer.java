@@ -13,6 +13,9 @@ import org.apache.spark.ml.regression.LinearRegression;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import scala.Tuple2;
+import scala.collection.immutable.Iterable;
+import scala.jdk.javaapi.CollectionConverters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,14 +27,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-import static scala.collection.JavaConversions.mapAsScalaMap;
 
 public class Trainer {
     private static final Logger logger = Logger.getLogger(Trainer.class.getName());
 
     private PipelineModel pipelineModel = null;
     public SparkSession spark = null;
-    private Map<String, String> elasticsearchConfig = new HashMap<String, String>();
     private Dataset<Row>[] splitDF = null;
     Properties trainerConfig = new Properties();
 
@@ -47,24 +48,16 @@ public class Trainer {
             e.printStackTrace();
         }
 
-//        InputStream properties = getClass().getClassLoader()
-//                .getResourceAsStream("trainer.properties");
-//
-//        prop.load(properties);
-
-        Map<String, String> scalaProps = new HashMap<>();
-        scalaProps.putAll( (Map) trainerConfig);
+        Map<String, String> scalaProps = new HashMap<>((Map) trainerConfig);
 
         SparkConf sparkConf = new SparkConf();
-        sparkConf.setAll(mapAsScalaMap(scalaProps));
+        scalaProps.forEach(sparkConf::set);
 
         spark = SparkSession
                 .builder()
                 .appName("ReadFromElasticAndTrainModel")
                 .config(sparkConf)
                 .getOrCreate();
-
-        elasticsearchConfig.putAll( (Map) trainerConfig);
 
         logger.info("Spark Started..");
     }
@@ -79,15 +72,16 @@ public class Trainer {
         properties.setProperty("ml.source.limit", String.valueOf(limit));
         properties.setProperty("ml.iterations", String.valueOf(iterations));
         //Override properties from config file
-        elasticsearchConfig.putAll((Map) properties);
     }
 
     public void train() {
         logger.info("Training Started..");
 
-        Dataset<Row> cars = spark.read().format("org.elasticsearch.spark.sql").options(elasticsearchConfig)
-                .option("inferSchema", true)
-                .load();
+        Dataset<Row> cars = spark
+                .read()
+                .format("mongodb")
+                .option("database", "<example-database>")
+                .option("collection", "<example-collection>").load();
 
         logger.info("Source schema: " + cars.schema().treeString());
 
@@ -98,8 +92,7 @@ public class Trainer {
                 "race_km",
                 "model",
                 "year",
-                "published")
-                .limit(Integer.valueOf(elasticsearchConfig.getOrDefault("ml.source.limit", "100")));
+                "published");
 
         logger.info("Pre-transformed data sample: \n"+selected.showString(10, 10, false));
         logger.info("Train dataset is limited to " + selected.count() + " rows");
@@ -117,7 +110,6 @@ public class Trainer {
 
         // Choosing a Model
         LinearRegression linearRegression = new LinearRegression();
-        linearRegression.setMaxIter(Integer.valueOf(elasticsearchConfig.getOrDefault("ml.iterations", "100")));
 
         Pipeline pipeline = new Pipeline()
                 .setStages(new PipelineStage[] {

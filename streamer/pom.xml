@@ -39,12 +39,12 @@
     <dependencies>
 
         <!--Scala Tests-->
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.major.version}</artifactId>
-            <version>3.0.5</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.scalatest</groupId>-->
+<!--            <artifactId>scalatest_${scala.major.version}</artifactId>-->
+<!--            <version>3.0.5</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
         <!--Junit-->
         <dependency>
@@ -105,30 +105,30 @@
         </dependency>
 
         <!--Spark HDFS-->
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-common</artifactId>
-            <version>${hadoop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-mapreduce-client-core</artifactId>
-            <version>${hadoop.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hadoop</groupId>-->
+<!--            <artifactId>hadoop-common</artifactId>-->
+<!--            <version>${hadoop.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hadoop</groupId>-->
+<!--            <artifactId>hadoop-mapreduce-client-core</artifactId>-->
+<!--            <version>${hadoop.version}</version>-->
+<!--        </dependency>-->
 
         <!--Mongo-->
         <dependency>
             <groupId>org.mongodb.spark</groupId>
-            <artifactId>mongo-spark-connector_${scala.major.version}</artifactId>
-            <version>${spark.mongo.version}</version>
+            <artifactId>mongo-spark-connector_2.13</artifactId>
+            <version>10.1.1</version>
         </dependency>
 
         <!--Elasticsearch-->
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch-hadoop</artifactId>
-            <version>${elasticsearch.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.elasticsearch</groupId>-->
+<!--            <artifactId>elasticsearch-hadoop</artifactId>-->
+<!--            <version>${elasticsearch.version}</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 

@@ -1,5 +1,0 @@
-
-- pipeline.id: olxua
-  path.config: "/etc/logstash/conf.d/olxua.conf"
-- pipeline.id: olxpl
-  path.config: "/etc/logstash/conf.d/olxpl.conf"

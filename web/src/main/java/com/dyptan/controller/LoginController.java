@@ -5,7 +5,6 @@ import com.dyptan.model.Role;
 import com.dyptan.model.User;
 import com.dyptan.repository.UserRepository;
 import com.dyptan.service.AuthService;
-import com.dyptan.service.SearchService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.logging.log4j.Logger;
@@ -33,8 +32,6 @@ public class LoginController {
     Logger log = LogManager.getLogger(LoginController.class);
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    SearchService service;
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
@@ -72,14 +69,6 @@ public class LoginController {
         return "admin";
     }
 
-    @GetMapping("/search")
-    public String search(Model model, UsernamePasswordAuthenticationToken principal) {
-        User user = (User) principal.getPrincipal();
-        model.addAttribute("filters", user.getFilters());
-        model.addAttribute("brands", service.getBrands());
-        model.addAttribute("userName", user.getUsername());
-        return "search";
-    }
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String searchWithfilter(@ModelAttribute Filter filter,
@@ -89,13 +78,6 @@ public class LoginController {
                                    UsernamePasswordAuthenticationToken principal) {
 
         log.info("Filter is built: "+filter);
-
-        List<Map<String, Object>> documents = service.getHitsAsList(filter);
-        log.debug("Docs found : " + documents.size() + "\n Content is: " + documents);
-
-        model.addAttribute("documents", documents);
-        model.addAttribute("brands", service.getBrands());
-        model.addAttribute("userName", session.getAttribute("userName").toString());
 
         if (saveFilter) {
 

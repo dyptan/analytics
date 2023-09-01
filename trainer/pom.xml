@@ -17,14 +17,19 @@
     <version>1.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-  <dependencies>
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                <groupId>com.google.cloud</groupId>-->
+<!--                <artifactId>libraries-bom</artifactId>-->
+<!--                <version>26.18.0</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
 
-    <dependency>
-        <groupId>org.scalatest</groupId>
-        <artifactId>scalatest_${scala.major.version}</artifactId>
-        <version>3.0.5</version>
-        <scope>test</scope>
-    </dependency>
+  <dependencies>
 
     <dependency>
         <groupId>junit</groupId>
@@ -44,8 +49,38 @@
         <artifactId>spark-mllib_${scala.major.version}</artifactId>
         <version>${spark.version}</version>
     </dependency>
-
-    <dependency>
+      <dependency>
+          <groupId>com.google.cloud</groupId>
+          <artifactId>pubsublite-spark-sql-streaming</artifactId>
+          <version>1.0.0</version>
+      </dependency>
+     <dependency>
+         <groupId>com.google.cloud</groupId>
+         <artifactId>google-cloud-pubsublite</artifactId>
+         <version>1.12.10</version>
+     </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>1.7.21</version>
+      </dependency>
+<!--      <dependency>-->
+<!--          <groupId>ch.qos.logback</groupId>-->
+<!--          <artifactId>logback-classic</artifactId>-->
+<!--          <version>1.4.7</version>-->
+<!--          <scope>test</scope>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--          <groupId>com.google.api</groupId>-->
+<!--          <artifactId>gax</artifactId>-->
+<!--          <version>2.8.1</version>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--          <groupId>com.google.api</groupId>-->
+<!--          <artifactId>gax-grpc</artifactId>-->
+<!--          <version>2.8.1</version>-->
+<!--      </dependency>-->
+      <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-http_${scala.major.version}</artifactId>
       <version>${akka.http.version}</version>
@@ -66,16 +101,11 @@
       <scope>compile</scope>
     </dependency>
 
-    <dependency>
-        <groupId>org.elasticsearch</groupId>
-        <artifactId>elasticsearch-spark-20_2.12</artifactId>
-        <version>7.17.3</version>
-    </dependency>
-      <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-common</artifactId>
-          <version>${hadoop.version}</version>
-      </dependency>
+<!--      <dependency>-->
+<!--          <groupId>org.apache.hadoop</groupId>-->
+<!--          <artifactId>hadoop-common</artifactId>-->
+<!--          <version>${hadoop.version}</version>-->
+<!--      </dependency>-->
 
   </dependencies>
 
@@ -83,12 +113,6 @@
 
   <build>
       <plugins>
-
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-
         <plugin>
             <groupId>org.scala-tools</groupId>
             <artifactId>maven-scala-plugin</artifactId>
@@ -108,7 +132,7 @@
 
         <plugin>
             <artifactId>maven-resources-plugin</artifactId>
-            <version>2.6</version>
+            <version>3.3.0</version>
             <executions>
                 <execution>
                     <id>copy-resources</id>

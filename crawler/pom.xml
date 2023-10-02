@@ -58,11 +58,11 @@
             <artifactId>zio_${scala.major.version}</artifactId>
             <version>3.8.15</version>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>dev.zio</groupId>
             <artifactId>zio-kafka_${scala.major.version}</artifactId>
             <version>2.3.1</version>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>

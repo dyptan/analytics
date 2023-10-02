@@ -14,7 +14,7 @@ libraryDependencies ++= List(
 )
 
 libraryDependencies ++= Seq(
-//  "dev.zio" %% "zio-kafka"   % "2.3.1",
+  "dev.zio" %% "zio-kafka"   % "2.4.2",
   "dev.zio" %% "zio-http" % "3.0.0-RC2",
   "dev.zio" %% "zio-akka-cluster" % "0.3.0",
   "dev.zio" %% "zio-cache" % "0.2.3"

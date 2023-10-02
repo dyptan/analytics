@@ -36,9 +36,10 @@
 
     <modules>
         <module>web</module>
-        <module>streamer</module>
+        <module>predictor</module>
         <module>trainer</module>
         <module>crawler</module>
+        <module>archiver</module>
     </modules>
 
 

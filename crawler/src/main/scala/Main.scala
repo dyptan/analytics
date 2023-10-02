@@ -83,7 +83,8 @@ object Main extends ZIOAppDefault {
 
     }.provide(
       HttpClientZioBackend.layer(),
-      producerLayer,
+      pubSubLiteProducerLayer,
+      kafkaProducerLayer,
 //      consumerLayer,
       actorSystem)
   }.catchAll(t => ZIO.log(s"caught failure $t"))

@@ -1,2 +1,2 @@
-db = db.getSiblingDB('olx')
-db.createCollection( "cars", { capped: true, size: 1024 } )
+db = db.getSiblingDB('ria')
+db.createCollection("cars")

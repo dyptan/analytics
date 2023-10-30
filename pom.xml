@@ -36,10 +36,8 @@
 
     <modules>
         <module>web</module>
-        <module>predictor</module>
-        <module>trainer</module>
         <module>crawler</module>
-        <module>archiver</module>
+        <module>processor</module>
     </modules>
 
 

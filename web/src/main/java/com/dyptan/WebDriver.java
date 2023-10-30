@@ -1,9 +1,7 @@
 package com.dyptan;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.elasticsearch.action.search.SearchRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -27,10 +25,6 @@ public class WebDriver
         return mapper;
     }
 
-    @Bean
-    public SearchRequest searchRequest(){
-        return new SearchRequest();
-    }
 
 }
 

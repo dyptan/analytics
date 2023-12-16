@@ -2,7 +2,7 @@ version: '3'
 
 services:
   kafka:
-    image: bitnami/kafka:latest
+    image: bitnami/kafka:3.6
     ports:
       - 9092:9092
     environment:
@@ -12,8 +12,19 @@ services:
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+
+  schema-registry:
+    image: bitnami/schema-registry:7.5
+    ports:
+      - 8081:8081
+    environment:
+      - SCHEMA_REGISTRY_DEBUG=true
+      - SCHEMA_REGISTRY_KAFKA_BROKERS=PLAINTEXT://kafka:9092
+      - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081
+
+
   mongo:
     build: ./mongo
     image: diptan/mongo

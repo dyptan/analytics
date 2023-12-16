@@ -36,13 +36,32 @@
             <url>https://repo1.maven.org/maven2</url>
         </repository>
         <repository>
-            <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/dyptan/analytics</url>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
         </repository>
+<!--        <repository>-->
+<!--            <id>github</id>-->
+<!--            <name>GitHub OWNER Apache Maven Packages</name>-->
+<!--            <url>https://maven.pkg.github.com/dyptan/analytics</url>-->
+<!--        </repository>-->
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.dyptan</groupId>
+            <artifactId>avro-schemas</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sksamuel.avro4s</groupId>
+            <artifactId>avro4s-core_2.13</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sksamuel.avro4s</groupId>
+            <artifactId>avro4s-json_2.13</artifactId>
+            <version>4.1.0</version>
+        </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
             <artifactId>izumi-reflect_${scala.major.version}</artifactId>
@@ -121,10 +140,21 @@
             <artifactId>config</artifactId>
             <version>1.4.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.11.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>7.0.0</version>
+        </dependency>
     </dependencies>
 
 <build>
     <plugins>
+
         <plugin>
             <groupId>org.scala-tools</groupId>
             <artifactId>maven-scala-plugin</artifactId>

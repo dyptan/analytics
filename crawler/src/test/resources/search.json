@@ -1,143 +1,145 @@
 {
-  "userId": 489269,
-  "userBlocked": [],
-  "chipsCount": 0,
-  "locationCityName": "Днепр (Днепропетровск)",
-  "cityLocative": "Днепре",
-  "auctionPossible": false,
-  "exchangePossible": false,
-  "realtyExchange": false,
-  "exchangeType": "Любой",
-  "exchangeTypeId": 0,
-  "addDate": "2017-04-24 23:02:06",
-  "updateDate": "2017-04-24 23:02:06",
-  "expireDate": "2017-07-24 23:02:06",
-  "soldDate": "2017-05-05 11:47:47",
-  "userHideADSStatus": false,
-  "userPhoneData": {
-    "phoneId": "xxxxxxx",
-    "phone": "(xxx) xxx xx xx"
+  "additional_params": {
+    "lang_id": 2,
+    "page": 0,
+    "view_type_id": 0,
+    "target": "search",
+    "section": "auto",
+    "catalog_name": "",
+    "elastica": true,
+    "nodejs": true,
+    "searchByTypeAction": true
   },
-  "USD": 33500,
-  "UAH": 1246535,
-  "EUR": 30962,
-  "isAutoAddedByPartner": false,
-  "partnerId": 0,
-  "levelData": {
-    "level": 0,
-    "label": 0,
-    "hotType": "",
-    "expireDate": ""
-  },
-  "color": {
-    "name": "Черный",
-    "eng": "black",
-    "hex": "#000000"
-  },
-  "autoData": {
-    "active": false,
-    "vat": false,
-    "description": "Итак. Пришло время в срочном порядке продать свой любимый автомобиль. \r\nПокупал его в августе 2013 года. \r\nПолностью обслужен на официальном дилере. \r\nПройдены все ТО. Никаких вложений не требует. \r\nВ дтп не был, ничего не красилось.\r\nОчень тихий, комфортный и качественный автомобиль. \r\nУход проходил всегда на дитейлинг центре - состояние салона и лакокрасочного покрытия на 5. \r\nВ машине не курил. 7 мест. \r\nХочу отдать в хорошие руки чтоб он дальше радовал нового владельца - соответственно площадки и перебаеры - просьба не тратить ваше время.\r\nОсобо торговаться не буду так как вложено много времени и денег для поддержания его в первоначальном виде. \r\n \r\n\r\n",
-    "version": "",
-    "onModeration": false,
-    "year": 2013,
-    "autoId": 19050985,
-    "bodyId": 5,
-    "statusId": 1,
-    "withVideo": false,
-    "race": "60 тыс. км",
-    "raceInt": 60,
-    "fuelId": 2,
-    "fuelName": "Дизель",
-    "fuelNameEng": "dizel",
-    "gearBoxId": 2,
-    "gearboxName": "Автомат",
-    "driveId": 1,
-    "driveName": "Полный",
-    "isSold": true,
-    "mainCurrency": "USD",
-    "fromArchive": true,
-    "categoryId": 1,
-    "categoryNameEng": "legkovie",
-    "subCategoryNameEng": "vnedorozhnik-krossover",
-    "custom": 0,
-    "withVideoMessages": false
-  },
-  "autoInfoBar": {
-    "custom": false,
-    "abroad": false,
-    "onRepairParts": false,
-    "damage": false,
-    "underCredit": false,
-    "confiscatedCar": false
-  },
-  "markName": "Volvo",
-  "markNameEng": "volvo",
-  "markId": 85,
-  "modelName": "XC90",
-  "modelNameEng": "xc90",
-  "modelId": 824,
-  "subCategoryName": "Внедорожник / Кроссовер",
-  "photoData": {
-    "all": [
-      181949196,
-      181949204,
-      181949211,
-      181949213,
-      181949217,
-      181949222,
-      181949225,
-      181949227,
-      181949230,
-      181949232,
-      181949237,
-      181949242,
-      181949246,
-      181949250,
-      181949255
-    ],
-    "count": 15,
-    "seoLinkM": "https://cdn1.riastatic.com/photosnew/auto/photo/volvo_xc90__181949196m.jpg",
-    "seoLinkSX": "https://cdn1.riastatic.com/photosnew/auto/photo/volvo_xc90__181949196sx.jpg",
-    "seoLinkB": "https://cdn1.riastatic.com/photosnew/auto/photo/volvo_xc90__181949196b.jpg",
-    "seoLinkF": "https://cdn1.riastatic.com/photosnew/auto/photo/volvo_xc90__181949196f.jpg"
-  },
-  "linkToView": "/auto_volvo_xc90_19050985.html",
-  "title": "Volvo XC90",
-  "stateData": {
-    "name": "Днепр (Днепропетровск)",
-    "regionName": "Днепропетровская",
-    "regionNameEng": "dnepr-dnepropetrovsk",
-    "linkToCatalog": "/city/dnepr-dnepropetrovsk/",
-    "title": "Поиск объявлений по городу Днепр (Днепропетровск)",
-    "stateId": 11,
-    "cityId": 11
-  },
-  "canSetSpecificPhoneToAdvert": false,
-  "dontComment": 0,
-  "sendComments": 0,
-  "badges": [],
-  "VIN": "",
-  "haveInfotechReport": false,
-  "hasWebP": 0,
-  "moderatedAbroad": false,
-  "secureKey": "37e371e022e2ff620ac6dca42804e186",
-  "firstTime": false,
-  "technicalChecked": false,
-  "videoMessages": {},
-  "videoMessageID": "",
-  "isLeasing": 0,
-  "dealer": {
-    "link": "",
-    "logo": "",
-    "type": "",
-    "id": 0,
-    "name": "",
-    "packageId": 0,
-    "typeId": 0,
-    "verified": false
-  },
-  "withInfoBar": false,
-  "infoBarText": "",
-  "optionStyles": []
+  "result": {
+    "search_result": {
+      "ids": [
+        "35637460"
+      ],
+      "count": 1,
+      "last_id": 0
+    },
+    "search_result_common": {
+      "count": 1,
+      "last_id": 0,
+      "data": [
+        {
+          "id": "35637460",
+          "type": "UsedAuto"
+        }
+      ]
+    },
+    "active_marka": null,
+    "active_model": null,
+    "active_state": null,
+    "active_city": null,
+    "revies": null,
+    "isCommonSearch": true,
+    "additional": {
+      "user_auto_positions": [],
+      "search_params": {
+        "all": {
+          "countpage": 1,
+          "category_id": 1,
+          "s_yers": [
+            2000
+          ],
+          "price_ot": 3000,
+          "price_do": 60000,
+          "top": "1,NoBody,Vector",
+          "searchType": 1,
+          "target": "search",
+          "event": "little",
+          "lang_id": 2,
+          "page": 0,
+          "limit_page": null,
+          "last_id": 0,
+          "saledParam": 0,
+          "marka_id": [],
+          "model_id": [],
+          "mm_marka_filtr": [],
+          "mm_model_filtr": [],
+          "useOrigAutoTable": false,
+          "withoutStatus": false,
+          "with_photo": false,
+          "with_video": false,
+          "under_credit": 0,
+          "confiscated_car": 0,
+          "exchange_filter": [],
+          "old_only": false,
+          "auto_options": [],
+          "user_id": [],
+          "person_id": 0,
+          "with_discount": false,
+          "auto_id_str": "",
+          "black_user_id": 0,
+          "order_by": 0,
+          "is_online": false,
+          "withoutCache": false,
+          "with_last_id": false,
+          "currency": 1,
+          "currency_id": 0,
+          "currencies_arr": [],
+          "power_name": 0,
+          "powerFrom": 0,
+          "powerTo": 0,
+          "hide_black_list": [],
+          "custom": 0,
+          "abroad": false,
+          "damage": 0,
+          "star_auto": 0,
+          "po_yers": [
+            null
+          ],
+          "year": 0,
+          "auto_ids_search_position": 0,
+          "print_qs": 0,
+          "is_hot": 0,
+          "deletedAutoSearch": 0,
+          "can_be_checked": 0,
+          "excludeMM": [],
+          "generation_id": [
+            null
+          ],
+          "modification_id": [
+            null
+          ]
+        },
+        "cleaned": {
+          "countpage": 100,
+          "category_id": 1,
+          "s_yers": [
+            2000
+          ],
+          "price_ot": 3000,
+          "price_do": 60000,
+          "top": "1,NoBody,Vector",
+          "searchType": 1,
+          "target": "search",
+          "event": "little",
+          "lang_id": 2,
+          "marka_id": [],
+          "model_id": [],
+          "mm_marka_filtr": [],
+          "mm_model_filtr": [],
+          "exchange_filter": [],
+          "auto_options": [],
+          "user_id": [],
+          "currency": 1,
+          "currencies_arr": [],
+          "hide_black_list": [],
+          "po_yers": [
+            null
+          ],
+          "excludeMM": [],
+          "generation_id": [
+            null
+          ],
+          "modification_id": [
+            null
+          ]
+        }
+      },
+      "query_string": "countpage=100&category_id=1&s_yers%5B0%5D=2000&price_ot=3000&price_do=60000&countpage=100&top=1,NoBody,Vector"
+    }
+  }
 }

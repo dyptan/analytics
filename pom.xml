@@ -38,6 +38,8 @@
         <module>web</module>
         <module>crawler</module>
         <module>processor</module>
+        <module>fetcher</module>
+        <module>avro-schemas</module>
     </modules>
 
 

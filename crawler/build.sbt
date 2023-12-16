@@ -1,6 +1,10 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "2.12.17"
+ThisBuild / scalaVersion := "2.13.11"
+
+resolvers ++= Seq(
+  "confluent" at "https://packages.confluent.io/maven/",
+)
 
 lazy val root = (project in file("."))
   .settings(
@@ -33,4 +37,12 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-test-sbt"      % "2.0.15" % Test,
   "dev.zio" %% "zio-test-magnolia" % "2.0.15" % Test
 )
+
+libraryDependencies ++= Seq(
+  "io.confluent" % "kafka-avro-serializer" % "7.0.0",
+  "com.sksamuel.avro4s" %% "avro4s-core" % "4.0.6"
+)
+
+
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
+libraryDependencies += "org.apache.avro" % "avro" % "1.11.3"

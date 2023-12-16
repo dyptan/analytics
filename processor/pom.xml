@@ -19,8 +19,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.beam</groupId>
@@ -67,6 +78,12 @@
             <artifactId>akka-stream_${scala.major.version}</artifactId>
             <version>${akka.version}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dyptan</groupId>
+            <artifactId>avro-schemas</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

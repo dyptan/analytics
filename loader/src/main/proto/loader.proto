@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.dyptan.gen.proto";
+
+service LoaderService {
+  rpc GetAdvertisements (FilterMessage) returns (stream AdvertisementMessage);
+}
+
+message FilterMessage {
+  string category = 1;
+}
+
+import "google/protobuf/timestamp.proto";
+
+message Geo {
+  int32 stateId = 1;
+  int32 cityId = 2;
+  string regionNameEng = 3;
+}
+
+message Dtls {
+  int32 year = 1;
+  int32 autoId = 2;
+  int32 bodyId = 3;
+  int32 raceInt = 4;
+  int32 fuelId = 5;
+  string fuelNameEng = 6;
+  int32 gearBoxId = 7;
+  string gearboxName = 8;
+  int32 driveId = 9;
+  string driveName = 10;
+  int32 categoryId = 11;
+  string categoryNameEng = 12;
+  string subCategoryNameEng = 13;
+}
+
+message AdvertisementMessage {
+  int32 USD = 1;
+  string addDate = 2;
+  string soldDate = 3;
+  Dtls autoData = 4;
+  int32 markId = 5;
+  string markNameEng = 6;
+  int32 modelId = 7;
+  string modelNameEng = 8;
+  string linkToView = 9;
+  Geo stateData = 10;
+  google.protobuf.Timestamp timestampField = 11;
+  // Add more fields as needed
+}

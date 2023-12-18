@@ -1,5 +1,6 @@
 package com.dyptan.model;
 
+import com.dyptan.gen.proto.FilterMessage;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Transient;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +19,7 @@ public class User {
     private String username;
     private String password;
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Filter> filters = new ArrayList<>();
+    private List<FilterMessage> filters = new ArrayList<>();
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role.Roles> roles = new HashSet<>();
 
@@ -31,7 +32,7 @@ public class User {
         this.filters = user.getFilters();
     }
 
-    public void addFilter(Filter filter) {
+    public void addFilter(FilterMessage filter) {
         filters.add(filter);
     }
     public void addRole(Role.Roles role) {
@@ -46,7 +47,7 @@ public class User {
     public String getPassword() {
         return this.password;
     }
-    public List<Filter> getFilters() {
+    public List<FilterMessage> getFilters() {
         return this.filters;
     }
     public Set<Role.Roles> getRoles() {
@@ -58,7 +59,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public void setFilters(List<Filter> filters) {
+    public void setFilters(List<FilterMessage> filters) {
         this.filters = filters;
     }
     public void setRoles(Set<Role.Roles> roles) {

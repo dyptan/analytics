@@ -8,7 +8,16 @@ service LoaderService {
 }
 
 message FilterMessage {
-  string category = 1;
+  int32 limit = 1 [deprecated=true];
+  string models = 2;
+  string brands = 3;
+  int32 periodLastDays = 5;
+  int32 yearFrom = 6;
+  int32 yearTo = 7;
+  int32 priceFrom = 8;
+  int32 priceTo = 9;
+  int32 raceFrom = 10;
+  int32 raceTo = 11;
 }
 
 import "google/protobuf/timestamp.proto";
@@ -16,36 +25,35 @@ import "google/protobuf/timestamp.proto";
 message Geo {
   int32 stateId = 1;
   int32 cityId = 2;
-  string regionNameEng = 3;
+  string regionName = 3;
 }
 
-message Dtls {
+message Details {
   int32 year = 1;
   int32 autoId = 2;
   int32 bodyId = 3;
   int32 raceInt = 4;
   int32 fuelId = 5;
-  string fuelNameEng = 6;
+  string fuelName = 6;
   int32 gearBoxId = 7;
   string gearboxName = 8;
   int32 driveId = 9;
   string driveName = 10;
   int32 categoryId = 11;
-  string categoryNameEng = 12;
-  string subCategoryNameEng = 13;
+  string categoryName = 12;
+  string subCategoryName = 13;
 }
 
 message AdvertisementMessage {
-  int32 USD = 1;
+  int32 priceUSD = 1;
   string addDate = 2;
   string soldDate = 3;
-  Dtls autoData = 4;
-  int32 markId = 5;
-  string markNameEng = 6;
+  Details autoData = 4;
+  int32 brandId = 5;
+  string brandName = 6;
   int32 modelId = 7;
-  string modelNameEng = 8;
+  string modelName = 8;
   string linkToView = 9;
   Geo stateData = 10;
   google.protobuf.Timestamp timestampField = 11;
-  // Add more fields as needed
 }

@@ -1,6 +1,6 @@
 package com.dyptan.controller;
 
-import com.dyptan.model.Filter;
+import com.dyptan.gen.proto.FilterMessage;
 import com.dyptan.model.User;
 import com.dyptan.repository.UserRepository;
 import com.dyptan.service.AuthService;
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{name}/filters")
-    public List<Filter> getAllUserFilters(@PathVariable(name="name") String name){
+    public List<FilterMessage> getAllUserFilters(@PathVariable(name="name") String name){
         return userRepository.findByUsername(name)
                     .map(User::getFilters)
                 .orElseThrow(() -> new UsernameNotFoundException(name));
@@ -46,7 +46,7 @@ public class UserController {
 
 
     @GetMapping("/user/{name}/filter/{id}")
-    public Filter getUserFilterById(@PathVariable(name="name") String name,
+    public FilterMessage getUserFilterById(@PathVariable(name="name") String name,
                                           @PathVariable(name="id") int filterId){
         return userRepository.findByUsername(name)
                 .map(user-> user.getFilters().get(filterId))
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/user/{name}/filters",  consumes = MediaType.APPLICATION_JSON_VALUE)
-    public User createUserFilter(@PathVariable(name="name") String name, @RequestBody Filter newFilter) {
+    public User createUserFilter(@PathVariable(name="name") String name, @RequestBody FilterMessage newFilter) {
         User user = userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException(name));
         user.addFilter(newFilter);
         return userRepository.save(user);

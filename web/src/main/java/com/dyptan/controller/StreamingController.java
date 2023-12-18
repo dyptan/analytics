@@ -1,7 +1,10 @@
 package com.dyptan.controller;
 
-import com.dyptan.model.Car;
-import com.dyptan.model.Filter;
+import com.dyptan.gen.proto.AdvertisementMessage;
+import com.dyptan.gen.proto.FilterMessage;
+import com.dyptan.gen.proto.LoaderServiceGrpc;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,17 +15,14 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.URL;
 import java.util.Arrays;
+import java.util.Iterator;
 
 
 @Controller
@@ -32,6 +32,30 @@ public class StreamingController {
 
     Logger log = LogManager.getLogger(StreamingController.class);
 
+    public static void main(String[] args) {
+        // Create a channel to connect to the gRPC server
+        ManagedChannel channel = ManagedChannelBuilder
+                .forAddress("localhost", 8080)  // Replace with your server's address and port
+                .usePlaintext()  // Use plaintext (non-secure) communication for simplicity
+                .build();
+
+        // Create a gRPC client using the channel
+        LoaderServiceGrpc.LoaderServiceBlockingStub blockingStub = LoaderServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        FilterMessage request = FilterMessage.newBuilder()
+                // Set request parameters
+                .build();
+
+        // Make an RPC call and get the response
+        Iterator<AdvertisementMessage> response = blockingStub.getAdvertisements(request);
+
+        // Process the response
+        System.out.println("Response received: " + response);
+
+        // Shutdown the channel when done
+        channel.shutdown();
+    }
     private final ReactiveMongoTemplate mongoTemplate;
 
     @Value
@@ -55,7 +79,7 @@ public class StreamingController {
     }
 
     @PostMapping(value = "/stream", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String stream(@ModelAttribute Filter filter) {
+    public String stream(@ModelAttribute FilterMessage filter) {
         this.query = new Query();
         this.query.addCriteria(Criteria.where("category").not().in(
                 // splits the string on a delimiter defined as:
@@ -93,8 +117,8 @@ public class StreamingController {
             value = {"/mongostream"},
             produces = {"text/event-stream"}
     )
-    public Flux<Car> filteredstream() {
-        return this.mongoTemplate.tail(this.query, Car.class).share();
+    public Flux<AdvertisementMessage> filteredstream() {
+        return this.mongoTemplate.tail(this.query, AdvertisementMessage.class).share();
     }
 
 

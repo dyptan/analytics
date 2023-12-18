@@ -1,6 +1,6 @@
 package com.dyptan.controller;
 
-import com.dyptan.model.Filter;
+import com.dyptan.gen.proto.FilterMessage;
 import com.dyptan.model.Role;
 import com.dyptan.model.User;
 import com.dyptan.repository.UserRepository;
@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class LoginController {
@@ -71,7 +69,7 @@ public class LoginController {
 
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String searchWithfilter(@ModelAttribute Filter filter,
+    public String searchWithfilter(@ModelAttribute FilterMessage filter,
                                    @RequestParam(name="saveFilter", required=false, defaultValue="false") Boolean saveFilter,
                                    HttpSession session,
                                    Model model,

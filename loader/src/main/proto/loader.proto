@@ -22,13 +22,13 @@ message FilterMessage {
 
 import "google/protobuf/timestamp.proto";
 
-message Geo {
+message StateData {
   int32 stateId = 1;
   int32 cityId = 2;
   string regionName = 3;
 }
 
-message Details {
+message AutoData {
   int32 year = 1;
   int32 autoId = 2;
   int32 bodyId = 3;
@@ -45,15 +45,15 @@ message Details {
 }
 
 message AdvertisementMessage {
-  int32 priceUSD = 1;
+  int32 USD = 1;
   string addDate = 2;
   string soldDate = 3;
-  Details autoData = 4;
+  AutoData autoData = 4;
   int32 brandId = 5;
   string brandName = 6;
   int32 modelId = 7;
   string modelName = 8;
   string linkToView = 9;
-  Geo stateData = 10;
+  StateData stateData = 10;
   google.protobuf.Timestamp timestampField = 11;
 }

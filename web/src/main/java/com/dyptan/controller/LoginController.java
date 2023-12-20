@@ -7,6 +7,7 @@ import com.dyptan.repository.UserRepository;
 import com.dyptan.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -23,15 +24,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
-
 @Controller
 public class LoginController {
     Logger log = LogManager.getLogger(LoginController.class);
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    ObjectMapper objectMapper;
     @Autowired
     AuthService authService;
 

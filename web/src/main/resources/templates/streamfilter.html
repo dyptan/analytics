@@ -5,37 +5,65 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>Filter Stream</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Form Submission</title>
 </head>
-<body style="height:100vh">
-<a href="/home">Home</a><br>
+<body>
 
-<div>
-    <form action="/stream" method="post" target="records">
-        Exclude
+<form target="records">
+    <!-- Your form fields go here -->
+    <input id="brands" name="brands" type="text" value="ВАЗ, ГАЗ"><br>
+    <input id="models" name="models" type="text" value="Lanos"><br>
+    <input id="yearFrom" name="yearFrom" type="text" value="2000">
+    <input id="yearTo" name="yearTo" type="text" value="2023"><br>
+    <input id="priceFrom" name="priceFrom" type="text" value="0">
+    <input id="priceTo" name="priceTo" type="text" value="40000"><br>
+    <input id="raceFrom" name="raceFrom" type="text" value="0">
+    <input id="raceTo" name="raceTo" type="text" value="200000"><br>
 
-        Brands:
-        <input id="brands" name="brands" type="text" value="ВАЗ, ГАЗ"><br>
-        Models:
-        <input id="models" name="models" type="text" value="Lanos"><br>
+    <input type="button" value="Apply filter" onclick="submitForm()">
+</form>
 
-        Include
+<script>
+    function submitForm() {
+        // Get form data
+        var formData = {
+            excludedVendors: parseCommaSeparatedList(document.getElementById('brands').value),
+            excludedModels: parseCommaSeparatedList(document.getElementById('models').value),
+            yearRange: [document.getElementById('yearFrom').value, document.getElementById('yearTo').value],
+            priceRange: [document.getElementById('priceFrom').value, document.getElementById('priceTo').value],
+            raceRange: [document.getElementById('raceFrom').value, document.getElementById('raceTo').value]
+        };
 
-        Year: <br>
-        from <input id="yearFrom" name="yearFrom" type="text" value="2000">
-        to <input id="yearTo" name="yearTo" type="text" value="2018"><br>
+        // Convert form data to JSON
+        var jsonData = JSON.stringify(formData);
 
-        Price: <br>
-        from <input id="priceFrom" name="priceFrom" type="text" value="0">
-        to <input id="priceTo" name="priceTo" type="text" value="20000"><br>
+        // Send JSON data via AJAX
+        fetch('/stream', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonData
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data as needed
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error:', error);
+            });
+    }
 
-        <input type="submit" value="Apply filter">
-    </form>
-</div>
-
+    function parseCommaSeparatedList(value) {
+        // Parse a comma-separated list to an array
+        return value.split(',').map(item => item.trim());
+    }
+</script>
 
 <iframe height="80%" id="iframeId" name="records" src="/stream" width="100%"></iframe>
-
 
 </body>
 </html>

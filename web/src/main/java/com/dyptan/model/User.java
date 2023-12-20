@@ -1,13 +1,13 @@
 package com.dyptan.model;
 
 import com.dyptan.gen.proto.FilterMessage;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Transient;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 

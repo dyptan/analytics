@@ -18,7 +18,6 @@ if (typeof (EventSource) !== "undefined") {
                     var race = row.insertCell(3);
                     var engine = row.insertCell(4);
                     var price = row.insertCell(5);
-                    var prediction = row.insertCell(6);
                     var published = row.insertCell(7);
 
                     model.innerHTML = data.model
@@ -27,7 +26,6 @@ if (typeof (EventSource) !== "undefined") {
                     race.innerHTML = Math.floor(data.race_km)
                     engine.innerHTML = Math.floor(data.engine_cubic_cm)
                     price.innerHTML = Math.floor(data.price_usd)
-                    prediction.innerHTML = Math.floor(data.prediction)
                     published.innerHTML = String(data.published)
 
                     console.log(data)

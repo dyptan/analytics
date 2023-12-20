@@ -1,57 +1,41 @@
 package com.dyptan.configuration;
 
-import com.dyptan.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
-@EnableWebSecurity
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-
-    @Autowired
-    private AuthService userAuthDetailsService;
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.userDetailsService(userAuthDetailsService)
-                .passwordEncoder(bCryptPasswordEncoder());
-    }
-
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
-        http.sessionManagement().maximumSessions(2);
-        http.authorizeRequests()
-                .antMatchers("/registration").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic()
-                .and()
-                .formLogin().permitAll()
-                .defaultSuccessUrl("/home", true);
-
-    }
+public class SecurityConfiguration {
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public static BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
-    public AuthService userAuthDetailsService() {
-        return new AuthService();
+    public SecurityFilterChain filterSecurity(HttpSecurity http) throws Exception {
+        http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+        http.csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests((authorize) ->
+                    authorize.requestMatchers("/stream").permitAll()
+            )
+            .authorizeHttpRequests((authorize) ->
+                    authorize.anyRequest().authenticated()
+            ).formLogin(
+                        form -> form
+                                .loginProcessingUrl("/login")
+                                .defaultSuccessUrl("/home")
+                                .permitAll()
+                ).logout(
+                        logout -> logout
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                .permitAll()
+            );
+        return http.build();
     }
-
 }

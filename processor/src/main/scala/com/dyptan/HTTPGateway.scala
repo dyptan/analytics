@@ -93,8 +93,8 @@ object HTTPGateway {
           }
         })
 
-    Http().newServerAt("0.0.0.0", 8081).bindFlow(processorServerRoute)
-    log.info("Gateway started to listen on port " + 8081)
+    Http().newServerAt("0.0.0.0", 8091).bindFlow(processorServerRoute)
+    log.info("Gateway started to listen on port " + 8091)
 
   }
 }

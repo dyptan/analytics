@@ -36,7 +36,7 @@ public class KafkaAdvertisementConsumer implements Serializable {
                 .withBootstrapServers("http://kafka:9092")
                 .withTopic("ria")
                 .withConsumerConfigUpdates(Collections.singletonMap("specific.avro.reader", (Object) "true"))
-                .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", (Object) "earliest"))
+                .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", (Object) "latest"))
                 .withConsumerConfigUpdates(Collections.singletonMap("schema.registry.url", (Object) "http://localhost:8081"))
                 .withKeyDeserializer(IntegerDeserializer.class)
                 .withValueDeserializerAndCoder((Class) KafkaAvroDeserializer.class, AvroCoder.of(Advertisement.class));
@@ -62,7 +62,7 @@ public class KafkaAdvertisementConsumer implements Serializable {
 
         String mongoURI = "mongodb://localhost:27017";
         String databaseName = "ria";
-        String collectionName = "autos";
+        String collectionName = "advertisement";
 
         mongoDocumentCollection.apply(
                 MongoDbIO.write()

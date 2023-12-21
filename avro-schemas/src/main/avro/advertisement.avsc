@@ -3,7 +3,7 @@
   "name": "Advertisement",
   "namespace": "com.dyptan.avro",
   "fields": [
-    {"name": "USD", "type": "int"},
+    {"name": "price", "type": "int"},
     {"name": "addDate", "type": "string"},
     {"name": "soldDate", "type": "string"},
     {
@@ -37,7 +37,7 @@
       "name": "stateData",
       "type": {
         "type": "record",
-        "name": "Geography",
+        "name": "StateData",
         "fields": [
           {"name": "stateId", "type": "int"},
           {"name": "cityId", "type": "int"},

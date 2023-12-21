@@ -9,6 +9,7 @@ import org.apache.avro.io.{DecoderFactory, EncoderFactory}
 import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter, SpecificRecord}
 import org.apache.kafka.common.Uuid
 import org.apache.kafka.common.header.Headers
+import org.apache.kafka.common.serialization.Serdes.UUID
 import sttp.client3.basicRequest
 import sttp.client3.circe._
 import sttp.client3.httpclient.zio._
@@ -28,6 +29,7 @@ object Main extends ZIOAppDefault {
 
   import Conf._
 
+  val advertisementSerializer = new AdvertisementSerializer
   override def run: ZIO[Any, Throwable, Unit] = {
     {
       for {
@@ -160,12 +162,14 @@ object Main extends ZIOAppDefault {
           .setStateData(geography)
           .build();
 
+
         Producer.produce[Any, Int, Advertisement](
           topic = config.getConfig("producer").getString("kafkaTopic"),
-          key = adWithId.id,
+//          key = adWithId.id,
+          key = UUID.hashCode(),
           value = advertisement,
           keySerializer = Serde.int,
-          valueSerializer = new AdvertisementSerializer
+          valueSerializer = advertisementSerializer
         )
 
       }

@@ -15,7 +15,7 @@
     <groupId>com.dyptan</groupId>
     <artifactId>avro-schemas</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0</version>
 
     <pluginRepositories>
         <pluginRepository>

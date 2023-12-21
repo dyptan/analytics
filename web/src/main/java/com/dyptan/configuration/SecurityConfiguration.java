@@ -22,7 +22,7 @@ public class SecurityConfiguration {
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) ->
-                    authorize.requestMatchers("/stream").permitAll()
+                    authorize.requestMatchers("/registration").permitAll()
             )
             .authorizeHttpRequests((authorize) ->
                     authorize.anyRequest().authenticated()

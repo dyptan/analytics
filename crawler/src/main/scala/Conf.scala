@@ -20,8 +20,8 @@ object Conf {
   val config = ConfigFactory.parseFile(new File("application.conf"))
   val authKey = model.QueryParams().param("api_key", config.getConfig("crawler").getString("autoriaApiKey"))
 //  val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
-  val infoBase = uri"http://localhost:8080/info.json".addParams(authKey)
-  val searchBase = uri"http://localhost:8080/search.json".addParams(authKey).addParam("countpage", "100")
+  val infoBase = uri"http://localhost:8090/info.json".addParams(authKey)
+  val searchBase = uri"http://localhost:8090/search.json".addParams(authKey).addParam("countpage", "100")
 //  val searchBase = uri"https://developers.ria.com/auto/search".addParams(authKey).addParam("countpage", "100")
   val searchDefault = searchBase.addParams("category_id" -> "1", "s_yers[0]" -> "2000", "price_ot" -> "3000",
     "price_do" -> "60000", "countpage" -> "100", "top" -> "1")

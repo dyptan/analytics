@@ -63,29 +63,5 @@ public class LoginController {
     public String admin() {
         return "admin";
     }
-
-
-    @PostMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String searchWithfilter(@ModelAttribute FilterMessage filter,
-                                   @RequestParam(name="saveFilter", required=false, defaultValue="false") Boolean saveFilter,
-                                   HttpSession session,
-                                   Model model,
-                                   UsernamePasswordAuthenticationToken principal) {
-
-        log.info("Filter is built: "+filter);
-
-        if (saveFilter) {
-
-            log.info("Saving filter.");
-            User user = userRepository
-                    .findByUsername(session.getAttribute("userName").toString())
-                    .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-            user.addFilter(filter);
-            log.debug("filter added: " + user.getFilters());
-            userRepository.save(user);
-        }
-
-        return "search";
-    }
 }
 

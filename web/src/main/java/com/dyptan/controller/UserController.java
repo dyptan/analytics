@@ -37,14 +37,6 @@ public class UserController {
         return userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException(name));
     }
 
-    @GetMapping("/user/{name}/filters")
-    public List<FilterMessage> getAllUserFilters(@PathVariable(name="name") String name){
-        return userRepository.findByUsername(name)
-                    .map(User::getFilters)
-                .orElseThrow(() -> new UsernameNotFoundException(name));
-    }
-
-
     @GetMapping("/user/{name}/filter/{id}")
     public FilterMessage getUserFilterById(@PathVariable(name="name") String name,
                                           @PathVariable(name="id") int filterId){
@@ -52,14 +44,6 @@ public class UserController {
                 .map(user-> user.getFilters().get(filterId))
                 .orElseThrow(() -> new UsernameNotFoundException(name));
     }
-
-    @PostMapping(value = "/user/{name}/filters",  consumes = MediaType.APPLICATION_JSON_VALUE)
-    public User createUserFilter(@PathVariable(name="name") String name, @RequestBody FilterMessage newFilter) {
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException(name));
-        user.addFilter(newFilter);
-        return userRepository.save(user);
-    }
-
 
     @PutMapping("/user/{name}")
     public User updateUserPassword(@RequestBody User newUser, @PathVariable String name) {
@@ -73,13 +57,6 @@ public class UserController {
                 .orElseGet(
                         ()-> userRepository.save(newUser)
                         );
-    }
-
-    @DeleteMapping("/user/{name}/filter/{id}")
-    public void deleteUserFilter(@PathVariable String name, @PathVariable int id){
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException(name));
-        user.deleteFilter(id);
-        userRepository.save(user);
     }
 
     @DeleteMapping("/user/{name}")

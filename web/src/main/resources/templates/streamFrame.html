@@ -12,19 +12,48 @@
 
 <form target="records">
     <!-- Your form fields go here -->
-    <input id="brands" name="brands" type="text" value="ВАЗ, ГАЗ"><br>
-    <input id="models" name="models" type="text" value="Lanos"><br>
+    Exclude vendors <input id="brands" name="brands" type="text" value="ВАЗ, ГАЗ"><br>
+    Exclude models <input id="models" name="models" type="text" value="Lanos"><br>
+    Age range<br>
     <input id="yearFrom" name="yearFrom" type="text" value="2000">
     <input id="yearTo" name="yearTo" type="text" value="2023"><br>
+    Price range<br>
     <input id="priceFrom" name="priceFrom" type="text" value="0">
     <input id="priceTo" name="priceTo" type="text" value="40000"><br>
+    Mileage range<br>
     <input id="raceFrom" name="raceFrom" type="text" value="0">
     <input id="raceTo" name="raceTo" type="text" value="200000"><br>
 
     <input type="button" value="Apply filter" onclick="submitForm()">
 </form>
 
+<div>
+    <button id="process">Stream start</button>
+    <div id="result"></div>
+</div>
+
 <script>
+    var processButton = document.getElementById('process');
+    var resultDiv = document.getElementById('result');
+
+    processButton.addEventListener('click', function () {
+        fetch('/crawler', {
+            method: 'GET'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+            .then(data => {
+                // Update the resultDiv with the response data
+                resultDiv.innerHTML = 'Response: ' + data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
     function submitForm() {
         // Get form data
         var formData = {
@@ -46,13 +75,7 @@
             },
             body: jsonData
         })
-            // .then(response => response.json())
-            // .then(data => {
-            //     // Handle the response data as needed
-            //     console.log(data);
-            // })
             .catch(error => {
-                // Handle errors
                 console.error('Error:', error);
             });
     }
@@ -63,7 +86,7 @@
     }
 </script>
 
-<iframe height="80%" id="iframeId" name="records" src="/stream" width="100%"></iframe>
+<iframe id="iframeId" name="records" src="/stream" width="100%"></iframe>
 
 </body>
 </html>

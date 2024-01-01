@@ -11,7 +11,7 @@ public class AppInitTest {
     @Ignore
     @Test
     public void contextLoads() throws Exception {
-        ConfigurableApplicationContext appContext = SpringApplication.run(WebDriver.class);
+        ConfigurableApplicationContext appContext = SpringApplication.run(Web.class);
         Assert.assertTrue(appContext.isActive());
     }
 

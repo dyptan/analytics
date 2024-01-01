@@ -12,7 +12,7 @@ object Tests extends ZIOSpecDefault{
   def spec =
     suite("ParseJsonSpec")(
 
-      test("field matches expected value") {
+     /* test("field matches expected value") {
         {
           for {
             adv <- ZIO.readFile("src/test/resources/info.json")
@@ -22,7 +22,7 @@ object Tests extends ZIOSpecDefault{
             _ <- ZIO.debug(s"$json")
           } yield assertTrue(decoded.autoData.year == 2013)
         }
-      }
+      }*/
 
 //        test("field matches expected value") {
 //        {

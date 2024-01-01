@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories("com.dyptan.repository")
 @EntityScan("com.dyptan.model")
 @SpringBootApplication
-public class WebDriver
+public class Web
 {
     public static void main(String[] args){
-        SpringApplication.run(WebDriver.class, args);
+        SpringApplication.run(Web.class, args);
     }
 
     @Bean

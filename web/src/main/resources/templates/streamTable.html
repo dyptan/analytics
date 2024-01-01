@@ -1,4 +1,26 @@
-//var table = document.createElement("TABLE");
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Stream</title>
+</head>
+<body>
+
+<div>
+    <table border="1" id="streamtable">
+        <tr align="left">
+            <th>Model</th>
+            <th>Brand</th>
+            <th>Year</th>
+            <th>Mileage</th>
+            <th>Price USD</th>
+        </tr>
+    </table>
+</div>
+
+
+<script>
 var table = document.getElementById("streamtable")
 
 if (typeof (EventSource) !== "undefined") {
@@ -34,3 +56,8 @@ if (typeof (EventSource) !== "undefined") {
     document.getElementById("result").innerHTML =
         "Sorry, your browser does not support server-sent events...";
 }
+</script>
+</body>
+
+
+</html>

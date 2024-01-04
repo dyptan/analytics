@@ -1,5 +1,7 @@
 package com.dyptan;
 
+import com.dyptan.component.GrpcClientComponent;
+import com.dyptan.service.GrpcClientService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;

@@ -1,2 +1,2 @@
 db = db.getSiblingDB('ria')
-db.createCollection("cars")
+db.createCollection('advertisement', { capped: true, size: 100000 })

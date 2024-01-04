@@ -7,10 +7,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Form Submission</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 10px;
+            padding: 5px;
+            overflow: hidden; /* Optional: Hide scrollbars if not needed */
+        }
+
+        #iframeId {
+            width: 100%;
+            height: 100%;
+            border: none; /* Optional: Remove iframe border */
+        }
+    </style>
 </head>
 <body>
 
-<form target="records">
+<form target="records" >
     <!-- Your form fields go here -->
     Exclude vendors <input id="brands" name="brands" type="text" value="ВАЗ, ГАЗ"><br>
     Exclude models <input id="models" name="models" type="text" value="Lanos"><br>
@@ -51,6 +65,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
+                resultDiv.innerHTML = 'Response: ' + error;
             });
     });
 
@@ -86,7 +101,7 @@
     }
 </script>
 
-<iframe id="iframeId" name="records" src="/stream" width="100%"></iframe>
+<iframe id="iframeId" name="records" src="/stream" width="100%" height="100%"></iframe>
 
 </body>
 </html>

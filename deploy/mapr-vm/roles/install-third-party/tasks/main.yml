@@ -1,3 +1,0 @@
-- name: Setup Mesos
-  include: setup_mesos.yml
-  when: (hostname in third_party.mesos.host)

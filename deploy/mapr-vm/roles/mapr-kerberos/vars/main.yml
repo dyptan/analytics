@@ -1,9 +1,0 @@
-kerberos_password: 123456
-
-server_ubuntu_kerberos_packages: [ "krb5-kdc", "krb5-admin-server", "krb5-user" ]
-server_centos_kerberos_packages: [ "krb5-libs", "krb5-server", "krb5-workstation" ]
-server_suse_kerberos_packages: [ "krb5", "krb5-client", "krb5-server" ]
-
-client_ubuntu_kerberos_packages: [ "krb5-kdc", "krb5-user" ]
-client_centos_kerberos_packages: [ "krb5-libs", "krb5-workstation" ]
-client_suse_kerberos_packages: [ "krb5", "krb5-client" ]

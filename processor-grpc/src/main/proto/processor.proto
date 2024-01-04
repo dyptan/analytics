@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.dyptan.gen.proto";
+
+service ProcessorService {
+  rpc ArchiveMessages (FilterMessage) returns (ConfirmationMessage);
+}
+
+message FilterMessage {
+  int32 limit = 1 [deprecated=true];
+  string models = 2;
+  string brands = 3;
+  int32 periodLastDays = 5;
+  int32 yearFrom = 6;
+  int32 yearTo = 7;
+  int32 priceFrom = 8;
+  int32 priceTo = 9;
+  int32 raceFrom = 10;
+  int32 raceTo = 11;
+}
+
+message ConfirmationMessage {
+  string status = 1;
+}

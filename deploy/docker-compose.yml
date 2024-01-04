@@ -14,7 +14,6 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-
   schema-registry:
     image: bitnami/schema-registry:7.5
     ports:
@@ -23,11 +22,10 @@ services:
       - SCHEMA_REGISTRY_DEBUG=true
       - SCHEMA_REGISTRY_KAFKA_BROKERS=PLAINTEXT://kafka:9092
       - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081
-
-
+    depends_on:
+      - kafka
   mongo:
     build: ./mongo
-    image: diptan/mongo
     ports:
       - 27017:27017
   db:
@@ -40,20 +38,19 @@ services:
       - 5432:5432
   web:
     build: ../web
-    image: diptan/web:latest
-    ports: 
+    ports:
       - 8080:8080
     depends_on:
       - db
-    volumes:
-      - model:/tmp
   crawler:
     build: ../crawler
-    image: diptan/crawler:latest
     ports:
       - 8083:8083
     depends_on:
       - kafka
+  processor:
+    build: ../processor
+
 volumes:
   esdata:
     driver: local

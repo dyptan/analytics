@@ -1,6 +1,8 @@
 package com.dyptan.controller;
 
 import com.dyptan.avro.Advertisement;
+import com.dyptan.gen.proto.ProcessorServiceGrpc;
+import com.dyptan.service.GrpcClientService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.dialect.BooleanDecoder;
@@ -30,7 +32,6 @@ import java.util.HashMap;
 import static com.dyptan.utils.JsonToMongoQueryTranslator.convert;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-
 @Controller
 @EnableConfigurationProperties
 @ConfigurationProperties
@@ -39,6 +40,8 @@ public class StreamingController {
     Logger log = LogManager.getLogger(StreamingController.class);
     @Autowired
     private ReactiveMongoTemplate mongoTemplate;
+    @Autowired
+    GrpcClientService client;
     private Query query = new Query();
 
     @GetMapping("/stream")

@@ -22,13 +22,21 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collections;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 
 public class Processor implements Serializable {
     static Logger logger = LoggerFactory.getLogger("KafkaAdvertisementConsumer");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        ServerBuilder.forPort(50051)
+                .addService(new ProcessorServiceImpl())
+                .build()
+                .start();
+
         PipelineOptions options = PipelineOptionsFactory.create();
         Pipeline pipeline = Pipeline.create(options);
 
@@ -36,7 +44,7 @@ public class Processor implements Serializable {
                 .withBootstrapServers("http://kafka:9092")
                 .withTopic("ria")
                 .withConsumerConfigUpdates(Collections.singletonMap("specific.avro.reader", "true"))
-                .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", "earliest"))
+                .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", "latest"))
                 .withConsumerConfigUpdates(Collections.singletonMap("schema.registry.url", "http://schema-registry:8081"))
                 .withKeyDeserializer(IntegerDeserializer.class)
                 .withValueDeserializerAndCoder((Class) KafkaAvroDeserializer.class, AvroCoder.of(Advertisement.class));
@@ -73,7 +81,6 @@ public class Processor implements Serializable {
         );
         
         pipeline.run().waitUntilFinish();
-        System.out.println("Pipeline finished");
     }
 
 

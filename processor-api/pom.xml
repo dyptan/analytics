@@ -14,7 +14,7 @@
     </parent>
 
     <groupId>com.dyptan</groupId>
-    <artifactId>processor-grpc</artifactId>
+    <artifactId>processor-api</artifactId>
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
 

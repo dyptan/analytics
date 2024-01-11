@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import org.springframework.beans.factory.annotation.Value;
 
 public class Processor implements Serializable {
     static Logger logger = LoggerFactory.getLogger("KafkaAdvertisementConsumer");
@@ -40,7 +41,7 @@ public class Processor implements Serializable {
         PipelineOptions options = PipelineOptionsFactory.create();
         Pipeline pipeline = Pipeline.create(options);
 
-        PTransform<PBegin, PCollection<KafkaRecord<Integer, Advertisement>>> read = KafkaIO.<Integer, Advertisement>read()
+        @SuppressWarnings("unchecked") PTransform<PBegin, PCollection<KafkaRecord<Integer, Advertisement>>> read = KafkaIO.<Integer, Advertisement>read()
                 .withBootstrapServers("http://kafka:9092")
                 .withTopic("ria")
                 .withConsumerConfigUpdates(Collections.singletonMap("specific.avro.reader", "true"))

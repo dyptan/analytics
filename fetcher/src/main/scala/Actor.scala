@@ -24,7 +24,7 @@ class CrawlerController extends Actor with ActorLogging {
   def startable(): Receive = {
     case StartProcessing =>
       log.info("Starting...")
-      val crawler = new Crawler
+      val crawler = new App
       Future(crawler.main(Array.empty))
       sender() ! "started"
       context.become(stoppable())

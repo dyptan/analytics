@@ -9,13 +9,12 @@ import zio.{ZIO, ZIOAppDefault}
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
-object Main extends ZIOAppDefault {
+object Driver extends ZIOAppDefault {
   import Conf._
   import CrawlerCommands.{StartProcessing, StopProcessing}
   implicit val system = ActorSystem("CrawlerGateway")
   implicit val defaultTimeout = Timeout(3000.seconds)
   val controller = system.actorOf(Props[CrawlerController], "CrawlerController")
-  val port = config.getConfig("httpConf").getInt("serverPort")
   val http: Http[Any, Response, Request, Response] = Http.collectZIO[Request] {
     case req@Method.POST -> Root / "search" =>
       req.body.asString.mapBoth(_ => Response.status(Status.BadRequest), {
@@ -47,7 +46,7 @@ object Main extends ZIOAppDefault {
       for {
         _ <- Server.serve(http)
       } yield ()
-    }.provide(Server.defaultWithPort(port))
+    }.provide(Server.defaultWithPort(httpServerPort))
   }
 
 }

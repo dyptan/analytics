@@ -1,14 +1,14 @@
 package com.dyptan
 
+import com.dyptan.Conf.registryUrl
 import com.dyptan.avro.{Advertisement, AutoData, Geography}
-import com.dyptan.Conf.Ad
 import io.confluent.kafka.serializers.KafkaAvroSerializer
 import org.apache.avro.generic.GenericRecord
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
 import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter, SpecificRecord}
 import org.apache.kafka.common.header.Headers
-import zio.{Task, ZIO}
 import zio.kafka.serde
+import zio.{Task, ZIO}
 
 import java.io.ByteArrayOutputStream
 import java.util
@@ -68,7 +68,7 @@ object AvroConverter {
 class AdvertisementSerializer extends serde.Serializer[Any, Advertisement] {
   val avroSerializer = new KafkaAvroSerializer()
   val props = new util.HashMap[String, String]
-  props.put("schema.registry.url","http://schema-registry:8081")
+  props.put("schema.registry.url",registryUrl)
   avroSerializer.configure(props, false)
   override def serialize(topic: String, headers: Headers, data: Advertisement): Task[Array[Byte]] = {
     val genericRecord = AvroConverter.convertToGenericRecord(data)

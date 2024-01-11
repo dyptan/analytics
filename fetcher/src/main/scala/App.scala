@@ -14,7 +14,7 @@ import zio.kafka.serde.Serde
 import zio.stream.ZStream
 import zio.{Duration, Queue, Schedule, ZIO, ZIOAppDefault}
 
-class Crawler extends ZIOAppDefault {
+class App extends ZIOAppDefault {
 
   import Conf._
 
@@ -41,7 +41,7 @@ class Crawler extends ZIOAppDefault {
           _ <- recProduceIds(pageCount, pubSubOfIds)
         } yield ()
         _ <- loop
-          .repeat(Schedule.spaced(Duration.fromSeconds(config.getConfig("crawler").getInt("searchIntervalSec"))))
+          .repeat(Schedule.spaced(Duration.fromSeconds(searchIntervalSec)))
           .retry(Schedule.exponential(Duration.fromSeconds(5)))
           .debug.fork
         // checks local cache for processed records
@@ -111,7 +111,7 @@ class Crawler extends ZIOAppDefault {
         val advertisement: Advertisement = toAvro(record)
 
         Producer.produce[Any, Int, Advertisement](
-          topic = config.getConfig("producer").getString("kafkaTopic"),
+          topic = topicName,
           key = adWithId.id,
           value = advertisement,
           keySerializer = Serde.int,

@@ -9,6 +9,7 @@ import org.apache.kafka.common.header.Headers
 import sttp.client3.circe._
 import sttp.client3.{UriContext, basicRequest}
 import sttp.model
+import sttp.model.Uri
 import zio.kafka.producer.{Producer, ProducerSettings}
 import zio.kafka.serde.{Deserializer, Serializer}
 import zio.{Task, ZIO, ZLayer}
@@ -25,28 +26,16 @@ object Conf {
   val searchBase = uri"https://developers.ria.com/auto/search".addParams(authKey).addParam("countpage", "100")
   val searchDefault = searchBase.addParams("category_id" -> "1", "s_yers[0]" -> "2000", "price_ot" -> "3000",
     "price_do" -> "60000", "countpage" -> "100", "top" -> "1")
-  var searchWithParameters = searchDefault
+  var searchWithParameters: Uri = searchDefault
+  val topicName: String = config.getConfig("producer").getString("kafkaTopic")
+  val registryUrl = "http://schema-registry:8081"
+  val searchIntervalSec = 5
+  val httpServerPort = 8083
 
   def searchRequest = basicRequest
     .get(searchWithParameters)
     .response(asJson[searchRoot])
 
-  case class L2(ids: Array[String], count: Int)
-
-  case class L1(search_result: L2)
-
-  case class searchRoot(result: L1)
-
-  case class Geo(stateId: Int, cityId: Int, regionNameEng: String)
-
-  case class Dtls(year: Int, autoId: Int, bodyId: Int, raceInt: Int, fuelId: Int,
-                     fuelNameEng: String, gearBoxId: Int, gearboxName: String, driveId: Int, driveName: String,
-                     categoryId: Int, categoryNameEng: String, subCategoryNameEng: String)
-
-  case class Ad(USD: Int, addDate: String, soldDate: String, autoData: Dtls,
-                     markId: Int, markNameEng: String, modelId: Int, modelNameEng: String, linkToView: String,
-                     stateData: Geo)
-  case class AdWithId(id: Int, advertisement: Ad)
 
   val actorSystem: ZLayer[Any, Throwable, ActorSystem] =
     ZLayer

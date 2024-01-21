@@ -51,7 +51,7 @@
     var resultDiv = document.getElementById('result');
 
     processButton.addEventListener('click', function () {
-        fetch('/crawler', {
+        fetch('/fetcher', {
             method: 'GET'
         }).then(response => {
             if (!response.ok) {

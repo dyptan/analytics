@@ -1,8 +1,7 @@
 package com.dyptan
 
-import com.dyptan.avro.Advertisement
 import com.dyptan.AvroConverter.toAvro
-import com.dyptan.{AdvertisementSerializer, Conf}
+import com.dyptan.avro.Advertisement
 import io.circe.generic.auto._
 import sttp.client3.basicRequest
 import sttp.client3.circe._

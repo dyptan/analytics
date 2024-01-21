@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.dialect.BooleanDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -42,6 +43,8 @@ public class StreamingController {
     private ReactiveMongoTemplate mongoTemplate;
     @Autowired
     GrpcClientService client;
+    @Value("${fetcher.api.url}")
+    String url;
     private Query query = new Query();
 
     @GetMapping("/stream")
@@ -61,7 +64,7 @@ public class StreamingController {
         return "streamFrame";
     }
 
-    @GetMapping("/crawler")
+    @GetMapping("/fetcher")
     @ResponseBody
     public String streamStart() {
         HttpHeaders headers = new HttpHeaders();
@@ -70,8 +73,6 @@ public class StreamingController {
         bodyValues.add("command", "start");
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(bodyValues, headers);
         RestTemplate restTemplate = new RestTemplate();
-
-        String url = "http://crawler:8083/control";
         ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
         if (response.getStatusCode().is2xxSuccessful()) {
             String responseBody = response.getBody();

@@ -18,7 +18,7 @@ import java.io.File
 import scala.jdk.CollectionConverters.MapHasAsJava
 
 object Conf {
-  val config = ConfigFactory.parseFile(new File("application.conf"))
+  val config = ConfigFactory.load()
   val authKey = model.QueryParams().param("api_key", config.getConfig("crawler").getString("autoriaApiKey"))
   val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
 //  val infoBase = uri"http://localhost:8090/info.json".addParams(authKey)

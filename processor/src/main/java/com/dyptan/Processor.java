@@ -3,6 +3,7 @@ package com.dyptan;
 import com.dyptan.avro.Advertisement;
 import com.google.gson.Gson;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.grpc.ServerBuilder;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.extensions.avro.coders.AvroCoder;
 import org.apache.beam.sdk.io.kafka.KafkaIO;
@@ -25,9 +26,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collections;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import org.springframework.beans.factory.annotation.Value;
 
 public class Processor implements Serializable {
     static Logger logger = LoggerFactory.getLogger("KafkaAdvertisementConsumer");
@@ -37,14 +35,16 @@ public class Processor implements Serializable {
                 .addService(new ProcessorServiceImpl())
                 .build()
                 .start();
-
+        logger.info("Starting api server...");
         PipelineOptions options = PipelineOptionsFactory.create();
         Pipeline pipeline = Pipeline.create(options);
 
-        @SuppressWarnings("unchecked") PTransform<PBegin, PCollection<KafkaRecord<Integer, Advertisement>>> read = KafkaIO.<Integer, Advertisement>read()
+        @SuppressWarnings("unchecked")
+        PTransform<PBegin, PCollection<KafkaRecord<Integer, Advertisement>>> read = KafkaIO.<Integer, Advertisement>read()
                 .withBootstrapServers("http://kafka:9092")
                 .withTopic("ria")
                 .withConsumerConfigUpdates(Collections.singletonMap("specific.avro.reader", "true"))
+                .withConsumerConfigUpdates(Collections.singletonMap("fetch.max.wait.ms", "5000"))
                 .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", "latest"))
                 .withConsumerConfigUpdates(Collections.singletonMap("schema.registry.url", "http://schema-registry:8081"))
                 .withKeyDeserializer(IntegerDeserializer.class)
@@ -80,10 +80,10 @@ public class Processor implements Serializable {
                         .withCollection(collectionName)
 
         );
-        
+
+        logger.info("Starting processing pipeline...");
         pipeline.run().waitUntilFinish();
     }
-
 
 
     public static class KVToMongoDocumentFn extends DoFn<KV<Integer, Advertisement>, Document> {

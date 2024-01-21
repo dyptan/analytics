@@ -42,17 +42,19 @@ services:
       - 8080:8080
     depends_on:
       - db
-  crawler:
-    build: ../crawler
+  fetcher:
+    build: ../fetcher
     ports:
       - 8083:8083
     depends_on:
       - kafka
   processor:
     build: ../processor
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
 
-volumes:
-  esdata:
-    driver: local
-  model:
-    driver: local
+    depends_on:
+      - kafka
+      - mongo

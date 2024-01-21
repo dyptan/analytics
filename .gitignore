@@ -3,4 +3,4 @@
 !/.gitlab-ci.yml
 !/.gitignore
 target
-trainedModel
+dependency-reduced-pom.xml

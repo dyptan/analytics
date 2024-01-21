@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <name>loader</name>
+    <name>processor-api</name>
 
     <parent>
         <artifactId>parent</artifactId>
@@ -13,10 +13,9 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.dyptan</groupId>
     <artifactId>processor-api</artifactId>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <protobuf.version>3.5.1</protobuf.version>

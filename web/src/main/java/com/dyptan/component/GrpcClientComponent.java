@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class GrpcClientComponent {
 
-//    @GrpcClient("processorService")
     private ProcessorServiceGrpc.ProcessorServiceBlockingStub blockingStub;
 
     public void callRemoteService() {

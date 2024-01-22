@@ -67,8 +67,8 @@ class App extends ZIOAppDefault {
   private def fetchAdToQ(id: String, pubSub: PubSub[AdWithId]): ZIO[SttpClient, Throwable, Unit] = {
     for {
       response <- send(basicRequest.get(infoBase.addParam("auto_id", id)).response(asJson[Ad]))
-      _ <- ZIO.log("Got Ad: " + response.body)
-      adv <- ZIO.fromEither(response.body).tapError { e => ZIO.logError("AD fetch failed: " + e) }
+//      _ <- ZIO.log("Got Ad: " + response.body)
+      adv <- ZIO.fromEither(response.body).debug.tapError { e => ZIO.logError("AD fetch failed: " + e) }
       adWithId = AdWithId(Integer.valueOf(id), adv)
       _ <- pubSub.publish("ads", adWithId)
     } yield ()

@@ -9,8 +9,8 @@ case class searchRoot(result: L1)
 case class Geo(stateId: Int, cityId: Int, regionNameEng: String)
 
 case class Dtls(year: Int, autoId: Int, bodyId: Int, raceInt: Int, fuelId: Int,
-                fuelNameEng: String, gearBoxId: Int, gearboxName: String, driveId: Int, driveName: String,
-                categoryId: Int, categoryNameEng: String, subCategoryNameEng: String)
+                fuelNameEng: Option[String], gearBoxId: Int, gearboxName: Option[String], driveId: Option[Int], driveName: String,
+                categoryId: Int, categoryNameEng: Option[String], subCategoryNameEng: Option[String])
 
 case class Ad(USD: Int, addDate: String, soldDate: String, autoData: Dtls,
               markId: Int, markNameEng: String, modelId: Int, modelNameEng: String, linkToView: String,

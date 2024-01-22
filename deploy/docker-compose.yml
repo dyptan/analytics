@@ -54,7 +54,6 @@ services:
       resources:
         limits:
           cpus: "0.5"
-
     depends_on:
       - kafka
       - mongo

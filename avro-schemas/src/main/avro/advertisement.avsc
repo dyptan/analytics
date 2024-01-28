@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "Advertisement",
-  "namespace": "com.dyptan.avro",
+  "namespace": "com.ria.avro",
   "fields": [
     {
       "name": "USD",
@@ -47,28 +47,28 @@
           },
           {
             "name": "fuelNameEng",
-            "type": "string",
-            "default": ""
+            "type": ["null", "string"],
+            "default": null
           },
           {
             "name": "gearBoxId",
-            "type": "int",
-            "default": -1
+            "type": ["null", "int"],
+            "default": null
           },
           {
             "name": "gearboxName",
-            "type": "string",
-            "default": ""
+            "type": ["null", "string"],
+            "default": null
           },
           {
             "name": "driveId",
-            "type": "int",
-            "default": -1
+            "type": ["null", "int"],
+            "default": null
           },
           {
             "name": "driveName",
-            "type": "string",
-            "default": ""
+            "type": ["null", "string"],
+            "default": null
           },
           {
             "name": "categoryId",
@@ -76,13 +76,13 @@
           },
           {
             "name": "categoryNameEng",
-            "type": "string",
-            "default": ""
+            "type": ["null", "string"],
+            "default": null
           },
           {
             "name": "subCategoryNameEng",
-            "type": "string",
-            "default": ""
+            "type": ["null", "string"],
+            "default": null
           }
         ]
       }
@@ -93,8 +93,8 @@
     },
     {
       "name": "markNameEng",
-      "type": "string",
-      "default": ""
+      "type": ["null", "string"],
+      "default": null
     },
     {
       "name": "modelId",
@@ -102,8 +102,8 @@
     },
     {
       "name": "modelNameEng",
-      "type": "string",
-      "default": ""
+      "type": ["null", "string"],
+      "default": null
     },
     {
       "name": "linkToView",
@@ -125,7 +125,8 @@
           },
           {
             "name": "regionNameEng",
-            "type": "string"
+            "type": ["null", "string"],
+            "default": null
           }
         ]
       }

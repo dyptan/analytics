@@ -2,6 +2,8 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.13.11"
 
+
+resolvers += Resolver.mavenLocal
 resolvers ++= Seq(
   "confluent" at "https://packages.confluent.io/maven/",
 )
@@ -9,7 +11,7 @@ resolvers ++= Seq(
 lazy val root = (project in file("."))
   .settings(
     name := "crawler",
-//    idePackagePrefix := Some("com.dyptan.crawler")
+    //    idePackagePrefix := Some("com.dyptan.crawler")
   )
 
 libraryDependencies ++= List(
@@ -18,7 +20,7 @@ libraryDependencies ++= List(
 )
 
 libraryDependencies ++= Seq(
-  "dev.zio" %% "zio-kafka"   % "2.4.2",
+  "dev.zio" %% "zio-kafka" % "2.4.2",
   "dev.zio" %% "zio-http" % "3.0.0-RC2",
   "dev.zio" %% "zio-akka-cluster" % "0.3.0",
   "dev.zio" %% "zio-cache" % "0.2.3"
@@ -33,8 +35,8 @@ libraryDependencies ++= Seq(
 
 
 libraryDependencies ++= Seq(
-  "dev.zio" %% "zio-test"          % "2.0.15" % Test,
-  "dev.zio" %% "zio-test-sbt"      % "2.0.15" % Test,
+  "dev.zio" %% "zio-test" % "2.0.15" % Test,
+  "dev.zio" %% "zio-test-sbt" % "2.0.15" % Test,
   "dev.zio" %% "zio-test-magnolia" % "2.0.15" % Test
 )
 
@@ -46,3 +48,6 @@ libraryDependencies ++= Seq(
 
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 libraryDependencies += "org.apache.avro" % "avro" % "1.11.3"
+libraryDependencies += "com.dyptan" % "avro-schemas" % "1.3"
+//Compile / avroSpecificScalaSource := new java.io.File("../avro-schema/src/main/advertisement.avsc")
+Compile / avroScalaCustomNamespace := Map("com.ria.avro" -> "com.ria.scala")

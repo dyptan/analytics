@@ -16,7 +16,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.11</version>
         </dependency>
         <dependency>
             <groupId>org.apache.beam</groupId>
@@ -47,12 +46,10 @@
         <dependency>
             <groupId>com.dyptan</groupId>
             <artifactId>avro-schemas</artifactId>
-            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
             <artifactId>processor-api</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
 

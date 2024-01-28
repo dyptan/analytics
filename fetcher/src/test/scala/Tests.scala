@@ -1,12 +1,6 @@
 package com.dyptan
 
-import Conf._
-import com.dyptan.avro.Advertisement
-import io.circe._
-import io.circe.generic.auto._
-import io.circe.syntax._
-import zio.ZIO
-import zio.test.{ZIOSpecDefault, _}
+import zio.test.ZIOSpecDefault
 object Tests extends ZIOSpecDefault{
 
   def spec =

@@ -7,15 +7,14 @@ import sttp.client3.httpclient.zio._
 import zio.akka.cluster.pubsub.PubSub
 import zio.cache.{Cache, Lookup}
 import zio.kafka.producer.Producer
-import zio.kafka.serde.Serde
+import zio.kafka.serde.{Serde, Serializer}
 import zio.stream.ZStream
 import zio.{Duration, Queue, Schedule, ZIO, ZIOAppDefault}
-
+import com.ria.avro.scala.{Advertisement, SearchRoot}
 class App extends ZIOAppDefault {
 
   import Conf._
-
-  private val advertisementSerializer = new AdvertisementSerializer
+  private val advertisementSerializer: Serializer[Any, Advertisement] = new AdvertisementSerializer
   override def run: ZIO[Any, Throwable, Unit] = {
     {
       for {
@@ -73,9 +72,9 @@ class App extends ZIOAppDefault {
   }
 
   /* Returns a list of IDs for a given API page */
-  private def pageNext(pageNum: Int): ZIO[SttpClient, Throwable, Array[String]] = {
+  private def pageNext(pageNum: Int): ZIO[SttpClient, Throwable, Seq[String]] = {
     val searchWithPage = searchWithParameters.addParam("page", s"$pageNum")
-    val req = basicRequest.get(searchWithPage).response(asJson[searchRoot])
+    val req = basicRequest.get(searchWithPage).response(asJson[SearchRoot])
     for {
       response <- send(req)
       root <- ZIO.fromEither(response.body).tapError { e => ZIO.logError("Paging failed: " + e) }
@@ -104,13 +103,10 @@ class App extends ZIOAppDefault {
       .tap(a => ZIO.log("records for send to kafka: " + a))
       .mapZIO { adWithId =>
 
-        val advertisement = adWithId.advertisement
-//        val advertisement: Advertisement = toAvro(record)
-
         Producer.produce[Any, Int, Advertisement](
           topic = topicName,
           key = adWithId.id,
-          value = advertisement,
+          value = adWithId.advertisement,
           keySerializer = Serde.int,
           valueSerializer = advertisementSerializer
         )

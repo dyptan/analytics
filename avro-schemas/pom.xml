@@ -12,10 +12,8 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.dyptan</groupId>
     <artifactId>avro-schemas</artifactId>
-    <packaging>jar</packaging>
-    <version>1.1</version>
+    <version>1.8</version>
 
 
     <pluginRepositories>
@@ -27,9 +25,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>
-            <version>${avro.version}</version>
         </dependency>
     </dependencies>
 
@@ -65,15 +66,56 @@
                         <goals>
                             <goal>schema</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
-                            <outputDirectory>${project.basedir}/target/generated-sources/avro/</outputDirectory>
-                            <imports>
-                                <import>${project.basedir}/src/main/avro/advertisement.avsc</import>
-                            </imports>
-                        </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>at.makubi.maven.plugin</groupId>
+                <artifactId>avrohugger-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-scala-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <namespaceMapping>
+                        <mapping>
+                            <from>com.ria.avro</from>
+                            <to>com.ria.avro.scala</to>
+                        </mapping>
+                    </namespaceMapping>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
+                <executions>
+                    <execution>
+                        <id>add-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDir>${project.build.directory}/generated-sources/avro</sourceDir>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>2.13.11</scalaVersion>
+                </configuration>
             </plugin>
         </plugins>
     </build>

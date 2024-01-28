@@ -1,6 +1,6 @@
 package com.dyptan.controller;
 
-import com.dyptan.avro.Advertisement;
+import com.ria.avro.Advertisement;
 import com.dyptan.service.GrpcClientService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +55,7 @@ public class StreamingController {
 
     @GetMapping("/streamfilter")
     public String streamfilter() {
-        return "streamFrame";
+        return "streamFilter";
     }
 
     @GetMapping("/fetcher")

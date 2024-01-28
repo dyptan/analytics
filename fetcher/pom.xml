@@ -22,17 +22,17 @@
     </properties>
 
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.cloud</groupId>
-                <artifactId>libraries-bom</artifactId>
-                <version>26.18.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                <groupId>com.google.cloud</groupId>-->
+<!--                <artifactId>libraries-bom</artifactId>-->
+<!--                <version>26.18.0</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
 
     <repositories>
         <repository>
@@ -43,10 +43,6 @@
             <id>confluent</id>
             <url>https://packages.confluent.io/maven/</url>
         </repository>
-<!--        <repository>-->
-<!--            <id>mavencentral</id>-->
-<!--            <url>https://mvnrepository.com/maven2</url>-->
-<!--        </repository>-->
         <!--        <repository>-->
         <!--            <id>github</id>-->
         <!--            <name>GitHub OWNER Apache Maven Packages</name>-->
@@ -58,7 +54,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.11</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
@@ -98,7 +93,7 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>3.3.2</version>
+            <version>3.6.1</version>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
@@ -156,12 +151,15 @@
         <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>
-            <version>1.11.2</version>
         </dependency>
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-avro-serializer</artifactId>
-            <version>7.0.0</version>
+            <version>7.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyptan</groupId>
+            <artifactId>avro-schemas</artifactId>
         </dependency>
     </dependencies>
 
@@ -217,6 +215,7 @@
                 <version>3.5.1</version>
                 <executions>
                     <execution>
+                        <id>shade-jar-with-dependencies</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -245,7 +244,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>

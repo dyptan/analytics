@@ -13,7 +13,7 @@ import sttp.model.Uri
 import zio.kafka.producer.{Producer, ProducerSettings}
 import zio.kafka.serde.{Deserializer, Serializer}
 import zio.{Task, ZIO, ZLayer}
-
+import com.ria.avro.scala.SearchRoot
 import java.io.File
 import scala.jdk.CollectionConverters.MapHasAsJava
 
@@ -21,11 +21,32 @@ object Conf {
   val config = ConfigFactory.load()
   val authKey = model.QueryParams().param("api_key", config.getConfig("crawler").getString("autoriaApiKey"))
   val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
-//  val infoBase = uri"http://localhost:8090/info.json".addParams(authKey)
-//  val searchBase = uri"http://localhost:8090/search.json".addParams(authKey).addParam("countpage", "100")
+  //  val infoBase = uri"http://localhost:8090/info.json".addParams(authKey)
+  //  val searchBase = uri"http://localhost:8090/search.json".addParams(authKey).addParam("countpage", "100")
   val searchBase = uri"https://developers.ria.com/auto/search".addParams(authKey).addParam("countpage", "100")
-  val searchDefault = searchBase.addParams("category_id" -> "1", "s_yers[0]" -> "2000", "price_ot" -> "3000",
-    "price_do" -> "60000", "countpage" -> "100", "top" -> "1")
+  val searchDefault = searchBase.addParams(
+    // private auto
+    "category_id" -> "1",
+    "s_yers[0]" -> "2000",
+    "price_ot" -> "3000",
+    "price_do" -> "60000",
+    //max ids on the page
+    "countpage" -> "100",
+    //last hour only
+    "top" -> "1",
+    // non sold only
+    "saledParam" -> "2",
+    // UA only
+    "abroad" -> "2",
+    //custom cleared only
+    "custom" -> "1",
+    // kyiv only
+    "state[0]" -> "10",
+    "city[0]" -> "0",
+    //in good condition
+    "auto_repairs" -> "0",
+    "damage" -> "0"
+  )
   var searchWithParameters: Uri = searchDefault
   val topicName: String = config.getConfig("producer").getString("kafkaTopic")
   val registryUrl = "http://schema-registry:8081"
@@ -34,7 +55,7 @@ object Conf {
 
   def searchRequest = basicRequest
     .get(searchWithParameters)
-    .response(asJson[searchRoot])
+    .response(asJson[SearchRoot])
 
 
   val actorSystem: ZLayer[Any, Throwable, ActorSystem] =
@@ -50,9 +71,8 @@ object Conf {
         settings = ProducerSettings(List(config.getConfig("producer").getString("kafkaServer")))
           .withProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getName)
           .withProperty(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, config.getConfig("producer").getString("schema-registry.url"))
+      )
     )
-    )
-
 
 
 }

@@ -1,6 +1,6 @@
 package com.dyptan;
 
-import com.dyptan.avro.Advertisement;
+import com.ria.avro.Advertisement;
 import com.google.gson.Gson;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.grpc.ServerBuilder;

@@ -1,0 +1,36 @@
+{
+  "type": "record",
+  "name": "SearchRoot",
+  "namespace": "com.ria.avro",
+  "fields": [
+    {
+      "name": "result",
+      "type": {
+        "type": "record",
+        "name": "Result",
+        "fields": [
+          {
+            "name": "search_result",
+            "type": {
+              "type": "record",
+              "name": "SearchResult",
+              "fields": [
+                {
+                  "name": "ids",
+                  "type": {
+                    "type": "array",
+                    "items": "string"
+                  }
+                },
+                {
+                  "name": "count",
+                  "type": "int"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

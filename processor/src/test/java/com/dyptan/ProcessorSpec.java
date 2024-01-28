@@ -1,6 +1,6 @@
 package com.dyptan;
 
-import com.dyptan.avro.Advertisement;
+import com.ria.avro.Advertisement;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.kafka.clients.consumer.*;

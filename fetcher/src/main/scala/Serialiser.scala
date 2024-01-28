@@ -1,7 +1,7 @@
 package com.dyptan
 
 import com.dyptan.Conf.registryUrl
-import com.dyptan.avro.{Advertisement, AutoData, Geography}
+import com.dyptan.avro.{Advertisement, AutoData, StateData}
 import io.confluent.kafka.serializers.KafkaAvroSerializer
 import org.apache.avro.generic.GenericRecord
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
@@ -14,43 +14,43 @@ import java.io.ByteArrayOutputStream
 import java.util
 
 object AvroConverter {
-  def toAvro(record: Ad) = {
-    val autoData = AutoData.newBuilder()
-      .setYear(record.autoData.year)
-      .setAutoId(record.autoData.autoId)
-      .setBodyId(record.autoData.bodyId)
-      .setRaceInt(record.autoData.raceInt)
-      .setFuelId(record.autoData.fuelId)
-      .setFuelNameEng(record.autoData.fuelNameEng.getOrElse(""))
-      .setGearBoxId(record.autoData.gearBoxId)
-      .setGearboxName(record.autoData.gearboxName.getOrElse(""))
-      .setDriveId(record.autoData.driveId.getOrElse(-1))
-      .setDriveName(record.autoData.driveName)
-      .setCategoryId(record.autoData.categoryId)
-      .setCategoryNameEng(record.autoData.categoryNameEng.getOrElse(""))
-      .setSubCategoryNameEng(record.autoData.subCategoryNameEng.getOrElse(""))
-      .build();
-
-    val geography = Geography.newBuilder()
-      .setStateId(record.stateData.stateId)
-      .setCityId(record.stateData.cityId)
-      .setRegionNameEng(record.stateData.regionNameEng)
-      .build();
-
-    val advertisement = Advertisement.newBuilder()
-      .setUSD(record.USD)
-      .setAddDate(record.addDate)
-      .setSoldDate(record.soldDate)
-      .setAutoData(autoData)
-      .setMarkId(record.markId)
-      .setMarkNameEng(record.markNameEng)
-      .setModelId(record.modelId)
-      .setModelNameEng(record.modelNameEng)
-      .setLinkToView(record.linkToView)
-      .setStateData(geography)
-      .build();
-    advertisement
-  }
+//  def toAvro(record: Advertisement) = {
+//    val autoData = AutoData.newBuilder()
+//      .setYear(record.autoData.year)
+//      .setAutoId(record.autoData.autoId)
+//      .setBodyId(record.autoData.bodyId)
+//      .setRaceInt(record.autoData.raceInt)
+//      .setFuelId(record.autoData.fuelId)
+//      .setFuelNameEng(record.autoData.fuelNameEng)
+//      .setGearBoxId(record.autoData.gearBoxId)
+//      .setGearboxName(record.autoData.gearboxName)
+//      .setDriveId(record.autoData.driveId)
+//      .setDriveName(record.autoData.driveName)
+//      .setCategoryId(record.autoData.categoryId)
+//      .setCategoryNameEng(record.autoData.categoryNameEng)
+//      .setSubCategoryNameEng(record.autoData.subCategoryNameEng)
+//      .build();
+//
+//    val geography = StateData.newBuilder()
+//      .setStateId(record.stateData.stateId)
+//      .setCityId(record.stateData.cityId)
+//      .setRegionNameEng(record.stateData.regionNameEng)
+//      .build();
+//
+//    val advertisement = Advertisement.newBuilder()
+//      .setPrice(record.USD)
+//      .setAddDate(record.addDate)
+//      .setSoldDate(record.soldDate)
+//      .setAutoData(autoData)
+//      .setMarkId(record.markId)
+//      .setMarkNameEng(record.markNameEng)
+//      .setModelId(record.modelId)
+//      .setModelNameEng(record.modelNameEng)
+//      .setLinkToView(record.linkToView)
+//      .setStateData(geography)
+//      .build();
+//    advertisement
+//  }
   def convertToGenericRecord(record: SpecificRecord): GenericRecord = {
     val writer = new SpecificDatumWriter[SpecificRecord](record.getSchema)
     val out = new ByteArrayOutputStream()

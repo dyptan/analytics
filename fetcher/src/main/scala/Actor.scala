@@ -12,8 +12,8 @@ object CrawlerCommands {
 }
 
 class CrawlerController extends Actor with ActorLogging {
-  implicit val system = ActorSystem("root")
-  implicit val defaultTimeout = Timeout(3000.seconds)
+  implicit val system: ActorSystem = ActorSystem("root")
+  implicit val defaultTimeout: Timeout = Timeout(3000.seconds)
 
   import CrawlerCommands._
   import context.dispatcher

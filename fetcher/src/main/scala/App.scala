@@ -1,7 +1,5 @@
 package com.dyptan
 
-import com.dyptan.AvroConverter.toAvro
-import com.dyptan.avro.Advertisement
 import io.circe.generic.auto._
 import sttp.client3.basicRequest
 import sttp.client3.circe._
@@ -66,7 +64,7 @@ class App extends ZIOAppDefault {
   /* Fetches a record from API for a given ID and pushes it to internal Q */
   private def fetchAdToQ(id: String, pubSub: PubSub[AdWithId]): ZIO[SttpClient, Throwable, Unit] = {
     for {
-      response <- send(basicRequest.get(infoBase.addParam("auto_id", id)).response(asJson[Ad]))
+      response <- send(basicRequest.get(infoBase.addParam("auto_id", id)).response(asJson[Advertisement]))
 //      _ <- ZIO.log("Got Ad: " + response.body)
       adv <- ZIO.fromEither(response.body).debug.tapError { e => ZIO.logError("AD fetch failed: " + e) }
       adWithId = AdWithId(Integer.valueOf(id), adv)
@@ -106,8 +104,8 @@ class App extends ZIOAppDefault {
       .tap(a => ZIO.log("records for send to kafka: " + a))
       .mapZIO { adWithId =>
 
-        val record = adWithId.advertisement
-        val advertisement: Advertisement = toAvro(record)
+        val advertisement = adWithId.advertisement
+//        val advertisement: Advertisement = toAvro(record)
 
         Producer.produce[Any, Int, Advertisement](
           topic = topicName,

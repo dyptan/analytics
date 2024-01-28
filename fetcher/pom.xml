@@ -43,6 +43,10 @@
             <id>confluent</id>
             <url>https://packages.confluent.io/maven/</url>
         </repository>
+<!--        <repository>-->
+<!--            <id>mavencentral</id>-->
+<!--            <url>https://mvnrepository.com/maven2</url>-->
+<!--        </repository>-->
         <!--        <repository>-->
         <!--            <id>github</id>-->
         <!--            <name>GitHub OWNER Apache Maven Packages</name>-->
@@ -51,11 +55,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>com.dyptan</groupId>
-            <artifactId>avro-schemas</artifactId>
-            <version>1.0.0</version>
-        </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -168,12 +167,38 @@
 
     <build>
         <plugins>
-
+                <plugin>
+                    <groupId>at.makubi.maven.plugin</groupId>
+                    <artifactId>avrohugger-maven-plugin</artifactId>
+                    <version>1.7</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>generate-scala-sources</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <sourceDirectory>${project.parent.basedir}/avro-schemas/src/main/avro</sourceDirectory>
+                        <outputDirectory>target/generated-sources</outputDirectory>
+                    </configuration>
+                </plugin>
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
                 <version>2.15.2</version>
                 <executions>
+                    <execution>
+                        <id>add-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDir>${project.build.directory}/generated-sources/avro</sourceDir>
+                        </configuration>
+                    </execution>
                     <execution>
                         <goals>
                             <goal>compile</goal>

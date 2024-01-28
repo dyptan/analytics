@@ -12,9 +12,9 @@ import scala.concurrent.duration.DurationInt
 object Driver extends ZIOAppDefault {
   import Conf._
   import CrawlerCommands.{StartProcessing, StopProcessing}
-  implicit val system = ActorSystem("CrawlerGateway")
-  implicit val defaultTimeout = Timeout(3000.seconds)
-  val controller = system.actorOf(Props[CrawlerController], "CrawlerController")
+  implicit val system: ActorSystem = ActorSystem("CrawlerGateway")
+  implicit val defaultTimeout: Timeout = Timeout(3000.seconds)
+  private val controller = system.actorOf(Props[CrawlerController], "CrawlerController")
   val http: Http[Any, Response, Request, Response] = Http.collectZIO[Request] {
     case req@Method.POST -> Root / "search" =>
       req.body.asString.mapBoth(_ => Response.status(Status.BadRequest), {

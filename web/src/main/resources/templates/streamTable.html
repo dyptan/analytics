@@ -46,8 +46,8 @@ if (typeof (EventSource) !== "undefined") {
         model.innerHTML = data.modelNameEng
         vendor.innerHTML = data.markNameEng
         year.innerHTML = data.autoData.year
-        race.innerHTML = Math.floor(data.autoData.raceInt)
-        price.innerHTML = Math.floor(data.USD)
+        race.innerHTML = data.autoData.raceInt
+        price.innerHTML = data.price
         // engine.innerHTML = Math.floor(data.engine_cubic_cm)
         // published.innerHTML = String(data.published)
     };

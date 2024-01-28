@@ -3,45 +3,130 @@
   "name": "Advertisement",
   "namespace": "com.dyptan.avro",
   "fields": [
-    {"name": "price", "type": "int"},
-    {"name": "addDate", "type": "string"},
-    {"name": "soldDate", "type": "string"},
+    {
+      "name": "USD",
+      "type": "int"
+    },
+    {
+      "name": "addDate",
+      "type": "string"
+    },
+    {
+      "name": "soldDate",
+      "type": "string"
+    },
     {
       "name": "autoData",
       "type": {
         "type": "record",
         "name": "AutoData",
         "fields": [
-          {"name": "year", "type": "int"},
-          {"name": "autoId", "type": "int"},
-          {"name": "bodyId", "type": "int"},
-          {"name": "raceInt", "type": "int"},
-          {"name": "fuelId", "type": "int"},
-          {"name": "fuelNameEng", "type": "string"},
-          {"name": "gearBoxId", "type": "int"},
-          {"name": "gearboxName", "type": "string"},
-          {"name": "driveId", "type": "int"},
-          {"name": "driveName", "type": "string"},
-          {"name": "categoryId", "type": "int"},
-          {"name": "categoryNameEng", "type": "string"},
-          {"name": "subCategoryNameEng", "type": "string"}
+          {
+            "name": "year",
+            "type": "int"
+          },
+          {
+            "name": "isSold",
+            "type": "boolean"
+          },
+          {
+            "name": "autoId",
+            "type": "int"
+          },
+          {
+            "name": "bodyId",
+            "type": "int"
+          },
+          {
+            "name": "raceInt",
+            "type": "int"
+          },
+          {
+            "name": "fuelId",
+            "type": "int"
+          },
+          {
+            "name": "fuelNameEng",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "gearBoxId",
+            "type": "int",
+            "default": -1
+          },
+          {
+            "name": "gearboxName",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "driveId",
+            "type": "int",
+            "default": -1
+          },
+          {
+            "name": "driveName",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "categoryId",
+            "type": "int"
+          },
+          {
+            "name": "categoryNameEng",
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "subCategoryNameEng",
+            "type": "string",
+            "default": ""
+          }
         ]
       }
     },
-    {"name": "markId", "type": "int"},
-    {"name": "markNameEng", "type": "string"},
-    {"name": "modelId", "type": "int"},
-    {"name": "modelNameEng", "type": "string"},
-    {"name": "linkToView", "type": "string"},
+    {
+      "name": "markId",
+      "type": "int"
+    },
+    {
+      "name": "markNameEng",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "modelId",
+      "type": "int"
+    },
+    {
+      "name": "modelNameEng",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "linkToView",
+      "type": "string"
+    },
     {
       "name": "stateData",
       "type": {
         "type": "record",
         "name": "StateData",
         "fields": [
-          {"name": "stateId", "type": "int"},
-          {"name": "cityId", "type": "int"},
-          {"name": "regionNameEng", "type": "string"}
+          {
+            "name": "stateId",
+            "type": "int"
+          },
+          {
+            "name": "cityId",
+            "type": "int"
+          },
+          {
+            "name": "regionNameEng",
+            "type": "string"
+          }
         ]
       }
     }

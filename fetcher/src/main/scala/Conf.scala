@@ -49,7 +49,7 @@ object Conf {
       Producer.make(
         settings = ProducerSettings(List(config.getConfig("producer").getString("kafkaServer")))
           .withProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getName)
-          .withProperty(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://schema-registry:8081")
+          .withProperty(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, config.getConfig("producer").getString("schema-registry.url"))
     )
     )
 

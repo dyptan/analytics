@@ -15,6 +15,7 @@
             <th>Year</th>
             <th>Mileage</th>
             <th>Price USD</th>
+            <th>Published</th>
         </tr>
     </table>
 </div>
@@ -40,16 +41,16 @@ if (typeof (EventSource) !== "undefined") {
         var year = row.insertCell(2);
         var race = row.insertCell(3);
         var price = row.insertCell(4);
+        var published = row.insertCell(5);
         // var engine = row.insertCell(4);
-        // var published = row.insertCell(7);
 
         model.innerHTML = data.modelNameEng
         vendor.innerHTML = data.markNameEng
         year.innerHTML = data.autoData.year
         race.innerHTML = data.autoData.raceInt
         price.innerHTML = data.USD
+        published.innerHTML = data.addDate
         // engine.innerHTML = Math.floor(data.engine_cubic_cm)
-        // published.innerHTML = String(data.published)
     };
 
 } else {

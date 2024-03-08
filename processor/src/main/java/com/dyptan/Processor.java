@@ -1,9 +1,10 @@
 package com.dyptan;
 
-import com.ria.avro.Advertisement;
 import com.google.gson.Gson;
+import com.ria.avro.Advertisement;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.grpc.ServerBuilder;
+import io.grpc.stub.StreamObserver;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.extensions.avro.coders.AvroCoder;
 import org.apache.beam.sdk.io.kafka.KafkaIO;
@@ -23,30 +24,36 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Properties;
 
 public class Processor implements Serializable {
-    static Logger logger = LoggerFactory.getLogger("KafkaAdvertisementConsumer");
+    static Logger logger = LoggerFactory.getLogger("MessageProcessor");
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        ServerBuilder.forPort(50051)
-                .addService(new ProcessorServiceImpl())
-                .build()
-                .start();
+
+    public static void main(String[] args) throws IOException {
+        var properties = new Properties();
+        properties.load(new FileInputStream("application.properties"));
+
+//        ServerBuilder.forPort(50051)
+//                .addService(new ProcessorServiceImpl())
+//                .build()
+//                .start();
         logger.info("Starting api server...");
         PipelineOptions options = PipelineOptionsFactory.create();
         Pipeline pipeline = Pipeline.create(options);
 
         @SuppressWarnings("unchecked")
         PTransform<PBegin, PCollection<KafkaRecord<Integer, Advertisement>>> read = KafkaIO.<Integer, Advertisement>read()
-                .withBootstrapServers("http://kafka:9092")
-                .withTopic("ria")
+                .withBootstrapServers(properties.getProperty("kafka.bootstrap.servers"))
+                .withTopic(properties.getProperty("kafka.producer.topic"))
                 .withConsumerConfigUpdates(Collections.singletonMap("specific.avro.reader", "true"))
                 .withConsumerConfigUpdates(Collections.singletonMap("fetch.max.wait.ms", "5000"))
                 .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", "latest"))
-                .withConsumerConfigUpdates(Collections.singletonMap("schema.registry.url", "http://schema-registry:8081"))
+                .withConsumerConfigUpdates(Collections.singletonMap("schema.registry.url", properties.getProperty("schema.registry.url")))
                 .withKeyDeserializer(IntegerDeserializer.class)
                 .withValueDeserializerAndCoder((Class) KafkaAvroDeserializer.class, AvroCoder.of(Advertisement.class));
 
@@ -69,9 +76,9 @@ public class Processor implements Serializable {
         PCollection<Document> mongoDocumentCollection = advertisementRecords
                 .apply("TransformToDocument", ParDo.of(new KVToMongoDocumentFn()));
 
-        String mongoURI = "mongodb://mongo:27017";
-        String databaseName = "ria";
-        String collectionName = "advertisement";
+        String mongoURI = properties.getProperty("mongo.uri");
+        String databaseName = properties.getProperty("database.name");
+        String collectionName = properties.getProperty("collection.name");
 
         mongoDocumentCollection.apply(
                 MongoDbIO.write()

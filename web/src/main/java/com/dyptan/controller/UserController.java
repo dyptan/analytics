@@ -1,6 +1,5 @@
 package com.dyptan.controller;
 
-import com.dyptan.gen.proto.FilterMessage;
 import com.dyptan.model.User;
 import com.dyptan.repository.UserRepository;
 import com.dyptan.service.AuthService;
@@ -32,14 +31,6 @@ public class UserController {
     @GetMapping("/user/{name}")
     public User getUser(@PathVariable(name="name") String name){
         return userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException(name));
-    }
-
-    @GetMapping("/user/{name}/filter/{id}")
-    public FilterMessage getUserFilterById(@PathVariable(name="name") String name,
-                                          @PathVariable(name="id") int filterId){
-        return userRepository.findByUsername(name)
-                .map(user-> user.getFilters().get(filterId))
-                .orElseThrow(() -> new UsernameNotFoundException(name));
     }
 
     @PutMapping("/user/{name}")

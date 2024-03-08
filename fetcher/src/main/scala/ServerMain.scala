@@ -2,6 +2,7 @@ package com.dyptan
 import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
+import com.ria.avro.scala.Advertisement
 import io.circe.parser.decode
 import zio.http._
 import zio.{ZIO, ZIOAppDefault}
@@ -9,7 +10,7 @@ import zio.{ZIO, ZIOAppDefault}
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
-object Driver extends ZIOAppDefault {
+object ServerMain extends ZIOAppDefault {
   import Conf._
   import CrawlerCommands.{StartProcessing, StopProcessing}
   implicit val system: ActorSystem = ActorSystem("CrawlerGateway")

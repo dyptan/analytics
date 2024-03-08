@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Form Generation</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        form {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="range"] {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .range-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // Default schema in case fetching fails
+        const defaultSchema = {
+            "USD": "int",
+            "addDate": "string",
+            "soldDate": "string",
+            "autoData": {
+                "year": "int",
+                "isSold": "boolean",
+                "autoId": "int",
+                "bodyId": "int",
+                "raceInt": "int",
+                "fuelId": "int",
+                "fuelNameEng": "string",
+                "gearBoxId": "int",
+                "gearboxName": "string",
+                "driveId": "int",
+                "driveName": "string",
+                "categoryId": "int",
+                "categoryNameEng": "string",
+                "subCategoryNameEng": "string"
+            },
+            "markId": "int",
+            "markNameEng": "string",
+            "modelId": "int",
+            "modelNameEng": "string",
+            "linkToView": "string",
+            "stateData": {
+                "stateId": "int",
+                "cityId": "int",
+                "regionNameEng": "string"
+            }
+        };
+
+        function generateBSONQuery(formData) {
+            const query = {};
+
+            for (const [fieldName, value] of formData.entries()) {
+                if (!value || value.trim() === "") continue; // Skip empty values
+
+                let fieldKey = fieldName;
+
+                if (fieldName.includes('_min')) {
+                    fieldKey = fieldName.replace('_min', '');
+                    query[fieldKey] = query[fieldKey] || {};
+                    query[fieldKey]['$gte'] = parseInt(value);
+                } else if (fieldName.includes('_max')) {
+                    fieldKey = fieldName.replace('_max', '');
+                    query[fieldKey] = query[fieldKey] || {};
+                    query[fieldKey]['$lte'] = parseInt(value);
+                } else {
+                    // If it's not a range field, handle as regular field
+                    query[fieldName] = value.includes(',') ? { '$in': value.split(',').map(v => v.trim()) } : value;
+                }
+            }
+
+            // Convert field names with underscore to dot notation
+            const resultQuery = {};
+            for (const key in query) {
+                const dottedKey = key.replace(/_/g, '.');
+                resultQuery[dottedKey] = query[key];
+            }
+
+            return resultQuery;
+        }
+
+
+
+
+        function generateSubmitForm(schema, parentFieldName = '') {
+            const form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('id', 'myForm');
+
+            function generateFields(container, nestedSchema, parentFieldName = '') {
+                for (const fieldName in nestedSchema) {
+                    const fieldType = nestedSchema[fieldName];
+                    const fullName = parentFieldName ? `${parentFieldName}.${fieldName}` : fieldName;
+
+                    if (fieldType === 'string' || fieldName.includes('Id')) {
+                        const input = document.createElement('input');
+                        input.setAttribute('name', fullName);
+                        input.setAttribute('type', 'text');
+                        input.setAttribute('placeholder', 'Enter comma-separated values');
+
+                        const label = document.createElement('label');
+                        label.textContent = fullName;
+
+                        container.appendChild(label);
+                        container.appendChild(input);
+                    } else if (fieldType === 'int') {
+                        const minInput = document.createElement('input');
+                        minInput.setAttribute('name', fullName + '_min');
+                        minInput.setAttribute('type', 'number');
+                        minInput.setAttribute('placeholder', 'Min ' + fullName);
+
+                        const maxInput = document.createElement('input');
+                        maxInput.setAttribute('name', fullName + '_max');
+                        maxInput.setAttribute('type', 'number');
+                        maxInput.setAttribute('placeholder', 'Max ' + fullName);
+
+                        const label = document.createElement('label');
+                        label.textContent = fullName;
+
+                        container.appendChild(label);
+                        container.appendChild(minInput);
+                        container.appendChild(maxInput);
+                    } else if (typeof fieldType === 'object') {
+                        const nestedContainer = document.createElement('div');
+                        nestedContainer.classList.add('nested-container');
+                        generateFields(nestedContainer, fieldType, fullName); // Recursively generate nested fields
+                        container.appendChild(nestedContainer);
+                    }
+                }
+            }
+
+            generateFields(form, schema);
+
+            const submitButton = document.createElement('button');
+            submitButton.setAttribute('type', 'submit');
+            submitButton.textContent = 'Submit';
+            form.appendChild(submitButton);
+
+            console.log(form);
+            return form;
+        }
+
+
+        // Function to send GET request to retrieve schema JSON
+        function fetchSchema() {
+            fetch('/schema') // Replace '/schema' with your actual endpoint URL
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Failed to fetch schema from endpoint. Using default schema.');
+                        return defaultSchema;
+                    }
+                    return response.json();
+                })
+                .then(schema => {
+                    const container = document.getElementById('form-container');
+                    const submitForm = generateSubmitForm(schema);
+                    container.appendChild(submitForm);
+
+                    const form3 = document.getElementById('myForm');
+                    form3.addEventListener('submit', function (event) {
+                        event.preventDefault(); // Prevent form submission
+                        const formData = new FormData(form3);
+                        const query = generateBSONQuery(formData);
+                        console.log(query); // Output the generated BSON query document
+                        // Now you can use this query to query MongoDB
+
+
+                        makePostRequest('/preexport', query)
+                            .then(response => {
+                                console.log('POST request successful:', response);
+                                generateForm2(response, schema)
+                            })
+                            .catch(error => {
+                                console.error('POST request failed:', error);
+                            });
+
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to retrieve schema. Please try again later.');
+                });
+        }
+
+        async function makePostRequest(url, data) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error making POST request to ${url}: ${response.status}`);
+                }
+
+                const responseJson = await response.json();
+
+                return responseJson;
+            } catch (error) {
+                console.error('Error making POST request:', error);
+                throw error;
+            }
+        }
+
+        function generateForm2(data, filter) {
+            // Create the form
+            const formContainer = document.getElementById("form-container2");
+            formContainer.innerHTML = '';
+            const form = document.createElement("form");
+            form.method = "POST";
+
+            // Create hidden input for filter
+            const filterInput = document.createElement("input");
+            filterInput.type = "hidden";
+            filterInput.name = "filter";
+            filterInput.value = filter;
+            form.appendChild(filterInput);
+
+            // Generate labels for each key in the data
+            for (const key in data) {
+                const label = document.createElement("label");
+                label.textContent = key + ': ';
+                const valueSpan = document.createElement("span");
+                valueSpan.textContent = JSON.stringify(data[key]);
+                label.appendChild(valueSpan);
+                form.appendChild(label);
+                form.appendChild(document.createElement("br")); // Add line break for each label
+            }
+
+            // Create dropdown for data format
+            const dataFormatLabel = document.createElement("label");
+            dataFormatLabel.textContent = "Data Format:";
+            const dataFormatSelect = document.createElement("select");
+            dataFormatSelect.name = "data_format";
+
+            const dataFormatOptions = ["JSON", "CSV", "PARQUET", "AVRO"];
+            dataFormatOptions.forEach((option, index) => {
+                const optionElement = document.createElement("option");
+                optionElement.value = index;
+                optionElement.textContent = option;
+                dataFormatSelect.appendChild(optionElement);
+            });
+
+            form.appendChild(dataFormatLabel);
+            form.appendChild(dataFormatSelect);
+
+            // Create dropdown for destination
+            const destinationLabel = document.createElement("label");
+            destinationLabel.textContent = "Destination:";
+            const destinationSelect = document.createElement("select");
+            destinationSelect.name = "destination";
+
+            const destinationOptions = ["S3", "Local"];
+            destinationOptions.forEach((option) => {
+                const optionElement = document.createElement("option");
+                optionElement.value = option;
+                optionElement.textContent = option;
+                destinationSelect.appendChild(optionElement);
+            });
+
+            form.appendChild(destinationLabel);
+            form.appendChild(destinationSelect);
+
+            const submitButton = document.createElement('button');
+            submitButton.setAttribute('type', 'submit');
+            submitButton.textContent = 'Submit';
+            form.appendChild(submitButton);
+
+            formContainer.appendChild(form);
+        }
+
+
+
+
+        // Call fetchSchema function to retrieve schema JSON and generate form
+
+        function test() {
+            const container = document.getElementById('form-container');
+            const submitForm = generateSubmitForm(defaultSchema);
+            container.appendChild(submitForm);
+
+            const form3 = document.getElementById('myForm');
+            form3.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+                const formData = new FormData(form3);
+                const query = generateBSONQuery(formData);
+                console.log(query); // Output the generated BSON query document
+                // Now you can use this query to query MongoDB
+                const url = '/preexport';
+
+                // makePostRequest(url, query)
+                //     .then(response => {
+                //         console.log('POST request successful:', response);
+                //     })
+                //     .catch(error => {
+                //         console.error('POST request failed:', error);
+                //     });
+            });
+        }
+        fetchSchema();
+        // test()
+
+    </script>
+
+    <div id="container">
+        <div id="form-container"></div>
+        <div id="form-container2">
+            <div id="table-container"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>

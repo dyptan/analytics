@@ -1,21 +1,34 @@
 package com.dyptan.component;
-import com.dyptan.gen.proto.FilterMessage;
-import com.dyptan.gen.proto.ProcessorServiceGrpc;
-import com.dyptan.gen.proto.ConfirmationMessage;
-//import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.springframework.stereotype.Component;
 
+import com.dyptan.gen.proto.ExportFilter;
+import com.dyptan.gen.proto.ExportRequest;
+import com.dyptan.gen.proto.ExportServiceGrpc;
+import com.dyptan.gen.proto.RawData;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Struct;
+import com.google.protobuf.util.JsonFormat;
+import com.ria.avro.Advertisement;
+import org.bson.BsonDocument;
+import org.springframework.stereotype.Component;
 @Component
 public class GrpcClientComponent {
 
-    private ProcessorServiceGrpc.ProcessorServiceBlockingStub blockingStub;
+    private ExportServiceGrpc.ExportServiceBlockingStub blockingStub;
 
-    public void callRemoteService() {
-        FilterMessage request = FilterMessage.newBuilder()
-                // Set your request fields here
+    public void exportData(BsonDocument validatedFilter) throws InvalidProtocolBufferException {
+        Struct.Builder structBuilder = Struct.newBuilder();
+        JsonFormat.parser().ignoringUnknownFields().merge(validatedFilter.toJson(), structBuilder);
+        Struct filterStruct = structBuilder.build();
+        ExportFilter exportFilter = ExportFilter.newBuilder()
+                .setJsonBody(filterStruct)
                 .build();
 
-        ConfirmationMessage response = blockingStub.archiveMessages(request);
-        System.out.println("Response: " + response.getStatus());
+        ExportRequest request = ExportRequest.newBuilder()
+                .setFilter(exportFilter)
+                .build();
+
+
+        RawData response = blockingStub.exportData(request);
+        System.out.println("Response: " + response.getRawData());
     }
 }

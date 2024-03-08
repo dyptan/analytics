@@ -4,10 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>web</name>
     <artifactId>web</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.dyptan</groupId>
@@ -16,7 +14,6 @@
     </parent>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -40,47 +37,40 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.6.0</version>
         </dependency>
-
-         <dependency>
-             <groupId>com.dyptan</groupId>
-             <artifactId>processor-api</artifactId>
-         </dependency>
-         <dependency>
-             <groupId>com.dyptan</groupId>
-             <artifactId>avro-schemas</artifactId>
-         </dependency>
-     </dependencies>
+        <dependency>
+            <groupId>com.dyptan</groupId>
+            <artifactId>processor-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dyptan</groupId>
+            <artifactId>avro-schemas</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <extensions>
@@ -91,7 +81,6 @@
             </extension>
         </extensions>
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -100,32 +89,30 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.6.1</version>
-                <configuration>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <protocArtifact>
-                        com.google.protobuf:protoc:3.3.0:exe:${os.detected.classifier}
-                    </protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <pluginArtifact>
-                        io.grpc:protoc-gen-grpc-java:1.4.0:exe:${os.detected.classifier}
-                    </pluginArtifact>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.xolstice.maven.plugins</groupId>-->
+<!--                <artifactId>protobuf-maven-plugin</artifactId>-->
+<!--                <version>0.6.1</version>-->
+<!--                <configuration>-->
+<!--                    &lt;!&ndash;suppress UnresolvedMavenProperty &ndash;&gt;-->
+<!--                    <protocArtifact>-->
+<!--                        com.google.protobuf:protoc:3.3.0:exe:${os.detected.classifier}-->
+<!--                    </protocArtifact>-->
+<!--                    <pluginId>grpc-java</pluginId>-->
+<!--                    &lt;!&ndash;suppress UnresolvedMavenProperty &ndash;&gt;-->
+<!--                    <pluginArtifact>-->
+<!--                        io.grpc:protoc-gen-grpc-java:1.4.0:exe:${os.detected.classifier}-->
+<!--                    </pluginArtifact>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                            <goal>compile-custom</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
-
 </project>

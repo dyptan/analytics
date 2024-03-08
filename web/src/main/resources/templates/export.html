@@ -103,13 +103,111 @@
             }
         };
 
+        function generateSubmitForm(schema, parentFieldName = '') {
+            const form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('id', 'myForm');
+
+            function generateFields(container, nestedSchema, parentFieldName = '') {
+                for (const fieldName in nestedSchema) {
+                    const fieldType = nestedSchema[fieldName];
+                    const fullName = parentFieldName ? `${parentFieldName}.${fieldName}` : fieldName;
+
+                    const fieldContainer = document.createElement('div');
+
+                    // Create checkbox
+                    const checkbox = document.createElement('input');
+                    checkbox.setAttribute('type', 'checkbox');
+                    checkbox.setAttribute('name', `${fullName}_checkbox`);
+                    checkbox.setAttribute('value', fullName); // Add value attribute to store field name
+                    fieldContainer.appendChild(checkbox);
+
+                    // Create input based on field type
+                    if (fieldType === 'string' || fieldName.includes('Id')) {
+                        const input = document.createElement('input');
+                        input.setAttribute('name', fullName);
+                        input.setAttribute('type', 'text');
+                        input.setAttribute('placeholder', 'Enter comma-separated values');
+                        fieldContainer.appendChild(input);
+                    } else if (fieldType === 'int') {
+                        const minInput = document.createElement('input');
+                        minInput.setAttribute('name', fullName + '_min');
+                        minInput.setAttribute('type', 'number');
+                        minInput.setAttribute('placeholder', 'Min ' + fullName);
+
+                        const maxInput = document.createElement('input');
+                        maxInput.setAttribute('name', fullName + '_max');
+                        maxInput.setAttribute('type', 'number');
+                        maxInput.setAttribute('placeholder', 'Max ' + fullName);
+
+                        fieldContainer.appendChild(minInput);
+                        fieldContainer.appendChild(maxInput);
+                    } else if (typeof fieldType === 'object') {
+                        const nestedContainer = document.createElement('div');
+                        nestedContainer.classList.add('nested-container');
+                        generateFields(nestedContainer, fieldType, fullName); // Recursively generate nested fields
+                        fieldContainer.appendChild(nestedContainer);
+                    }
+
+                    const label = document.createElement('label');
+                    label.textContent = fullName;
+                    fieldContainer.appendChild(label);
+
+                    container.appendChild(fieldContainer);
+                }
+            }
+
+            generateFields(form, schema);
+
+            const submitButton = document.createElement('button');
+            submitButton.setAttribute('type', 'submit');
+            submitButton.textContent = 'Submit';
+            form.appendChild(submitButton);
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission behavior
+                const formData = new FormData(form);
+
+                // Iterate over checkbox inputs and set their value to 'on' if checked
+                const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        formData.set(checkbox.name, 'on');
+                    } else {
+                        formData.set(checkbox.name, ''); // Set value to empty string if unchecked
+                    }
+                });
+
+                for (const [fieldName, value] of formData.entries()) {
+                    console.log(fieldName, value)
+                }
+
+                generateBSONQuery(formData);
+            });
+
+
+            return form;
+        }
+
+
         function generateBSONQuery(formData) {
             const query = {};
+            const projection = {}; // Projection object to include checked fields only
 
             for (const [fieldName, value] of formData.entries()) {
                 if (!value || value.trim() === "") continue; // Skip empty values
 
                 let fieldKey = fieldName;
+                let isChecked = true;
+
+                if (fieldName.includes('_checkbox')) {
+                    fieldKey = fieldName.replace('_checkbox', '');
+                    isChecked = value === 'on'; // Check if the checkbox is checked
+                    if (isChecked) projection[fieldKey] = 1; // Include field in projection if checked
+                    console.log("including into projection:", fieldKey)
+                    console.log("projection now is:", projection)
+                    continue; // Skip processing the checkbox entry
+                }
 
                 if (fieldName.includes('_min')) {
                     fieldKey = fieldName.replace('_min', '');
@@ -125,76 +223,23 @@
                 }
             }
 
-            // Convert field names with underscore to dot notation
+            // Convert field names with underscore to dot notation in query
             const resultQuery = {};
             for (const key in query) {
                 const dottedKey = key.replace(/_/g, '.');
                 resultQuery[dottedKey] = query[key];
             }
 
-            return resultQuery;
+            // Check if there are fields to project, if not, set projection to null
+            const projectionKeys = Object.keys(projection);
+            const finalProjection = projectionKeys.length > 0 ? projection : null;
+
+            return { query: resultQuery, projection: finalProjection };
         }
 
 
 
 
-        function generateSubmitForm(schema, parentFieldName = '') {
-            const form = document.createElement('form');
-            form.setAttribute('method', 'post');
-            form.setAttribute('id', 'myForm');
-
-            function generateFields(container, nestedSchema, parentFieldName = '') {
-                for (const fieldName in nestedSchema) {
-                    const fieldType = nestedSchema[fieldName];
-                    const fullName = parentFieldName ? `${parentFieldName}.${fieldName}` : fieldName;
-
-                    if (fieldType === 'string' || fieldName.includes('Id')) {
-                        const input = document.createElement('input');
-                        input.setAttribute('name', fullName);
-                        input.setAttribute('type', 'text');
-                        input.setAttribute('placeholder', 'Enter comma-separated values');
-
-                        const label = document.createElement('label');
-                        label.textContent = fullName;
-
-                        container.appendChild(label);
-                        container.appendChild(input);
-                    } else if (fieldType === 'int') {
-                        const minInput = document.createElement('input');
-                        minInput.setAttribute('name', fullName + '_min');
-                        minInput.setAttribute('type', 'number');
-                        minInput.setAttribute('placeholder', 'Min ' + fullName);
-
-                        const maxInput = document.createElement('input');
-                        maxInput.setAttribute('name', fullName + '_max');
-                        maxInput.setAttribute('type', 'number');
-                        maxInput.setAttribute('placeholder', 'Max ' + fullName);
-
-                        const label = document.createElement('label');
-                        label.textContent = fullName;
-
-                        container.appendChild(label);
-                        container.appendChild(minInput);
-                        container.appendChild(maxInput);
-                    } else if (typeof fieldType === 'object') {
-                        const nestedContainer = document.createElement('div');
-                        nestedContainer.classList.add('nested-container');
-                        generateFields(nestedContainer, fieldType, fullName); // Recursively generate nested fields
-                        container.appendChild(nestedContainer);
-                    }
-                }
-            }
-
-            generateFields(form, schema);
-
-            const submitButton = document.createElement('button');
-            submitButton.setAttribute('type', 'submit');
-            submitButton.textContent = 'Submit';
-            form.appendChild(submitButton);
-
-            console.log(form);
-            return form;
-        }
 
 
         // Function to send GET request to retrieve schema JSON
@@ -234,7 +279,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Failed to retrieve schema. Please try again later.');
+                    test()
                 });
         }
 
@@ -361,12 +406,8 @@
 
     </script>
 
-    <div id="container">
-        <div id="form-container"></div>
-        <div id="form-container2">
-            <div id="table-container"></div>
-        </div>
-    </div>
+    <div id="form-container"></div>
+    <div id="form-container2"></div>
 
 </body>
 

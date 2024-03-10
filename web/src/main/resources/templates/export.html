@@ -69,44 +69,13 @@
 </head>
 
 <body>
+    <form id="form-container"></form>
+    <form id="form-container2"></form>
     <script>
-        // Default schema in case fetching fails
-        const defaultSchema = {
-            "USD": "int",
-            "addDate": "string",
-            "soldDate": "string",
-            "autoData": {
-                "year": "int",
-                "isSold": "boolean",
-                "autoId": "int",
-                "bodyId": "int",
-                "raceInt": "int",
-                "fuelId": "int",
-                "fuelNameEng": "string",
-                "gearBoxId": "int",
-                "gearboxName": "string",
-                "driveId": "int",
-                "driveName": "string",
-                "categoryId": "int",
-                "categoryNameEng": "string",
-                "subCategoryNameEng": "string"
-            },
-            "markId": "int",
-            "markNameEng": "string",
-            "modelId": "int",
-            "modelNameEng": "string",
-            "linkToView": "string",
-            "stateData": {
-                "stateId": "int",
-                "cityId": "int",
-                "regionNameEng": "string"
-            }
-        };
 
-        function generateSubmitForm(schema, parentFieldName = '') {
-            const form = document.createElement('form');
+        async function generateForm() {
+            const form = document.getElementById('form-container');
             form.setAttribute('method', 'post');
-            form.setAttribute('id', 'myForm');
 
             function generateFields(container, nestedSchema, parentFieldName = '') {
                 for (const fieldName in nestedSchema) {
@@ -116,11 +85,13 @@
                     const fieldContainer = document.createElement('div');
 
                     // Create checkbox
-                    const checkbox = document.createElement('input');
-                    checkbox.setAttribute('type', 'checkbox');
-                    checkbox.setAttribute('name', `${fullName}_checkbox`);
-                    checkbox.setAttribute('value', fullName); // Add value attribute to store field name
-                    fieldContainer.appendChild(checkbox);
+                    if (typeof fieldType !== 'object') {
+                        const checkbox = document.createElement('input');
+                        checkbox.setAttribute('type', 'checkbox');
+                        checkbox.setAttribute('name', `${fullName}_checkbox`);
+                        checkbox.setAttribute('value', fullName); // Add value attribute to store field name
+                        fieldContainer.appendChild(checkbox);
+                    }
 
                     // Create input based on field type
                     if (fieldType === 'string' || fieldName.includes('Id')) {
@@ -157,15 +128,18 @@
                 }
             }
 
+            const response = await fetch("/schema");
+            const schema = await response.json();
             generateFields(form, schema);
 
             const submitButton = document.createElement('button');
             submitButton.setAttribute('type', 'submit');
-            submitButton.textContent = 'Submit';
+            submitButton.textContent = 'Prepare';
             form.appendChild(submitButton);
 
             form.addEventListener('submit', function (event) {
                 event.preventDefault(); // Prevent default form submission behavior
+                // console.log("button clicked")
                 const formData = new FormData(form);
 
                 // Iterate over checkbox inputs and set their value to 'on' if checked
@@ -178,15 +152,24 @@
                     }
                 });
 
-                for (const [fieldName, value] of formData.entries()) {
-                    console.log(fieldName, value)
-                }
+                // for (const [fieldName, value] of formData.entries()) {
+                //     console.log(fieldName, value)
+                // }
 
-                generateBSONQuery(formData);
+                const filter = generateBSONQuery(formData);
+                console.log("filter generated:", filter)
+                const response = fetch('/preexport', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(filter),
+                }).then(response => {
+                    generateForm2(response.json(), filter)
+                    console.log("form 2 generated")
+                });
+
             });
-
-
-            return form;
         }
 
 
@@ -203,9 +186,13 @@
                 if (fieldName.includes('_checkbox')) {
                     fieldKey = fieldName.replace('_checkbox', '');
                     isChecked = value === 'on'; // Check if the checkbox is checked
-                    if (isChecked) projection[fieldKey] = 1; // Include field in projection if checked
-                    console.log("including into projection:", fieldKey)
-                    console.log("projection now is:", projection)
+                    if (isChecked) { 
+                        projection[fieldKey] = 1;}
+                    else {
+                        projection[fieldKey] = 0;
+                    } // Include field in projection if checked
+                    // console.log("including into projection:", fieldKey)
+                    // console.log("projection now is:", projection)
                     continue; // Skip processing the checkbox entry
                 }
 
@@ -240,74 +227,11 @@
 
 
 
-
-
-        // Function to send GET request to retrieve schema JSON
-        function fetchSchema() {
-            fetch('/schema') // Replace '/schema' with your actual endpoint URL
-                .then(response => {
-                    if (!response.ok) {
-                        console.error('Failed to fetch schema from endpoint. Using default schema.');
-                        return defaultSchema;
-                    }
-                    return response.json();
-                })
-                .then(schema => {
-                    const container = document.getElementById('form-container');
-                    const submitForm = generateSubmitForm(schema);
-                    container.appendChild(submitForm);
-
-                    const form3 = document.getElementById('myForm');
-                    form3.addEventListener('submit', function (event) {
-                        event.preventDefault(); // Prevent form submission
-                        const formData = new FormData(form3);
-                        const query = generateBSONQuery(formData);
-                        console.log(query); // Output the generated BSON query document
-                        // Now you can use this query to query MongoDB
-
-
-                        makePostRequest('/preexport', query)
-                            .then(response => {
-                                console.log('POST request successful:', response);
-                                generateForm2(response, schema)
-                            })
-                            .catch(error => {
-                                console.error('POST request failed:', error);
-                            });
-
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    test()
-                });
-        }
-
-        async function makePostRequest(url, data) {
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error making POST request to ${url}: ${response.status}`);
-                }
-
-                const responseJson = await response.json();
-
-                return responseJson;
-            } catch (error) {
-                console.error('Error making POST request:', error);
-                throw error;
-            }
-        }
-
-        function generateForm2(data, filter) {
+        async function generateForm2(fromPreexportPromise, filter) {
             // Create the form
+            const fromPreexport = await fromPreexportPromise;
+
+            // console.log("json should be here", fromPreexport)
             const formContainer = document.getElementById("form-container2");
             formContainer.innerHTML = '';
             const form = document.createElement("form");
@@ -321,11 +245,11 @@
             form.appendChild(filterInput);
 
             // Generate labels for each key in the data
-            for (const key in data) {
+            for (const key in fromPreexport) {
                 const label = document.createElement("label");
                 label.textContent = key + ': ';
                 const valueSpan = document.createElement("span");
-                valueSpan.textContent = JSON.stringify(data[key]);
+                valueSpan.textContent = JSON.stringify(fromPreexport[key]);
                 label.appendChild(valueSpan);
                 form.appendChild(label);
                 form.appendChild(document.createElement("br")); // Add line break for each label
@@ -375,40 +299,8 @@
         }
 
 
-
-
-        // Call fetchSchema function to retrieve schema JSON and generate form
-
-        function test() {
-            const container = document.getElementById('form-container');
-            const submitForm = generateSubmitForm(defaultSchema);
-            container.appendChild(submitForm);
-
-            const form3 = document.getElementById('myForm');
-            form3.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent form submission
-                const formData = new FormData(form3);
-                const query = generateBSONQuery(formData);
-                console.log(query); // Output the generated BSON query document
-                // Now you can use this query to query MongoDB
-                const url = '/preexport';
-
-                // makePostRequest(url, query)
-                //     .then(response => {
-                //         console.log('POST request successful:', response);
-                //     })
-                //     .catch(error => {
-                //         console.error('POST request failed:', error);
-                //     });
-            });
-        }
-        fetchSchema();
-        // test()
-
+        generateForm()
     </script>
-
-    <div id="form-container"></div>
-    <div id="form-container2"></div>
 
 </body>
 

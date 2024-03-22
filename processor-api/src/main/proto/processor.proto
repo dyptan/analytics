@@ -1,35 +1,25 @@
 syntax = "proto3";
 package dev.dyptan.ExportService.v1;
 
-import "google/protobuf/any.proto";
 import "google/protobuf/struct.proto";
 option java_multiple_files = true;
 option java_package = "com.dyptan.gen.proto";
 
 service ExportService {
-  rpc ExportData (ExportRequest) returns (RawData);
+  rpc ExportData (ExportRequest) returns (ExportAck);
 }
 
 message ExportRequest {
-  int32 limit = 1 [deprecated=true];
-  ExportFormat format = 2;
-  ExportDestination destination = 3;
-  ExportFilter filter = 4;
+  ExportFormat format = 1;
+  string name = 2;
+  ExportFilter filter = 3;
 }
 
 message ExportFilter {
   google.protobuf.Struct json_body = 1;
 }
 
-message RawData {
-  int32 progress = 1;
-  google.protobuf.Any raw_data = 2;
-}
-
-enum ExportDestination {
-  S3 = 0;
-  LOCAL = 1;
-}
+message ExportAck {}
 
 enum ExportFormat {
   JSON = 0;

@@ -1,6 +1,21 @@
 version: '3'
 
+volumes:
+  minio_data:
+    driver: local
+
 services:
+  minio:
+    image: docker.io/bitnami/minio:2024
+    environment:
+      - MINIO_ROOT_USER=minio-root-user
+      - MINIO_ROOT_PASSWORD=minio-root-password
+      - MINIO_DEFAULT_BUCKETS=export-bucket:policy,another-bucket
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - 'minio_data:/bitnami/minio/data'
   kafka:
     image: bitnami/kafka:3.6
     ports:

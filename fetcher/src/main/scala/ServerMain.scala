@@ -5,7 +5,7 @@ import akka.util.Timeout
 import com.ria.avro.scala.Advertisement
 import io.circe.parser.decode
 import zio.http._
-import zio.{ZIO, ZIOAppDefault}
+import zio.{ZIO, ZIOApp, ZIOAppDefault}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt

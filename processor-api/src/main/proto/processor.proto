@@ -19,7 +19,9 @@ message ExportFilter {
   google.protobuf.Struct json_body = 1;
 }
 
-message ExportAck {}
+message ExportAck {
+  string status = 1;
+}
 
 enum ExportFormat {
   JSON = 0;

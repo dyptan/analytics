@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.ria.avro.Advertisement;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.grpc.ServerBuilder;
-import io.grpc.stub.StreamObserver;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.extensions.avro.coders.AvroCoder;
 import org.apache.beam.sdk.io.kafka.KafkaIO;
@@ -32,22 +31,21 @@ import java.util.Properties;
 
 public class Processor implements Serializable {
     static Logger logger = LoggerFactory.getLogger("MessageProcessor");
-
-
     public static void main(String[] args) throws IOException {
         var properties = new Properties();
         properties.load(new FileInputStream("application.properties"));
 
-//        ServerBuilder.forPort(50051)
-//                .addService(new ProcessorServiceImpl())
-//                .build()
-//                .start();
+        ServerBuilder.forPort(50051)
+                .addService(new ExportServiceImpl())
+                .build()
+                .start();
         logger.info("Starting api server...");
+
         PipelineOptions options = PipelineOptionsFactory.create();
         Pipeline pipeline = Pipeline.create(options);
 
         @SuppressWarnings("unchecked")
-        PTransform<PBegin, PCollection<KafkaRecord<Integer, Advertisement>>> read = KafkaIO.<Integer, Advertisement>read()
+        PTransform<PBegin, PCollection<KafkaRecord<Integer, Advertisement>>> kafkaConsumer = KafkaIO.<Integer, Advertisement>read()
                 .withBootstrapServers(properties.getProperty("kafka.bootstrap.servers"))
                 .withTopic(properties.getProperty("kafka.producer.topic"))
                 .withConsumerConfigUpdates(Collections.singletonMap("specific.avro.reader", "true"))
@@ -59,7 +57,7 @@ public class Processor implements Serializable {
 
 
         PCollection<KV<Integer, Advertisement>> advertisementRecords =
-                pipeline.apply(read)
+                pipeline.apply(kafkaConsumer)
                         .apply("ExtractRecord", ParDo.of(
                                 new DoFn<KafkaRecord<Integer, Advertisement>, KV<Integer, Advertisement>>() {
                                     @ProcessElement
@@ -73,14 +71,14 @@ public class Processor implements Serializable {
                                     }
                                 }));
 
-        PCollection<Document> mongoDocumentCollection = advertisementRecords
-                .apply("TransformToDocument", ParDo.of(new KVToMongoDocumentFn()));
+        PCollection<Document> mongoDocuments = advertisementRecords
+                .apply("TransformToDocument", ParDo.of(new KV2MongoDocumentFn()));
 
         String mongoURI = properties.getProperty("mongo.uri");
         String databaseName = properties.getProperty("database.name");
         String collectionName = properties.getProperty("collection.name");
 
-        mongoDocumentCollection.apply(
+        mongoDocuments.apply(
                 MongoDbIO.write()
                         .withUri(mongoURI)
                         .withDatabase(databaseName)
@@ -93,7 +91,7 @@ public class Processor implements Serializable {
     }
 
 
-    public static class KVToMongoDocumentFn extends DoFn<KV<Integer, Advertisement>, Document> {
+    public static class KV2MongoDocumentFn extends DoFn<KV<Integer, Advertisement>, Document> {
         @ProcessElement
         public void processElement(ProcessContext c) {
             KV<Integer, Advertisement> input = c.element();

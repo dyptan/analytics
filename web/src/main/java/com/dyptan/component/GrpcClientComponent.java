@@ -1,9 +1,9 @@
 package com.dyptan.component;
 
+import com.dyptan.gen.proto.ExportAck;
 import com.dyptan.gen.proto.ExportFilter;
 import com.dyptan.gen.proto.ExportRequest;
 import com.dyptan.gen.proto.ExportServiceGrpc;
-import com.dyptan.gen.proto.RawData;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Struct;
 import com.google.protobuf.util.JsonFormat;
@@ -28,7 +28,7 @@ public class GrpcClientComponent {
                 .build();
 
 
-        RawData response = blockingStub.exportData(request);
-        System.out.println("Response: " + response.getRawData());
+        ExportAck response = blockingStub.exportData(request);
+        System.out.println("Response: " + response);
     }
 }

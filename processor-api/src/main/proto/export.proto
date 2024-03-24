@@ -17,7 +17,8 @@ message ExportRequest {
 }
 
 message ExportFilter {
-  google.protobuf.Struct json_body = 1;
+  google.protobuf.Struct filter = 1;
+  google.protobuf.Struct projection = 2;
 }
 
 message ExportStatus {

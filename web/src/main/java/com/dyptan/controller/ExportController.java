@@ -60,11 +60,11 @@ public class ExportController {
     public String doExport(@RequestBody ExportRequest exportRequest) throws IOException {
         JsonNode jsonQuery = exportRequest.getQuery();
         JsonNode jsonProjection = exportRequest.getProjection();
-        log.info("select: " + jsonQuery.toPrettyString());
+        log.debug("select: " + jsonQuery.toPrettyString());
         Document query = Document.parse(jsonQuery.toString());
         Document projection = Document.parse(jsonProjection.toString());
 
-        exportService.exportData(query.toBsonDocument());
+        exportService.exportData(query.toBsonDocument(), projection.toBsonDocument() );
         return jsonQuery.toPrettyString();
     }
 

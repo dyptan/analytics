@@ -16,8 +16,9 @@
         <version>3.2.0</version>
         <relativePath/>
     </parent>
-
     <properties>
+        <scala.major.version>2.13</scala.major.version>
+        <scala.version>2.13.13</scala.version>
         <java.version>21</java.version>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
@@ -30,6 +31,7 @@
         <module>processor</module>
         <module>processor-api</module>
         <module>avro-schemas</module>
+        <module>exporter</module>
     </modules>
 
     <dependencyManagement>

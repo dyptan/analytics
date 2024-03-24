@@ -10,24 +10,28 @@ import com.google.protobuf.util.JsonFormat;
 import org.bson.BsonDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 @Component
 public class GrpcClientComponent {
-
     @Autowired
     private ExportServiceGrpc.ExportServiceBlockingStub blockingStub;
+    public void exportData(BsonDocument validatedFilter, BsonDocument projection) throws InvalidProtocolBufferException {
+        Struct.Builder structBuilderFilter = Struct.newBuilder();
+        JsonFormat.parser().ignoringUnknownFields().merge(validatedFilter.toJson(), structBuilderFilter);
+        Struct filterStruct = structBuilderFilter.build();
 
-    public void exportData(BsonDocument validatedFilter) throws InvalidProtocolBufferException {
-        Struct.Builder structBuilder = Struct.newBuilder();
-        JsonFormat.parser().ignoringUnknownFields().merge(validatedFilter.toJson(), structBuilder);
-        Struct filterStruct = structBuilder.build();
+        Struct.Builder structBuilderProjection = Struct.newBuilder();
+        JsonFormat.parser().ignoringUnknownFields().merge(projection.toJson(), structBuilderProjection);
+        Struct projectionStruct = structBuilderProjection.build();
+
         ExportFilter exportFilter = ExportFilter.newBuilder()
-                .setJsonBody(filterStruct)
+                .setFilter(filterStruct)
+                .setProjection(projectionStruct)
                 .build();
 
         ExportRequest request = ExportRequest.newBuilder()
                 .setFilter(exportFilter)
                 .build();
-
 
         ExportStatus response = blockingStub.doExport(request);
         System.out.println("Response: " + response);

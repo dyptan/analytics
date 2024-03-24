@@ -13,10 +13,6 @@
         <version>1.0</version>
     </parent>
 
-    <properties>
-        <scala.major.version>2.13</scala.major.version>
-        <scala.version>2.13.11</scala.version>
-    </properties>
 
     <repositories>
         <repository>
@@ -46,12 +42,12 @@
         </dependency>
         <dependency>
             <groupId>com.sksamuel.avro4s</groupId>
-            <artifactId>avro4s-core_2.13</artifactId>
+            <artifactId>avro4s-core_${scala.major.version}</artifactId>
             <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.sksamuel.avro4s</groupId>
-            <artifactId>avro4s-json_2.13</artifactId>
+            <artifactId>avro4s-json_${scala.major.version}</artifactId>
             <version>4.1.0</version>
         </dependency>
         <dependency>

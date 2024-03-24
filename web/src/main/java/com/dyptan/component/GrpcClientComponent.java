@@ -1,18 +1,19 @@
 package com.dyptan.component;
 
-import com.dyptan.gen.proto.ExportAck;
+import com.dyptan.gen.proto.ExportStatus;
 import com.dyptan.gen.proto.ExportFilter;
 import com.dyptan.gen.proto.ExportRequest;
 import com.dyptan.gen.proto.ExportServiceGrpc;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Struct;
 import com.google.protobuf.util.JsonFormat;
-import com.ria.avro.Advertisement;
 import org.bson.BsonDocument;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class GrpcClientComponent {
 
+    @Autowired
     private ExportServiceGrpc.ExportServiceBlockingStub blockingStub;
 
     public void exportData(BsonDocument validatedFilter) throws InvalidProtocolBufferException {
@@ -28,7 +29,7 @@ public class GrpcClientComponent {
                 .build();
 
 
-        ExportAck response = blockingStub.exportData(request);
+        ExportStatus response = blockingStub.doExport(request);
         System.out.println("Response: " + response);
     }
 }

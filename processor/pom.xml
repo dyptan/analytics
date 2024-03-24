@@ -55,10 +55,6 @@
             <groupId>com.dyptan</groupId>
             <artifactId>avro-schemas</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.dyptan</groupId>
-            <artifactId>processor-api</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

@@ -1,25 +1,26 @@
 syntax = "proto3";
-package dev.dyptan.ExportService.v1;
+package com.dyptan.ExportService.v1;
 
 import "google/protobuf/struct.proto";
 option java_multiple_files = true;
 option java_package = "com.dyptan.gen.proto";
 
 service ExportService {
-  rpc ExportData (ExportRequest) returns (ExportAck);
+  rpc DoExport (ExportRequest) returns (ExportStatus);
 }
 
 message ExportRequest {
   ExportFormat format = 1;
-  string name = 2;
-  ExportFilter filter = 3;
+  ExportFilter filter = 2;
+  string export_name = 3;
+  string user = 4;
 }
 
 message ExportFilter {
   google.protobuf.Struct json_body = 1;
 }
 
-message ExportAck {
+message ExportStatus {
   string status = 1;
 }
 

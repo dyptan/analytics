@@ -1,5 +1,6 @@
 package com.dyptan.controller;
 
+import com.dyptan.component.GrpcClientComponent;
 import com.dyptan.model.ExportRequest;
 import com.dyptan.service.GrpcClientService;
 import com.dyptan.utils.AvroSchemaConverter;
@@ -39,7 +40,8 @@ public class ExportController {
     private ReactiveMongoTemplate mongoTemplate;
     //    @Value("${exporter.api.url}")
 //    String exporterUrl;
-    private Query query = new Query();
+    @Autowired
+    GrpcClientComponent exportService;
 
     @GetMapping("/export")
     public String exportpage() {
@@ -53,12 +55,25 @@ public class ExportController {
         return json;
     }
 
+    @PostMapping(value = "/export", consumes = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String doExport(@RequestBody ExportRequest exportRequest) throws IOException {
+        JsonNode jsonQuery = exportRequest.getQuery();
+        JsonNode jsonProjection = exportRequest.getProjection();
+        log.info("select: " + jsonQuery.toPrettyString());
+        Document query = Document.parse(jsonQuery.toString());
+        Document projection = Document.parse(jsonProjection.toString());
+
+        exportService.exportData(query.toBsonDocument());
+        return jsonQuery.toPrettyString();
+    }
+
     @PostMapping(value = "/preexport", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
     public String prepareExport(@RequestBody ExportRequest exportRequest) throws IOException {
         JsonNode jsonQuery = exportRequest.getQuery();
         JsonNode jsonProjection = exportRequest.getProjection();
-        log.debug("select: " + jsonQuery.toPrettyString());
+        log.info("select: " + jsonQuery.toPrettyString());
         Document query = Document.parse(jsonQuery.toString());
         Document projection = Document.parse(jsonProjection.toString());
         BasicQuery filter = new BasicQuery(query, projection);

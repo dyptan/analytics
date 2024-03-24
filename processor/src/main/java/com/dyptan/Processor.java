@@ -3,7 +3,6 @@ package com.dyptan;
 import com.google.gson.Gson;
 import com.ria.avro.Advertisement;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.grpc.ServerBuilder;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.extensions.avro.coders.AvroCoder;
 import org.apache.beam.sdk.io.kafka.KafkaIO;
@@ -35,11 +34,6 @@ public class Processor implements Serializable {
         var properties = new Properties();
         properties.load(new FileInputStream("application.properties"));
 
-        ServerBuilder.forPort(50051)
-                .addService(new ExportServiceImpl())
-                .build()
-                .start();
-        logger.info("Starting api server...");
 
         PipelineOptions options = PipelineOptionsFactory.create();
         Pipeline pipeline = Pipeline.create(options);

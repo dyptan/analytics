@@ -64,7 +64,7 @@
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
-            <artifactId>processor-api</artifactId>
+            <artifactId>exporter-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
@@ -89,30 +89,6 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.xolstice.maven.plugins</groupId>-->
-<!--                <artifactId>protobuf-maven-plugin</artifactId>-->
-<!--                <version>0.6.1</version>-->
-<!--                <configuration>-->
-<!--                    &lt;!&ndash;suppress UnresolvedMavenProperty &ndash;&gt;-->
-<!--                    <protocArtifact>-->
-<!--                        com.google.protobuf:protoc:3.3.0:exe:${os.detected.classifier}-->
-<!--                    </protocArtifact>-->
-<!--                    <pluginId>grpc-java</pluginId>-->
-<!--                    &lt;!&ndash;suppress UnresolvedMavenProperty &ndash;&gt;-->
-<!--                    <pluginArtifact>-->
-<!--                        io.grpc:protoc-gen-grpc-java:1.4.0:exe:${os.detected.classifier}-->
-<!--                    </pluginArtifact>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>compile</goal>-->
-<!--                            <goal>compile-custom</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 </project>

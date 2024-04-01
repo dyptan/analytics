@@ -1,64 +1,57 @@
 import com.dyptan.gen.proto.{ExportRequest, ExportServiceGrpc, ExportStatus}
 import com.google.protobuf.MessageOrBuilder
 import com.google.protobuf.util.JsonFormat
-import com.spotify.scio.{ContextAndArgs, ScioContext}
-import io.grpc.{ServerBuilder, ServerServiceDefinition}
+import com.spotify.scio.ScioContext
 import io.grpc.stub.StreamObserver
-import org.apache.avro.data.Json
+import org.apache.beam.sdk.io.TextIO
+import org.apache.beam.sdk.io.aws2.options.S3Options
 import org.apache.beam.sdk.io.mongodb.{FindQuery, MongoDbIO}
+import org.apache.beam.sdk.options.PipelineOptionsFactory
 import org.bson.Document
+import org.slf4j.LoggerFactory
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider
 
-import java.util.stream.Collectors
-import scala.collection.mutable.ListBuffer
+import java.net.URI
 import scala.language.existentials
-import scala.concurrent.ExecutionContext
 
 class ExportServiceImpl extends ExportServiceGrpc.ExportServiceImplBase {
+  val logger = LoggerFactory.getLogger("ExportServiceImpl")
   def toJson(messageOrBuilder: MessageOrBuilder): String = JsonFormat.printer.print(messageOrBuilder)
   override def doExport(request: ExportRequest, responseObserver: StreamObserver[ExportStatus]) = {
-    val sc = ScioContext()
 
-    val filterJson = toJson(request.getFilter.getFilter)
+    val filterJson = toJson(request.getQuery.getFilter)
     val filter = Document.parse(filterJson)
 
-    val projectionJson = toJson(request.getFilter.getProjection)
+    val projectionJson = toJson(request.getQuery.getProjection)
     val projectionSet = Document.parse(projectionJson).keySet()
     val projection: java.util.List[String] = java.util.List.copyOf(projectionSet)
 
+    val s3Opt = PipelineOptionsFactory.create().as(classOf[S3Options])
+    s3Opt.setEndpoint(new URI("http://127.0.0.1:9000"))
+    s3Opt.setAwsCredentialsProvider(EnvironmentVariableCredentialsProvider.create())
+    val sc = ScioContext(s3Opt)
+
     val data = sc.customInput("read from MongoDB", MongoDbIO.read()
       .withUri("mongodb://localhost:27017")
-      .withDatabase("test")
-      .withCollection("customers").withQueryFn(
+      .withDatabase("vlp")
+      .withCollection("leads").withQueryFn(
         FindQuery.create().withFilters(filter).withProjection(projection)
       )
-      )
+    )
 
-    data.saveAsCustomOutput("write to MongoDB", MongoDbIO.write()
-        .withUri("mongodb://localhost:27017")
-        .withDatabase("test")
-        .withCollection("customers_copy")
-      )
+    data.map(_.toJson()).saveAsCustomOutput("write to MongoDB",
+      TextIO.write().to("s3://export-bucket/test"))
 
     try {
-      val result = sc.run().waitUntilFinish()
+      sc.run().waitUntilFinish()
       val confirmationMessage = ExportStatus.newBuilder.setStatus("ok").build
       responseObserver.onNext(confirmationMessage)
       responseObserver.onCompleted()
     } catch {
       case e: Throwable => val confirmationMessage = ExportStatus.newBuilder.setStatus(e.toString).build
+        logger.error("something bad happened", e)
         responseObserver.onNext(confirmationMessage)
         responseObserver.onCompleted()
     }
-  }
-}
-
-object Main {
-  val ec = ExecutionContext.global
-  def main(args: Array[String]): Unit = {
-    ServerBuilder.forPort(50051)
-      .addService(new ExportServiceImpl)
-      .build
-      .start
-      .awaitTermination
   }
 }

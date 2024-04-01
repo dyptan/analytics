@@ -11,12 +11,12 @@ service ExportService {
 
 message ExportRequest {
   ExportFormat format = 1;
-  ExportFilter filter = 2;
+  ExportQuery query = 2;
   string export_name = 3;
   string user = 4;
 }
 
-message ExportFilter {
+message ExportQuery {
   google.protobuf.Struct filter = 1;
   google.protobuf.Struct projection = 2;
 }

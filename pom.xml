@@ -23,13 +23,16 @@
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <avro.version>1.11.3</avro.version>
+        <!--compatible with scio-->
+        <protobuf-java.version>3.25.1</protobuf-java.version>
+        <grpc.version>1.60.1</grpc.version>
     </properties>
 
     <modules>
         <module>web</module>
         <module>fetcher</module>
         <module>processor</module>
-        <module>processor-api</module>
+        <module>exporter-api</module>
         <module>avro-schemas</module>
         <module>exporter</module>
     </modules>
@@ -37,14 +40,21 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${grpc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>com.dyptan</groupId>
                 <artifactId>avro-schemas</artifactId>
                 <version>1.9</version>
             </dependency>
             <dependency>
                 <groupId>com.dyptan</groupId>
-                <artifactId>processor-api</artifactId>
-                <version>1.4</version>
+                <artifactId>exporter-api</artifactId>
+                <version>1.10</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.avro</groupId>

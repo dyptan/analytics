@@ -1,7 +1,7 @@
 package com.dyptan.component;
 
 import com.dyptan.gen.proto.ExportStatus;
-import com.dyptan.gen.proto.ExportFilter;
+import com.dyptan.gen.proto.ExportQuery;
 import com.dyptan.gen.proto.ExportRequest;
 import com.dyptan.gen.proto.ExportServiceGrpc;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -24,13 +24,13 @@ public class GrpcClientComponent {
         JsonFormat.parser().ignoringUnknownFields().merge(projection.toJson(), structBuilderProjection);
         Struct projectionStruct = structBuilderProjection.build();
 
-        ExportFilter exportFilter = ExportFilter.newBuilder()
+        ExportQuery exportFilter = ExportQuery.newBuilder()
                 .setFilter(filterStruct)
                 .setProjection(projectionStruct)
                 .build();
 
         ExportRequest request = ExportRequest.newBuilder()
-                .setFilter(exportFilter)
+                .setQuery(exportFilter)
                 .build();
 
         ExportStatus response = blockingStub.doExport(request);

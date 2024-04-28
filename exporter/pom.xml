@@ -43,6 +43,21 @@
             <version>${beam.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.13</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb.spark</groupId>
+            <artifactId>mongo-spark-connector_2.13</artifactId>
+            <version>10.2.3</version>
+        </dependency>
+        <dependency>
             <groupId>com.dyptan</groupId>
             <artifactId>exporter-api</artifactId>
             <version>1.10</version>
@@ -64,7 +79,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaVersion>${scala.version}</scalaVersion>
+                    <scalaVersion>2.13.13</scalaVersion>
                 </configuration>
             </plugin>
 <!--            <plugin>-->

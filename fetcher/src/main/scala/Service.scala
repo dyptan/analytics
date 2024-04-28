@@ -11,7 +11,7 @@ import zio.kafka.serde.{Serde, Serializer}
 import zio.stream.ZStream
 import zio.{Duration, Queue, Schedule, ZIO, ZIOAppDefault}
 import com.ria.avro.scala.{Advertisement, SearchRoot}
-class App extends ZIOAppDefault {
+class Service extends ZIOAppDefault {
 
   import Conf._
   private val advertisementSerializer: Serializer[Any, Advertisement] = new AdvertisementSerializer

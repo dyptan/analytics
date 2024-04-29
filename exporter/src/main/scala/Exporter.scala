@@ -1,12 +1,9 @@
 import io.grpc.ServerBuilder
 
-object Exporter {
-  def main(args: Array[String]) = {
+object Exporter extends App{
     ServerBuilder.forPort(50051)
       .addService(new ExportServiceImpl)
       .build
       .start
       .awaitTermination
-  }
-
 }

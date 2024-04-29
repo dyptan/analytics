@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>processor</artifactId>
+    <artifactId>streamer</artifactId>
     <version>1.0</version>
     <properties>
         <beam.version>2.49.0</beam.version>
@@ -67,7 +67,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.dyptan.Processor</mainClass>
+                            <mainClass>com.dyptan.Streamer</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

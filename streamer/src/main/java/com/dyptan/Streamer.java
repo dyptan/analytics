@@ -28,7 +28,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Properties;
 
-public class Processor implements Serializable {
+public class Streamer implements Serializable {
     static Logger logger = LoggerFactory.getLogger("MessageProcessor");
     public static void main(String[] args) throws IOException {
         var properties = new Properties();

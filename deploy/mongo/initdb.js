@@ -1,2 +1,2 @@
 db = db.getSiblingDB('ria')
-db.createCollection('advertisement', { capped: true, size: 100000 })
+db.createCollection('advertisementStream', { capped: true, size: 100000 })

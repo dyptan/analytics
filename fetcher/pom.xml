@@ -42,32 +42,32 @@
         </dependency>
         <dependency>
             <groupId>com.sksamuel.avro4s</groupId>
-            <artifactId>avro4s-core_${scala.major.version}</artifactId>
+            <artifactId>avro4s-core_${scala.version}</artifactId>
             <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.sksamuel.avro4s</groupId>
-            <artifactId>avro4s-json_${scala.major.version}</artifactId>
+            <artifactId>avro4s-json_${scala.version}</artifactId>
             <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
-            <artifactId>izumi-reflect_${scala.major.version}</artifactId>
+            <artifactId>izumi-reflect_${scala.version}</artifactId>
             <version>2.3.8</version>
         </dependency>
         <dependency>
             <groupId>com.softwaremill.sttp.client3</groupId>
-            <artifactId>circe_${scala.major.version}</artifactId>
+            <artifactId>circe_${scala.version}</artifactId>
             <version>3.8.15</version>
         </dependency>
         <dependency>
             <groupId>com.softwaremill.sttp.client3</groupId>
-            <artifactId>zio_${scala.major.version}</artifactId>
+            <artifactId>zio_${scala.version}</artifactId>
             <version>3.8.15</version>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
-            <artifactId>zio-kafka_${scala.major.version}</artifactId>
+            <artifactId>zio-kafka_${scala.version}</artifactId>
             <version>2.3.1</version>
         </dependency>
         <dependency>
@@ -76,50 +76,50 @@
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
-            <artifactId>zio-http_${scala.major.version}</artifactId>
+            <artifactId>zio-http_${scala.version}</artifactId>
             <version>3.0.0-RC2</version>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
-            <artifactId>zio-test_${scala.major.version}</artifactId>
+            <artifactId>zio-test_${scala.version}</artifactId>
             <version>2.0.15</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
-            <artifactId>zio-test-sbt_${scala.major.version}</artifactId>
+            <artifactId>zio-test-sbt_${scala.version}</artifactId>
             <version>2.0.15</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
-            <artifactId>zio-test-magnolia_${scala.major.version}</artifactId>
+            <artifactId>zio-test-magnolia_${scala.version}</artifactId>
             <version>2.0.15</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
-            <artifactId>zio-akka-cluster_${scala.major.version}</artifactId>
+            <artifactId>zio-akka-cluster_${scala.version}</artifactId>
             <version>0.3.0</version>
         </dependency>
         <dependency>
             <groupId>dev.zio</groupId>
-            <artifactId>zio-cache_${scala.major.version}</artifactId>
+            <artifactId>zio-cache_${scala.version}</artifactId>
             <version>0.2.3</version>
         </dependency>
         <dependency>
             <groupId>io.circe</groupId>
-            <artifactId>circe-core_${scala.major.version}</artifactId>
+            <artifactId>circe-core_${scala.version}</artifactId>
             <version>0.14.5</version>
         </dependency>
         <dependency>
             <groupId>io.circe</groupId>
-            <artifactId>circe-generic_${scala.major.version}</artifactId>
+            <artifactId>circe-generic_${scala.version}</artifactId>
             <version>0.14.5</version>
         </dependency>
         <dependency>
             <groupId>io.circe</groupId>
-            <artifactId>circe-parser_${scala.major.version}</artifactId>
+            <artifactId>circe-parser_${scala.version}</artifactId>
             <version>0.14.5</version>
         </dependency>
         <dependency>
@@ -180,7 +180,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaVersion>2.13.13</scalaVersion>
+                    <scalaVersion>${scalaLibraryVersion}</scalaVersion>
                 </configuration>
             </plugin>
             <plugin>

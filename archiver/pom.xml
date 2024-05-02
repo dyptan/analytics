@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>com.spotify</groupId>
-            <artifactId>scio-core_${scala.major.version}</artifactId>
+            <artifactId>scio-core_${scala.version}</artifactId>
             <version>0.14.2</version>
         </dependency>
         <dependency>
@@ -34,6 +34,15 @@
             <groupId>org.apache.beam</groupId>
             <artifactId>beam-sdks-java-io-amazon-web-services2</artifactId>
             <version>${beam.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.beam</groupId>
+            <artifactId>beam-sdks-java-io-kafka</artifactId>
+            <version>${beam.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -60,7 +69,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaVersion>2.13.13</scalaVersion>
+                    <scalaVersion>${scalaLibraryVersion}</scalaVersion>
                 </configuration>
             </plugin>
         </plugins>

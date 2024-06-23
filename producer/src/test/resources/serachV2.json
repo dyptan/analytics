@@ -1,0 +1,547 @@
+{
+  "additional_params": {
+    "catalog_name": "",
+    "elastica": true,
+    "lang_id": "4",
+    "nodejs": true,
+    "page": 0,
+    "searchByTypeAction": true,
+    "section": "auto",
+    "target": "search",
+    "view_type_id": 0
+  },
+  "result": {
+    "active_city": null,
+    "active_marka": null,
+    "active_model": null,
+    "active_state": null,
+    "additional": {
+      "query_string": "countpage=100&category_id=1&s_yers%5B0%5D=2000&price_ot=3000&price_do=60000&countpage=100&top=1&saledParam=2&abroad=2&custom=1&state%5B0%5D=10&city%5B0%5D=0&auto_repairs=0&damage=0,NoBody,Vector&lang_id=4&langId=4",
+      "search_params": {
+        "all": {
+          "auto_ids_search_position": 0,
+          "powerFrom": 0,
+          "print_qs": 0,
+          "auto_id_str": "",
+          "page": 0,
+          "old_only": false,
+          "with_discount": false,
+          "is_online": false,
+          "mm_model_filtr": [],
+          "withoutStatus": false,
+          "can_be_checked": 0,
+          "modification_id": [
+            null
+          ],
+          "year": 0,
+          "custom": 0,
+          "city": [
+            0
+          ],
+          "is_hot": 0,
+          "currency": 1,
+          "s_yers": [
+            2000
+          ],
+          "person_id": 0,
+          "black_user_id": 0,
+          "confiscated_car": 0,
+          "marka_id": [],
+          "event": "little",
+          "limit_page": null,
+          "category_id": 1,
+          "price_do": 60000,
+          "abroad": false,
+          "saled_star_auto": 0,
+          "po_yers": [
+            null
+          ],
+          "mm_marka_filtr": [],
+          "top": 1,
+          "under_credit": 0,
+          "star_auto": 1,
+          "searchType": 6,
+          "currencies_arr": [],
+          "saledParam": 2,
+          "user_id": [],
+          "langId": "4",
+          "power_name": 0,
+          "excludeMM": [],
+          "with_video": false,
+          "lang_id": "4",
+          "target": "search",
+          "generation_id": [
+            null
+          ],
+          "damage": "0,NoBody,Vector",
+          "order_by": 0,
+          "deletedAutoSearch": 0,
+          "price_ot": 3000,
+          "exchange_filter": [],
+          "with_photo": false,
+          "withoutCache": false,
+          "powerTo": 0,
+          "last_id": 0,
+          "countpage": 100,
+          "auto_options": [],
+          "with_last_id": false,
+          "hide_black_list": [],
+          "useOrigAutoTable": false,
+          "state": [
+            10
+          ],
+          "model_id": [],
+          "currency_id": 0
+        },
+        "cleaned": {
+          "auto_options": [],
+          "category_id": 1,
+          "city": [
+            0
+          ],
+          "countpage": 100,
+          "currencies_arr": [],
+          "currency": 1,
+          "damage": "0,NoBody,Vector",
+          "event": "little",
+          "exchange_filter": [],
+          "excludeMM": [],
+          "generation_id": [
+            null
+          ],
+          "hide_black_list": [],
+          "langId": "4",
+          "lang_id": "4",
+          "marka_id": [],
+          "mm_marka_filtr": [],
+          "mm_model_filtr": [],
+          "model_id": [],
+          "modification_id": [
+            null
+          ],
+          "po_yers": [
+            null
+          ],
+          "price_do": 60000,
+          "price_ot": 3000,
+          "s_yers": [
+            2000
+          ],
+          "saledParam": 2,
+          "searchType": 6,
+          "star_auto": 1,
+          "state": [
+            10
+          ],
+          "target": "search",
+          "top": 1,
+          "user_id": []
+        }
+      },
+      "user_auto_positions": []
+    },
+    "isCommonSearch": true,
+    "revies": null,
+    "search_result": {
+      "count": 77,
+      "ids": [
+        "36787275",
+        "36790119",
+        "36790032",
+        "36330563",
+        "36790142",
+        "34836625",
+        "36790074",
+        "36790013",
+        "36645143",
+        "36654550",
+        "36644246",
+        "36644760",
+        "36626618",
+        "36476893",
+        "36476725",
+        "36476732",
+        "36476710",
+        "36476640",
+        "36476613",
+        "36476589",
+        "36476536",
+        "36476474",
+        "36476454",
+        "36476466",
+        "36476403",
+        "36476361",
+        "36790179",
+        "36790166",
+        "36790160",
+        "36476276",
+        "36287274",
+        "36287271",
+        "36287148",
+        "36287138",
+        "36419523",
+        "36286936",
+        "36286916",
+        "36207559",
+        "36105650",
+        "36105548",
+        "36105250",
+        "36790110",
+        "35930201",
+        "35930065",
+        "35929961",
+        "35788034",
+        "35738793",
+        "35637231",
+        "35637137",
+        "35636882",
+        "35636641",
+        "35598779",
+        "35465390",
+        "35464878",
+        "35036467",
+        "34732654",
+        "34386949",
+        "34380575",
+        "32882696",
+        "36790138",
+        "36789902",
+        "36790129",
+        "36790125",
+        "36790107",
+        "36789967",
+        "36789111",
+        "36790052",
+        "36790084",
+        "36648468",
+        "36790069",
+        "34223355",
+        "36790050",
+        "36790063",
+        "36790061",
+        "35699700",
+        "36790046",
+        "36713721"
+      ],
+      "last_id": 0
+    },
+    "search_result_common": {
+      "count": 77,
+      "data": [
+        {
+          "id": "36787275",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790119",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "100500",
+          "type": "OfferOfTheDay"
+        },
+        {
+          "id": "36790032",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36330563",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790142",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "34836625",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790074",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790013",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36645143",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36654550",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36644246",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36644760",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36626618",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476893",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476725",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476732",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476710",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476640",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476613",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476589",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476536",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476474",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476454",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476466",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476403",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476361",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790179",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790166",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790160",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36476276",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36287274",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36287271",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36287148",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36287138",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36419523",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36286936",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36286916",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36207559",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36105650",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36105548",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36105250",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790110",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35930201",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35930065",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35929961",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35788034",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35738793",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35637231",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35637137",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35636882",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35636641",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35598779",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35465390",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35464878",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35036467",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "34732654",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "34386949",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "34380575",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "32882696",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790138",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36789902",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790129",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790125",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790107",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36789967",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36789111",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790052",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790084",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36648468",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790069",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "34223355",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790050",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790063",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790061",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "35699700",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36790046",
+          "type": "UsedAuto"
+        },
+        {
+          "id": "36713721",
+          "type": "UsedAuto"
+        }
+      ],
+      "last_id": 0
+    }
+  }
+}

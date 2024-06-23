@@ -10,12 +10,6 @@
     <packaging>pom</packaging>
     <version>1.0</version>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
-        <relativePath/>
-    </parent>
 
     <properties>
         <scala.version>2.13</scala.version>
@@ -31,12 +25,11 @@
 
     <modules>
         <module>web</module>
-        <module>fetcher</module>
-        <module>streamer</module>
-        <module>exporter-api</module>
-        <module>avro-schemas</module>
-        <module>exporter</module>
-        <module>archiver</module>
+        <module>producer</module>
+        <module>consumer</module>
+        <module>mongo-exporter</module>
+        <module>schema</module>
+        <module>s3-exporter</module>
     </modules>
 
     <dependencyManagement>
@@ -50,12 +43,12 @@
             </dependency>
             <dependency>
                 <groupId>com.dyptan</groupId>
-                <artifactId>avro-schemas</artifactId>
+                <artifactId>schema</artifactId>
                 <version>1.9</version>
             </dependency>
             <dependency>
                 <groupId>com.dyptan</groupId>
-                <artifactId>exporter-api</artifactId>
+                <artifactId>mongo-exporter</artifactId>
                 <version>1.10</version>
             </dependency>
             <dependency>

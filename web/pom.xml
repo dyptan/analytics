@@ -8,9 +8,10 @@
     <version>1.0</version>
 
     <parent>
-        <groupId>com.dyptan</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.1</version>
+        <relativePath/>
     </parent>
 
     <dependencies>
@@ -64,11 +65,23 @@
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
-            <artifactId>exporter-api</artifactId>
+            <artifactId>mongo-exporter</artifactId>
+            <version>1.10</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.beam</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
-            <artifactId>avro-schemas</artifactId>
+            <artifactId>schema</artifactId>
+            <version>1.9</version>
         </dependency>
     </dependencies>
 

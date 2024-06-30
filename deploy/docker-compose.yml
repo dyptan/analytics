@@ -10,12 +10,28 @@ services:
     environment:
       - MINIO_ROOT_USER=minio-root-user
       - MINIO_ROOT_PASSWORD=minio-root-password
-      - MINIO_DEFAULT_BUCKETS=export-bucket:policy,another-bucket
+      - MINIO_DEFAULT_BUCKETS=export-bucket
     ports:
       - '9000:9000'
       - '9001:9001'
-    volumes:
-      - 'minio_data:/bitnami/minio/data'
+#    volumes:
+#      - 'minio_data:/bitnami/minio/data'
+
+  minio-client:
+      image: docker.io/bitnami/minio-client
+      environment:
+        - MINIO_SERVER_URL=http://minio:9000
+        - MINIO_SERVER_HOST=minio
+        - MINIO_SERVER_ACCESS_KEY=minio-root-user
+        - MINIO_SERVER_SECRET_KEY=minio-root-password
+      command:
+        - bash
+        - -c
+        - |
+          mc alias set myminio http://minio:9000 minio-root-user minio-root-password
+          mc admin user add myminio "myuserserviceaccount" "myuserserviceaccountpassword"
+          mc admin policy attach myminio readwrite --user=myuserserviceaccount
+#          mc admin user svcacct add myminio myuserserviceaccount
   kafka:
     image: bitnami/kafka:3.6
     ports:
@@ -29,6 +45,21 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+
+  init-kafka:
+    image: bitnami/kafka:3.6
+    depends_on:
+      - kafka
+    command:
+      - bash
+      - -c
+      - |
+        kafka-topics.sh --bootstrap-server kafka:9092 --list
+        echo -e 'Creating kafka topics'
+        kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic ria --replication-factor 1 --partitions 1
+        echo -e 'Successfully created the following topics:'
+        kafka-topics.sh --bootstrap-server kafka:9092 --list
+
   schema-registry:
     image: bitnami/schema-registry:7.5
     ports:
@@ -58,17 +89,30 @@ services:
     depends_on:
       - db
   fetcher:
-    build: ../fetcher
+    build: ../producer
     ports:
       - 8083:8083
     depends_on:
       - kafka
   processor:
-    build: ../processor
+    build: ../consumer
     deploy:
       resources:
         limits:
           cpus: "0.5"
     depends_on:
       - kafka
+      - mongo
+
+  exporter-mongo:
+    build: ../mongo-exporter
+    depends_on:
+      - mongo
+
+  exporter-s3:
+    build: ../s3-exporter
+    ports:
+      - 8082:8082
+    depends_on:
+      - minio
       - mongo

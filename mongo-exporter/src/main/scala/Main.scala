@@ -1,6 +1,9 @@
+package com.dyptan
+
+import com.dyptan.service.ExportServiceImpl
 import io.grpc.ServerBuilder
 
-object ExporterMain extends App{
+object Main extends App{
   ServerBuilder.forPort(50051)
     .addService(new ExportServiceImpl())
     .build

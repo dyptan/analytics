@@ -26,15 +26,15 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Properties;
 
-public class Consumer {
+public class Main {
     static Logger logger = LoggerFactory.getLogger("MessageProcessor");
     static Properties properties = new Properties();
-    Consumer() throws IOException {
+    Main() throws IOException {
         properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
     }
 
     public static void main(String[] args) throws IOException {
-        new Consumer();
+        new Main();
 
         PipelineOptions options = PipelineOptionsFactory.create();
         Pipeline pipeline = Pipeline.create(options);
@@ -45,7 +45,7 @@ public class Consumer {
                 .withTopic(properties.getProperty("kafka.producer.topic"))
                 .withConsumerConfigUpdates(Collections.singletonMap("specific.avro.reader", "true"))
                 .withConsumerConfigUpdates(Collections.singletonMap("fetch.max.wait.ms", "5000"))
-                .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", "latest"))
+                .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", "earliest"))
                 .withConsumerConfigUpdates(Collections.singletonMap("schema.registry.url", properties.getProperty("schema.registry.url")))
                 .withKeyDeserializer(IntegerDeserializer.class)
                 .withValueDeserializerAndCoder((Class) KafkaAvroDeserializer.class, AvroCoder.of(Advertisement.class));

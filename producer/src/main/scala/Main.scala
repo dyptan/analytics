@@ -10,7 +10,7 @@ import zio.{ZIO, ZIOApp, ZIOAppDefault}
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
-object Fetcher extends ZIOAppDefault {
+object Main extends ZIOAppDefault {
   import Conf._
   import CrawlerCommands.{StartProcessing, StopProcessing}
   implicit val system: ActorSystem = ActorSystem("CrawlerGateway")

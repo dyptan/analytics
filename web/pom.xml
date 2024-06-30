@@ -4,8 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.dyptan</groupId>
     <artifactId>web</artifactId>
     <version>1.0</version>
+
+    <properties>
+        <protobuf-java.version>3.25.1</protobuf-java.version>
+        <grpc.version>1.60.1</grpc.version>
+        <avro.version>1.11.3</avro.version>
+    </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -74,6 +81,10 @@
                 </exclusion>
                 <exclusion>
                     <groupId>com.spotify</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>

@@ -1,0 +1,63 @@
+openapi: 3.0.0
+info:
+  title: Data Processing API
+  version: 1.0.0
+  description: API for processing data from MongoDB, applying filters, and uploading to S3 in various formats
+
+paths:
+  /process:
+    post:
+      summary: Process data from MongoDB and upload to S3
+      operationId: doExport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResponse'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    ProcessRequest:
+      type: object
+      required:
+        - mongoCollection
+        - s3Bucket
+        - outputFormat
+      properties:
+        mongoCollection:
+          type: string
+          description: Name of the MongoDB collection to query
+        filters:
+          type: object
+          description: MongoDB query filters to apply
+        s3Bucket:
+          type: string
+          description: Name of the S3 bucket to upload the processed data
+        outputFormat:
+          type: string
+          enum: [csv, parquet]
+          description: Format of the output file
+
+    ProcessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        message:
+          type: string
+        s3Location:
+          type: string
+          description: S3 URL of the uploaded file (if successful)

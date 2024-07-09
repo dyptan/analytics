@@ -15,21 +15,22 @@
         <scala.version>2.13</scala.version>
         <java.version>21</java.version>
         <maven.compiler.target>21</maven.compiler.target>
-        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.source>21</maven.compiler.source>
         <avro.version>1.11.3</avro.version>
         <!--compatible with scio-->
         <protobuf-java.version>3.25.1</protobuf-java.version>
         <grpc.version>1.60.1</grpc.version>
-        <scalaLibraryVersion>2.13.13</scalaLibraryVersion>
+        <scalaLibraryVersion>2.13.14</scalaLibraryVersion>
+        <beam.version>2.56.0</beam.version>
     </properties>
 
     <modules>
         <module>web</module>
         <module>producer</module>
         <module>consumer</module>
-        <module>mongo-exporter</module>
+        <module>duplicator</module>
         <module>schema</module>
-        <module>s3-exporter</module>
+        <module>exporter</module>
     </modules>
 
     <dependencyManagement>

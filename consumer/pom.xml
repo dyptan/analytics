@@ -68,7 +68,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.dyptan.Main</mainClass>
+                            <mainClass>com.dyptan.consumer.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

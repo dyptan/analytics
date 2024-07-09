@@ -1,18 +1,18 @@
-package com.dyptan
+package com.dyptan.producer
+
 import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
-import com.ria.avro.scala.Advertisement
+import com.dyptan.producer.Conf._
+import com.dyptan.producer.CrawlerCommands.{StartProcessing, StopProcessing}
 import io.circe.parser.decode
 import zio.http._
-import zio.{ZIO, ZIOApp, ZIOAppDefault}
+import zio.{ZIO, ZIOAppDefault}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
 object Main extends ZIOAppDefault {
-  import Conf._
-  import CrawlerCommands.{StartProcessing, StopProcessing}
   implicit val system: ActorSystem = ActorSystem("CrawlerGateway")
   implicit val defaultTimeout: Timeout = Timeout(3000.seconds)
   private val controller = system.actorOf(Props[CrawlerController], "CrawlerController")

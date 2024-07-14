@@ -41,9 +41,11 @@
         }
 
         input[type="text"],
-        input[type="range"] {
+        input[type="range"],
+        select {
             width: 100%;
             box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
         .range-container {
@@ -69,67 +71,66 @@
 </head>
 
 <body>
-    <form id="form-container"></form>
-    <form id="form-container2"></form>
-    <script>
+<form id="form-container"></form>
+<div id="form-container2"></div>
+<script>
+    let filter = null;
 
-        filter = null
+    async function generateForm() {
+        const form = document.getElementById('form-container');
+        form.innerHTML = '';
+        form.setAttribute('method', 'post');
 
-        async function generateForm() {
-            const form = document.getElementById('form-container');
-            form.setAttribute('method', 'post');
+        function generateFields(container, nestedSchema, parentFieldName = '') {
+            for (const fieldName in nestedSchema) {
+                const fieldType = nestedSchema[fieldName];
+                const fullName = parentFieldName ? `${parentFieldName}.${fieldName}` : fieldName;
 
-            function generateFields(container, nestedSchema, parentFieldName = '') {
-                for (const fieldName in nestedSchema) {
-                    const fieldType = nestedSchema[fieldName];
-                    const fullName = parentFieldName ? `${parentFieldName}.${fieldName}` : fieldName;
+                const fieldContainer = document.createElement('div');
 
-                    const fieldContainer = document.createElement('div');
-
-                    // Create checkbox
-                    if (typeof fieldType !== 'object') {
-                        const checkbox = document.createElement('input');
-                        checkbox.setAttribute('type', 'checkbox');
-                        checkbox.setAttribute('name', `${fullName}_checkbox`);
-                        checkbox.setAttribute('value', fullName); // Add value attribute to store field name
-                        fieldContainer.appendChild(checkbox);
-                    }
-
-                    // Create input based on field type
-                    if (fieldType === 'string' || fieldName.includes('Id')) {
-                        const input = document.createElement('input');
-                        input.setAttribute('name', fullName);
-                        input.setAttribute('type', 'text');
-                        input.setAttribute('placeholder', 'Enter comma-separated values');
-                        fieldContainer.appendChild(input);
-                    } else if (fieldType === 'int') {
-                        const minInput = document.createElement('input');
-                        minInput.setAttribute('name', fullName + '_min');
-                        minInput.setAttribute('type', 'number');
-                        minInput.setAttribute('placeholder', 'Min ' + fullName);
-
-                        const maxInput = document.createElement('input');
-                        maxInput.setAttribute('name', fullName + '_max');
-                        maxInput.setAttribute('type', 'number');
-                        maxInput.setAttribute('placeholder', 'Max ' + fullName);
-
-                        fieldContainer.appendChild(minInput);
-                        fieldContainer.appendChild(maxInput);
-                    } else if (typeof fieldType === 'object') {
-                        const nestedContainer = document.createElement('div');
-                        nestedContainer.classList.add('nested-container');
-                        generateFields(nestedContainer, fieldType, fullName); // Recursively generate nested fields
-                        fieldContainer.appendChild(nestedContainer);
-                    }
-
-                    const label = document.createElement('label');
-                    label.textContent = fullName;
-                    fieldContainer.appendChild(label);
-
-                    container.appendChild(fieldContainer);
+                if (typeof fieldType !== 'object') {
+                    const checkbox = document.createElement('input');
+                    checkbox.setAttribute('type', 'checkbox');
+                    checkbox.setAttribute('name', `${fullName}_checkbox`);
+                    checkbox.setAttribute('value', fullName);
+                    fieldContainer.appendChild(checkbox);
                 }
-            }
 
+                if (fieldType === 'string' || fieldName.includes('Id')) {
+                    const input = document.createElement('input');
+                    input.setAttribute('name', fullName);
+                    input.setAttribute('type', 'text');
+                    input.setAttribute('placeholder', 'Enter comma-separated values');
+                    fieldContainer.appendChild(input);
+                } else if (fieldType === 'int') {
+                    const minInput = document.createElement('input');
+                    minInput.setAttribute('name', fullName + '_min');
+                    minInput.setAttribute('type', 'number');
+                    minInput.setAttribute('placeholder', 'Min ' + fullName);
+
+                    const maxInput = document.createElement('input');
+                    maxInput.setAttribute('name', fullName + '_max');
+                    maxInput.setAttribute('type', 'number');
+                    maxInput.setAttribute('placeholder', 'Max ' + fullName);
+
+                    fieldContainer.appendChild(minInput);
+                    fieldContainer.appendChild(maxInput);
+                } else if (typeof fieldType === 'object') {
+                    const nestedContainer = document.createElement('div');
+                    nestedContainer.classList.add('nested-container');
+                    generateFields(nestedContainer, fieldType, fullName);
+                    fieldContainer.appendChild(nestedContainer);
+                }
+
+                const label = document.createElement('label');
+                label.textContent = fullName;
+                fieldContainer.appendChild(label);
+
+                container.appendChild(fieldContainer);
+            }
+        }
+
+        try {
             const response = await fetch("/schema");
             const schema = await response.json();
             generateFields(form, schema);
@@ -140,187 +141,197 @@
             form.appendChild(submitButton);
 
             form.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent default form submission behavior
-                // console.log("button clicked")
+                event.preventDefault();
                 const formData = new FormData(form);
 
-                // Iterate over checkbox inputs and set their value to 'on' if checked
                 const checkboxes = form.querySelectorAll('input[type="checkbox"]');
                 checkboxes.forEach(checkbox => {
                     if (checkbox.checked) {
                         formData.set(checkbox.name, 'on');
                     } else {
-                        formData.set(checkbox.name, ''); // Set value to empty string if unchecked
+                        formData.set(checkbox.name, '');
                     }
                 });
-
-                // for (const [fieldName, value] of formData.entries()) {
-                //     console.log(fieldName, value)
-                // }
 
                 filter = generateBSONQuery(formData);
-                console.log("filter generated:", filter)
-                const response = fetch('/preexport', {
+                console.log("filter generated:", filter);
+                fetch('/preexport', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(filter),
-                }).then(response => {
-                    generateForm2(response.json(), filter)
-                    console.log("form 2 generated")
-                });
-
+                })
+                .then(response => response.json())
+                .then(data => {
+                    generateForm2(data, filter);
+                    console.log("form 2 generated");
+                })
+                .catch(error => console.error('Error:', error));
             });
+        } catch (error) {
+            console.error('Error fetching schema:', error);
         }
+    }
 
+    function generateBSONQuery(formData) {
+        const query = {};
+        const projection = {};
 
-        function generateBSONQuery(formData) {
-            const query = {};
-            const projection = {}; // Projection object to include checked fields only
+        for (const [fieldName, value] of formData.entries()) {
+            if (!value || value.trim() === "") continue;
 
-            for (const [fieldName, value] of formData.entries()) {
-                if (!value || value.trim() === "") continue; // Skip empty values
+            let fieldKey = fieldName;
+            let isChecked = true;
 
-                let fieldKey = fieldName;
-                let isChecked = true;
-
-                if (fieldName.includes('_checkbox')) {
-                    fieldKey = fieldName.replace('_checkbox', '');
-                    isChecked = value === 'on'; // Check if the checkbox is checked
-                    if (isChecked) {
-                        projection[fieldKey] = 1;
-                    }
-                    else {
-                        projection[fieldKey] = 0;
-                    } // Include field in projection if checked
-                    // console.log("including into projection:", fieldKey)
-                    // console.log("projection now is:", projection)
-                    continue; // Skip processing the checkbox entry
-                }
-
-                if (fieldName.includes('_min')) {
-                    fieldKey = fieldName.replace('_min', '');
-                    query[fieldKey] = query[fieldKey] || {};
-                    query[fieldKey]['$gte'] = parseInt(value);
-                } else if (fieldName.includes('_max')) {
-                    fieldKey = fieldName.replace('_max', '');
-                    query[fieldKey] = query[fieldKey] || {};
-                    query[fieldKey]['$lte'] = parseInt(value);
+            if (fieldName.includes('_checkbox')) {
+                fieldKey = fieldName.replace('_checkbox', '');
+                isChecked = value === 'on';
+                if (isChecked) {
+                    projection[fieldKey] = 1;
                 } else {
-                    // If it's not a range field, handle as regular field
-                    query[fieldName] = value.includes(',') ? { '$in': value.split(',').map(v => v.trim()) } : value;
+                    projection[fieldKey] = 0;
                 }
+                continue;
             }
 
-            // Convert field names with underscore to dot notation in query
-            const resultQuery = {};
-            for (const key in query) {
-                const dottedKey = key.replace(/_/g, '.');
-                resultQuery[dottedKey] = query[key];
+            if (fieldName.includes('_min')) {
+                fieldKey = fieldName.replace('_min', '');
+                query[fieldKey] = query[fieldKey] || {};
+                query[fieldKey]['$gte'] = parseInt(value);
+            } else if (fieldName.includes('_max')) {
+                fieldKey = fieldName.replace('_max', '');
+                query[fieldKey] = query[fieldKey] || {};
+                query[fieldKey]['$lte'] = parseInt(value);
+            } else {
+                query[fieldName] = value.includes(',') ? { '$in': value.split(',').map(v => v.trim()) } : value;
             }
-
-            // Check if there are fields to project, if not, set projection to null
-            const projectionKeys = Object.keys(projection);
-            const finalProjection = projectionKeys.length > 0 ? projection : null;
-
-            return { query: resultQuery, projection: finalProjection };
         }
 
-
-
-
-        async function generateForm2(fromPreexportPromise, filter) {
-            // Create the form
-            const fromPreexport = await fromPreexportPromise;
-
-            // console.log("json should be here", fromPreexport)
-            const formContainer = document.getElementById("form-container2");
-            formContainer.innerHTML = '';
-            const form = document.createElement("form");
-            form.method = "POST";
-
-            // Create hidden input for filter
-            const filterInput = document.createElement("input");
-            filterInput.type = "hidden";
-            filterInput.name = "filter";
-            filterInput.value = filter;
-            form.appendChild(filterInput);
-
-            // Generate labels for each key in the data
-            for (const key in fromPreexport) {
-                const label = document.createElement("label");
-                label.textContent = key + ': ';
-                const valueSpan = document.createElement("span");
-                valueSpan.textContent = JSON.stringify(fromPreexport[key]);
-                label.appendChild(valueSpan);
-                form.appendChild(label);
-                form.appendChild(document.createElement("br")); // Add line break for each label
-            }
-
-            // Create dropdown for data format
-            const dataFormatLabel = document.createElement("label");
-            dataFormatLabel.textContent = "Data Format:";
-            const dataFormatSelect = document.createElement("select");
-            dataFormatSelect.name = "data_format";
-
-            const dataFormatOptions = ["JSON", "CSV", "PARQUET", "AVRO"];
-            dataFormatOptions.forEach((option, index) => {
-                const optionElement = document.createElement("option");
-                optionElement.value = index;
-                optionElement.textContent = option;
-                dataFormatSelect.appendChild(optionElement);
-            });
-
-            form.appendChild(dataFormatLabel);
-            form.appendChild(dataFormatSelect);
-
-            // Create dropdown for destination
-            const destinationLabel = document.createElement("label");
-            destinationLabel.textContent = "Destination:";
-            const destinationSelect = document.createElement("select");
-            destinationSelect.name = "destination";
-
-            const destinationOptions = ["S3", "Local"];
-            destinationOptions.forEach((option) => {
-                const optionElement = document.createElement("option");
-                optionElement.value = option;
-                optionElement.textContent = option;
-                destinationSelect.appendChild(optionElement);
-            });
-
-            form.appendChild(destinationLabel);
-            form.appendChild(destinationSelect);
-
-            const submitButton = document.createElement('button');
-            submitButton.setAttribute('type', 'submit');
-            submitButton.textContent = 'Submit';
-            form.appendChild(submitButton);
-
-
-            formContainer.appendChild(form);
-
-            form.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent default form submission behavior
-                // console.log("button clicked")
-
-                const response = fetch('/export', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(filter),
-                }).then(response => {
-                    response.json()
-                });
-
-            });
+        const resultQuery = {};
+        for (const key in query) {
+            const dottedKey = key.replace(/_/g, '.');
+            resultQuery[dottedKey] = query[key];
         }
 
+        const projectionKeys = Object.keys(projection);
+        const finalProjection = projectionKeys.length > 0 ? projection : null;
 
-        generateForm()
-    </script>
+        return { query: resultQuery, projection: finalProjection };
+    }
 
+    function generateForm2(fromPreexport, filter) {
+        const formContainer = document.getElementById("form-container2");
+        formContainer.innerHTML = '';
+        const form = document.createElement("form");
+        form.method = "POST";
+
+        const filterInput = document.createElement("input");
+        filterInput.type = "hidden";
+        filterInput.name = "filter";
+        filterInput.value = JSON.stringify(filter);
+        form.appendChild(filterInput);
+
+        for (const key in fromPreexport) {
+            const label = document.createElement("label");
+            label.textContent = key + ': ';
+            const valueSpan = document.createElement("span");
+            valueSpan.textContent = JSON.stringify(fromPreexport[key]);
+            label.appendChild(valueSpan);
+            form.appendChild(label);
+            form.appendChild(document.createElement("br"));
+        }
+
+        const destinationLabel = document.createElement("label");
+        destinationLabel.textContent = "Destination:";
+        const destinationSelect = document.createElement("select");
+        destinationSelect.name = "destination";
+
+        const destinationOptions = ["Select Destination", "S3", "Mongo"];
+        destinationOptions.forEach((option) => {
+            const optionElement = document.createElement("option");
+            optionElement.value = option;
+            optionElement.textContent = option;
+            destinationSelect.appendChild(optionElement);
+        });
+
+        form.appendChild(destinationLabel);
+        form.appendChild(destinationSelect);
+
+        const dataFormatContainer = document.createElement("div");
+        dataFormatContainer.style.display = "none";
+
+        const dataFormatLabel = document.createElement("label");
+        dataFormatLabel.textContent = "Data Format:";
+        const dataFormatSelect = document.createElement("select");
+        dataFormatSelect.name = "data_format";
+
+        const dataFormatOptions = ["JSON", "CSV", "PARQUET", "AVRO"];
+        dataFormatOptions.forEach((option, index) => {
+            const optionElement = document.createElement("option");
+            optionElement.value = index;
+            optionElement.textContent = option;
+            dataFormatSelect.appendChild(optionElement);
+        });
+
+        dataFormatContainer.appendChild(dataFormatLabel);
+        dataFormatContainer.appendChild(dataFormatSelect);
+        form.appendChild(dataFormatContainer);
+
+        const submitButton = document.createElement('button');
+        submitButton.setAttribute('type', 'submit');
+        submitButton.textContent = 'Submit';
+        form.appendChild(submitButton);
+
+        formContainer.appendChild(form);
+
+        destinationSelect.addEventListener('change', function () {
+            if (this.value === "S3") {
+                dataFormatContainer.style.display = "block";
+            } else {
+                dataFormatContainer.style.display = "none";
+            }
+        });
+
+        form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const destination = destinationSelect.value;
+
+                if (destination === "S3") {
+                    const requestBody = {
+                        file_format: dataFormatSelect.value
+                    };
+
+                    fetch('/exportToS3', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestBody),
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(error => console.error('Error:', error));
+                }
+                else if (destination === "Mongo") {
+                    fetch('/exportToCollection', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: filterInput.value,
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(error => console.error('Error:', error));
+                }
+                else {
+                    console.error('Invalid destination selected');
+                }
+            });
+        }
+    window.addEventListener('load', generateForm);
+</script>
 </body>
 
 </html>

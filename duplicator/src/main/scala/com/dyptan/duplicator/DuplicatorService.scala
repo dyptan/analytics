@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory
 
 class DuplicatorService extends ExportServiceGrpc.ExportServiceImplBase {
   val logger = LoggerFactory.getLogger("DuplicatorService")
-  val sc = ScioContext()
-  logger.info("service has started")
 
   def toJson(messageOrBuilder: MessageOrBuilder): String = JsonFormat.printer.print(messageOrBuilder)
 
   override def doExport(request: ExportRequest, responseObserver: StreamObserver[ExportStatus]): Unit = {
+  val sc = ScioContext()
+    logger.info("service has started")
     val filterJson = toJson(request.getQuery.getFilter)
     val filter = Document.parse(filterJson)
 

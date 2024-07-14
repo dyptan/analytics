@@ -54,9 +54,22 @@ public class ExportController {
         return json;
     }
 
-    @PostMapping(value = "/export", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/exportToCollection", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String doExport(@RequestBody ExportRequest exportRequest) throws IOException {
+    public String exportToCollection(@RequestBody ExportRequest exportRequest) throws IOException {
+        JsonNode jsonQuery = exportRequest.getQuery();
+        JsonNode jsonProjection = exportRequest.getProjection();
+        log.debug("select: " + jsonQuery.toPrettyString());
+        Document query = Document.parse(jsonQuery.toString());
+        Document projection = Document.parse(jsonProjection.toString());
+
+        exportService.exportData(query.toBsonDocument(), projection.toBsonDocument() );
+        return jsonQuery.toPrettyString();
+    }
+
+ @PostMapping(value = "/exportToS3", consumes = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String exportToS3(@RequestBody ExportRequest exportRequest) throws IOException {
         JsonNode jsonQuery = exportRequest.getQuery();
         JsonNode jsonProjection = exportRequest.getProjection();
         log.debug("select: " + jsonQuery.toPrettyString());

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.dyptan</groupId>
-    <artifactId>web</artifactId>
+    <artifactId>spring-web</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -91,7 +91,7 @@
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
-            <artifactId>schema</artifactId>
+            <artifactId>avro-schema</artifactId>
             <version>1.9</version>
         </dependency>
     </dependencies>

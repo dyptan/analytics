@@ -25,12 +25,12 @@
     </properties>
 
     <modules>
-        <module>web</module>
-        <module>producer</module>
-        <module>consumer</module>
-        <module>duplicator</module>
-        <module>schema</module>
-        <module>exporter</module>
+        <module>spring-web</module>
+        <module>zio-producer</module>
+        <module>beam-consumer</module>
+        <module>avro-schema</module>
+        <module>scio-exporter</module>
+        <module>spark-exporter</module>
     </modules>
 
     <dependencyManagement>
@@ -44,7 +44,7 @@
             </dependency>
             <dependency>
                 <groupId>com.dyptan</groupId>
-                <artifactId>schema</artifactId>
+                <artifactId>avro-schema</artifactId>
                 <version>1.9</version>
             </dependency>
             <dependency>

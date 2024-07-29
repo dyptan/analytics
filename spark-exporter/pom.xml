@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>exporter</artifactId>
+    <artifactId>spark-exporter</artifactId>
     <version>1.0</version>
     <groupId>com.dyptan</groupId>
     <properties>
@@ -143,7 +143,7 @@
                             <Class-Path>.</Class-Path>
                         </manifestEntries>
                     </archive>
-                    <finalName>dist/Main</finalName>
+                    <finalName>dist/app</finalName>
                 </configuration>
             </plugin>
             <!--            <plugin>-->

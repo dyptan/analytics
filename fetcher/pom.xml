@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.sksamuel.avro4s</groupId>
             <artifactId>avro4s-core_2.13</artifactId>
-            <version>4.1.0</version>
+            <version>4.1.2</version>
         </dependency>
         <dependency>
             <groupId>com.sksamuel.avro4s</groupId>
@@ -205,14 +205,11 @@
                                 </includes>
                             </artifactSet>
                             <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>reference.conf</resource>
                                 </transformer>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.dyptan.Driver</mainClass>
                                 </transformer>
                             </transformers>

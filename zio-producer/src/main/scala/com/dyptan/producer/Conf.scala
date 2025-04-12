@@ -16,10 +16,11 @@ import com.ria.avro.scala.SearchRoot
 object Conf {
   val config = ConfigFactory.load()
   val authKey = model.QueryParams().param("api_key", config.getConfig("crawler").getString("autoriaApiKey"))
-  val infoBase = uri"https://developers.ria.com/auto/info".addParams(authKey)
+  val riaDomain = config.getConfig("crawler").getString("autoriaDomain")
+  val infoBase = uri"$riaDomain/auto/info".addParams(authKey)
   //  val infoBase = uri"http://localhost:8090/info.json".addParams(authKey)
   //  val searchBase = uri"http://localhost:8090/search.json".addParams(authKey).addParam("countpage", "100")
-  val searchBase = uri"https://developers.ria.com/auto/search".addParams(authKey).addParam("countpage", "100")
+  val searchBase = uri"$riaDomain/auto/search".addParams(authKey).addParam("countpage", "100")
   val searchDefault = searchBase.addParams(
     // private auto
     "category_id" -> "1",

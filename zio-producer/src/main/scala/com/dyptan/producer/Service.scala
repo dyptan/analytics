@@ -66,7 +66,7 @@ class Service extends ZIOAppDefault {
   private def fetchAdToQ(id: String, pubSub: PubSub[AdWithId]): ZIO[SttpClient, Throwable, Unit] = {
     for {
       response <- send(basicRequest.get(infoBase.addParam("auto_id", id)).response(asJson[Advertisement]))
-      //      _ <- ZIO.log("Got Ad: " + response.body)
+            _ <- ZIO.log("Got Ad: " + response.body)
       adv <- ZIO.fromEither(response.body).debug.tapError { e => ZIO.logError("AD fetch failed: " + e) }
       adWithId = AdWithId(Integer.valueOf(id), adv)
       _ <- pubSub.publish("ads", adWithId)
@@ -87,14 +87,13 @@ class Service extends ZIOAppDefault {
   /* Publishes list of IDs to local Q */
   private def recProduceIds(pageNum: Int, destQ: PubSub[String]): ZIO[SttpClient, Throwable, Unit] = {
     for {
-      _ <- ZIO.ifZIO(ZIO.succeed(pageNum >= 0))(
+      _ <- ZIO.when(pageNum >= 0)(
         for {
           _ <- ZIO.logInfo(s"pages num: $pageNum")
           ids <- pageNext(pageNum)
           _ <- ZIO.foreachDiscard(ids)(id => destQ.publish("ids", id))
           _ <- recProduceIds(pageNum - 1, destQ)
-        } yield (),
-        ZIO.succeed())
+        } yield ())
 
     } yield ()
   }

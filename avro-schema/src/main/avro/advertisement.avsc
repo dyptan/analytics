@@ -13,7 +13,8 @@
     },
     {
       "name": "soldDate",
-      "type": "string"
+      "type": ["null", "string"],
+      "default": null
     },
     {
       "name": "autoData",

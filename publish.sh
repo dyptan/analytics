@@ -1,14 +1,19 @@
 #!/bin/bash
-#used on GCP
-#export repo=europe-west9-docker.pkg.dev/synthetic-verve-390913/analytics
+
 export repo=diptan
-for module in "$@"
+default_modules=("beam-consumer" "scio-exporter" "spark-exporter" "zio-producer" "spring-web")
 
+# Use provided arguments if any, otherwise use default modules
+if [ $# -eq 0 ]; then
+    modules=("${default_modules[@]}")
+else
+    modules=("$@")
+fi
+
+for module in "${modules[@]}"
 do
-mvn clean package -DskipTests -pl $module
-docker build --rm -f $module/Dockerfile -t $repo/$module:1.0 $module
-docker push $repo/$module:latest
+    echo "Processing module: $module"
+    mvn clean package -DskipTests -pl $module
+    docker build --rm -f $module/Dockerfile -t $repo/$module:latest $module
+    docker push $repo/$module:latest
 done
-
-
-

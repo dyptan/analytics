@@ -146,41 +146,6 @@
                     <finalName>dist/app</finalName>
                 </configuration>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-shade-plugin</artifactId>-->
-            <!--                <version>3.5.1</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>shade-jar-with-dependencies</id>-->
-            <!--                        <phase>package</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>shade</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <shadedArtifactAttached>true</shadedArtifactAttached>-->
-            <!--                            <shadedClassifierName>with-dependencies</shadedClassifierName>-->
-            <!--                            <artifactSet>-->
-            <!--                                <includes>-->
-            <!--                                    <include>*:*</include>-->
-            <!--                                </includes>-->
-            <!--                            </artifactSet>-->
-            <!--                            <transformers>-->
-            <!--                                <transformer-->
-            <!--                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>-->
-            <!--                                <transformer-->
-            <!--                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">-->
-            <!--                                    <resource>reference.conf</resource>-->
-            <!--                                </transformer>-->
-            <!--                                <transformer-->
-            <!--                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
-            <!--                                    <mainClass>com.dyptan.s3.exporter.Main</mainClass>-->
-            <!--                                </transformer>-->
-            <!--                            </transformers>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
         </plugins>
     </build>
 </project>

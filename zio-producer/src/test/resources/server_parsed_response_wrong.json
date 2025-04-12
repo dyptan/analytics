@@ -1,0 +1,31 @@
+{
+    "USD": "41049",
+    "addDate": "2025-04-12 17:26:19",
+    "soldDate": "null",
+    "autoData": {
+        "year": 2005,
+        "isSold": "false",
+        "autoId": 33253141,
+        "bodyId": 2,
+        "raceInt": 232,
+        "fuelId": 8,
+        "fuelNameEng": "methane",
+        "gearBoxId": 4,
+        "gearboxName": "Робот",
+        "driveId": 3,
+        "driveName": "Повний",
+        "categoryId": 8,
+        "categoryNameEng": "motorhomes",
+        "subCategoryNameEng": "avtodomiki"
+    },
+    "markId": 9,
+    "markNameEng": "bmw",
+    "modelId": 102,
+    "modelNameEng": "x5",
+    "linkToView": "/auto_bmw_x5_33253141.html",
+    "stateData": {
+        "stateId": 1,
+        "cityId": 219,
+        "regionNameEng": "vinnytsia"
+    }
+}

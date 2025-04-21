@@ -6,12 +6,13 @@ import sttp.client3.circe._
 import sttp.client3.httpclient.zio._
 import zio.akka.cluster.pubsub.PubSub
 import zio.cache.{Cache, Lookup}
-import zio.kafka.producer.Producer
+import zio.kafka.producer.{Producer, ProducerSettings}
 import zio.kafka.serde.{Serde, Serializer}
 import zio.stream.ZStream
 import zio.{Duration, Queue, Schedule, ZIO, ZIOAppDefault}
 import com.ria.avro.scala.{Advertisement, SearchRoot}
 import com.dyptan.producer.Conf._
+import org.apache.kafka.clients.producer.ProducerRecord
 
 class Service extends ZIOAppDefault {
 
@@ -103,17 +104,15 @@ class Service extends ZIOAppDefault {
     ZStream.fromQueue(records)
       .tap(a => ZIO.log("records for send to kafka: " + a))
       .mapZIO { adWithId =>
-        Producer.produce[Any, Int, Advertisement](
-          topic = topicName,
-          key = adWithId.id,
-          value = adWithId.advertisement,
-          keySerializer = Serde.int,
-          valueSerializer = advertisementSerializer
-        )
+        ZIO.serviceWithZIO[Producer] { producer =>
+          // Create producer record
+          val record = new ProducerRecord[Int, Advertisement](topicName, adWithId.id, adWithId.advertisement)
+          // Send the record
+          producer.produce(record, Serde.int, advertisementSerializer)
+        }
       }
       .tapError(error => ZIO.logError(s"Error in stream: $error"))
-      .tap(a => ZIO.log("records sent, current offset " + a.offset()))
+      .tap(record => ZIO.log("records sent, current offset " + record.offset))
       .drain
-
 }
 

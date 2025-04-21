@@ -5,4 +5,4 @@ ADD target/dist/lib /app/lib
 WORKDIR /app
 
 ENTRYPOINT ["java", "--add-exports", "java.base/sun.nio.ch=ALL-UNNAMED", "-jar", "app.jar"]
-EXPOSE 8082 4040
+EXPOSE 8082

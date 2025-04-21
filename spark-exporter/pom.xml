@@ -7,45 +7,37 @@
     <artifactId>spark-exporter</artifactId>
     <version>1.0</version>
     <groupId>com.dyptan</groupId>
-    <properties>
-        <scala.binary.version>2.13</scala.binary.version>
-        <scala.version>2.13.13</scala.version>
-        <circe.version>0.14.5</circe.version>
-    </properties>
+
     <parent>
         <artifactId>parent</artifactId>
         <groupId>com.dyptan</groupId>
         <version>1.0</version>
     </parent>
     <dependencies>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>${scala.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>io.circe</groupId>
-            <artifactId>circe-core_${scala.binary.version}</artifactId>
+                <artifactId>circe-core_${scala.version}</artifactId>
             <version>${circe.version}</version>
         </dependency>
         <dependency>
             <groupId>io.circe</groupId>
-            <artifactId>circe-generic_${scala.binary.version}</artifactId>
+            <artifactId>circe-generic_${scala.version}</artifactId>
             <version>${circe.version}</version>
         </dependency>
         <dependency>
             <groupId>io.circe</groupId>
-            <artifactId>circe-parser_${scala.binary.version}</artifactId>
+            <artifactId>circe-parser_${scala.version}</artifactId>
             <version>${circe.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-http_${scala.binary.version}</artifactId>
+            <artifactId>akka-http_${scala.version}</artifactId>
             <version>10.6.0-M1</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-stream_${scala.binary.version}</artifactId>
+            <artifactId>akka-stream_${scala.version}</artifactId>
             <version>2.9.0-M2</version>
         </dependency>
         <dependency>
@@ -55,12 +47,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_${scala.binary.version}</artifactId>
+            <artifactId>spark-sql_${scala.version}</artifactId>
             <version>4.0.0-preview2</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb.spark</groupId>
-            <artifactId>mongo-spark-connector_${scala.binary.version}</artifactId>
+            <artifactId>mongo-spark-connector_${scala.version}</artifactId>
             <version>10.4.1</version>
         </dependency>
         <dependency>
@@ -80,7 +72,7 @@
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
-                <version>2.15.1</version>
+                <version>2.15.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -89,6 +81,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <scalaVersion>${scalaLibraryVersion}</scalaVersion>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>dev.guardrail</groupId>

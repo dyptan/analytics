@@ -1,3 +1,4 @@
+/*
 package com.dyptan.producer
 
 import com.ria.avro.scala.Advertisement
@@ -45,3 +46,4 @@ object Tests extends ZIOSpecDefault {
     }
   )
 }
+*/

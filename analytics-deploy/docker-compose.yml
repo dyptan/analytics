@@ -5,6 +5,11 @@ volumes:
     driver: local
 
 services:
+  mock-api:
+    build:
+      context: ./mock-api
+    ports:
+      - 3000:3000
   kafka-ui:
     container_name: kafka-ui
     restart: always
@@ -109,6 +114,8 @@ services:
     depends_on:
       - kafka
       - schema-registry
+    environment:
+      - RIA_DOMAIN=http://mock-api:3000
 
   beam-consumer:
     build: ../beam-consumer

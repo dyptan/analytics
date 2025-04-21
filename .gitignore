@@ -4,3 +4,4 @@
 !/.gitignore
 target
 dependency-reduced-pom.xml
+/analytics-deploy/mock-api/node_modules/

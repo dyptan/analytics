@@ -7,9 +7,9 @@
         </layout>
     </appender>
 
-<!--    <logger name="com.dyptan" level="debug" additivity="false">-->
+    <logger name="com.dyptan" level="debug" additivity="false">
 <!--        <appender-ref ref="CONSOLE"/>-->
-<!--    </logger>-->
+    </logger>
 
     <root level="info">
         <appender-ref ref="CONSOLE"/>

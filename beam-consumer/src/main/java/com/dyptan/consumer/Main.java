@@ -59,8 +59,8 @@ public class Main {
                                     public void processElement(ProcessContext c) {
                                         KafkaRecord<Integer, Advertisement> record = c.element();
                                         KV<Integer, Advertisement> log = record.getKV();
-                                        logger.debug("Key Obtained: " + log.getKey());
-                                        logger.debug("Value Obtained: " + log.getValue().toString());
+                                        logger.info("Key Obtained: " + log.getKey());
+                                        logger.info("Value Obtained: " + log.getValue().toString());
                                         c.output(record.getKV());
 
                                     }
@@ -97,6 +97,7 @@ public class Main {
     public static class KV2MongoDocumentFn extends DoFn<KV<Integer, Advertisement>, Document> {
         @ProcessElement
         public void processElement(ProcessContext c) {
+            logger.info("processing element");
             KV<Integer, Advertisement> input = c.element();
             Document document = Document.parse(new Gson().toJson(input.getValue(), Advertisement.class));
             document.put("_id", new ObjectId(String.format("%024d", input.getKey())));

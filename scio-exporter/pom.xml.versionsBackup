@@ -17,7 +17,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.18</version>
+            <version>1.5.6</version>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>com.spotify</groupId>
             <artifactId>scio-core_${scala.version}</artifactId>
-            <version>0.14.16</version>
+            <version>0.14.5</version>
         </dependency>
         <dependency>
             <groupId>org.apache.beam</groupId>

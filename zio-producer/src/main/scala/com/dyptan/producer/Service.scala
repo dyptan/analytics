@@ -9,7 +9,7 @@ import zio.cache.{Cache, Lookup}
 import zio.kafka.producer.{Producer, ProducerSettings}
 import zio.kafka.serde.{Serde, Serializer}
 import zio.stream.ZStream
-import zio.{Duration, Queue, Schedule, ZIO, ZIOAppDefault}
+import zio.{Duration, Queue, Schedule, ZIO, ZIOAppDefault, durationInt}
 import com.ria.avro.scala.{Advertisement, SearchRoot}
 import com.dyptan.producer.Conf._
 import org.apache.kafka.clients.producer.ProducerRecord
@@ -68,6 +68,7 @@ class Service extends ZIOAppDefault {
     for {
       response <- send(basicRequest.get(infoBase.addParam("auto_id", id)).response(asJson[Advertisement]))
             _ <- ZIO.log("Got Ad: " + response.body)
+            _ <- ZIO.sleep(1.seconds)
       adv <- ZIO.fromEither(response.body).debug.tapError { e => ZIO.logError("AD fetch failed: " + e) }
       adWithId = AdWithId(Integer.valueOf(id), adv)
       _ <- pubSub.publish("ads", adWithId)

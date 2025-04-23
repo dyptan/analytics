@@ -19,7 +19,7 @@
         <protobuf-java.version>3.25.1</protobuf-java.version>
         <grpc.version>1.70.0</grpc.version>
         <scalaLibraryVersion>2.13.16</scalaLibraryVersion>
-        <beam.version>2.56.0</beam.version>
+        <beam.version>2.64.0</beam.version>
         <scala.version>2.13</scala.version>
         <circe.version>0.14.5</circe.version>
     </properties>

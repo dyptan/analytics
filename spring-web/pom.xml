@@ -92,7 +92,7 @@
         <dependency>
             <groupId>com.dyptan</groupId>
             <artifactId>avro-schema</artifactId>
-            <version>1.9</version>
+            <version>1.10</version>
         </dependency>
     </dependencies>
 

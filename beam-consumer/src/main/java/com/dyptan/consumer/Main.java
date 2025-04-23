@@ -45,7 +45,7 @@ public class Main {
                 .withTopic(properties.getProperty("kafka.producer.topic"))
                 .withConsumerConfigUpdates(Collections.singletonMap("specific.avro.reader", "true"))
                 .withConsumerConfigUpdates(Collections.singletonMap("fetch.max.wait.ms", "5000"))
-                .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", "earliest"))
+                .withConsumerConfigUpdates(Collections.singletonMap("auto.offset.reset", "latest"))
                 .withConsumerConfigUpdates(Collections.singletonMap("schema.registry.url", properties.getProperty("schema.registry.url")))
                 .withKeyDeserializer(IntegerDeserializer.class)
                 .withValueDeserializerAndCoder((Class) KafkaAvroDeserializer.class, AvroCoder.of(Advertisement.class));

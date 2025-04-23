@@ -15,10 +15,9 @@
         <java.version>21</java.version>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <avro.version>1.11.3</avro.version>
         <!--compatible with scio-->
         <protobuf-java.version>3.25.1</protobuf-java.version>
-        <grpc.version>1.60.1</grpc.version>
+        <grpc.version>1.70.0</grpc.version>
         <scalaLibraryVersion>2.13.16</scalaLibraryVersion>
         <beam.version>2.56.0</beam.version>
         <scala.version>2.13</scala.version>
@@ -39,7 +38,7 @@
             <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-bom</artifactId>
-                <version>1.60.1</version>
+                <version>${grpc.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -50,18 +49,18 @@
             </dependency>
             <dependency>
                 <groupId>com.dyptan</groupId>
-                <artifactId>mongo-exporter</artifactId>
+                <artifactId>scio-exporter</artifactId>
                 <version>1.10</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro</artifactId>
-                <version>${avro.version}</version>
+                <version>1.11.3</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-tools</artifactId>
-                <version>${avro.version}</version>
+                <version>1.11.3</version>
             </dependency>
             <dependency>
                 <groupId>org.scala-lang</groupId>

@@ -89,7 +89,7 @@
                             <language>scala</language>
                             <kind>server</kind>
                             <framework>akka-http</framework>
-                            <specPath>src/main/resources/openapi.yaml</specPath>
+                            <specPath>../avro-schema/src/main/openapi/openapi.yaml</specPath>
                             <packageName>com.dyptan.generated.exporter</packageName>
                         </configuration>
                     </execution>

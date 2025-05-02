@@ -1,3 +1,4 @@
+/*
 package com.dyptan.configuration;
 
 import com.dyptan.gen.proto.ExportServiceGrpc;
@@ -18,3 +19,4 @@ class GrpcClientConfiguration {
         return ExportServiceGrpc.newBlockingStub(channel);
     }
 }
+*/

@@ -1,7 +1,6 @@
 package com.dyptan.controller;
 
 import com.ria.avro.Advertisement;
-import com.dyptan.service.GrpcClientService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,8 @@ public class StreamingController {
     Logger log = LogManager.getLogger(StreamingController.class);
     @Autowired
     private ReactiveMongoTemplate mongoTemplate;
-    @Autowired
-    GrpcClientService client;
+//    @Autowired
+//    GrpcClientService client;
     @Value("${fetcher.api.url}")
     String url;
     private Query query = new Query();

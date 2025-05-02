@@ -1,3 +1,4 @@
+/*
 package com.dyptan.service;
 import com.dyptan.component.GrpcClientComponent;
 import org.springframework.stereotype.Service;
@@ -14,3 +15,4 @@ public class GrpcClientService {
 //        grpcClientService.exportData();
 //    }
 }
+*/

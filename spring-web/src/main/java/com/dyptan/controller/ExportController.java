@@ -1,8 +1,9 @@
 package com.dyptan.controller;
 
-import com.dyptan.component.GrpcClientComponent;
+import com.dyptan.generated.exporter.Client;
+import com.dyptan.generated.exporter.DoExportResponse;
+import com.dyptan.generated.exporter.definitions.ProcessRequest;
 import com.dyptan.model.ExportRequest;
-import com.dyptan.service.GrpcClientService;
 import com.dyptan.utils.AvroSchemaConverter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -33,55 +35,44 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class ExportController {
 
     Logger log = LogManager.getLogger(ExportController.class);
-    @Autowired
-    GrpcClientService client;
+
     @Autowired
     private ReactiveMongoTemplate mongoTemplate;
-    //    @Value("${exporter.api.url}")
-//    String exporterUrl;
-    @Autowired
-    GrpcClientComponent exportService;
+
+    private static String accept(DoExportResponse response, Throwable throwable) {
+        return throwable != null
+            ? "Request failed: %s".formatted(throwable.getMessage())
+            : switch (response) {
+                case DoExportResponse.Ok ok -> "Success: %s".formatted(ok.getValue());
+                case DoExportResponse.BadRequest bad -> "Bad Request: %s".formatted(bad.toString());
+                case DoExportResponse.InternalServerError ignored -> "Internal Server Error";
+                default -> "Unexpected response";
+            };
+    }
 
     @GetMapping("/export")
     public String exportpage() {
         return "export";
     }
 
-    @GetMapping("/schema")
     @ResponseBody
+    @GetMapping("/schema")
     public String getSchema() {
         String json = AvroSchemaConverter.schemaToJson(Advertisement.getClassSchema());
         return json;
     }
 
-    @PostMapping(value = "/exportToCollection", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String exportToCollection(@RequestBody ExportRequest exportRequest) throws IOException {
-        JsonNode jsonQuery = exportRequest.getQuery();
-        JsonNode jsonProjection = exportRequest.getProjection();
-        log.debug("select: " + jsonQuery.toPrettyString());
-        Document query = Document.parse(jsonQuery.toString());
-        Document projection = Document.parse(jsonProjection.toString());
-
-        exportService.exportData(query.toBsonDocument(), projection.toBsonDocument() );
-        return jsonQuery.toPrettyString();
+    @PostMapping(value = "/exportToS3", consumes = APPLICATION_JSON_VALUE)
+    public String exportToS3(@RequestBody ProcessRequest exportRequest) throws IOException {
+        var client = new Client.Builder(URI.create("http://localhost:8082")).build();
+        var exporterResponse = client.doExport(exportRequest).call();
+        var result = exporterResponse.toCompletableFuture().join(); // Blocking call to get the result
+        return ExportController.accept(result, null); // Pass the result to the accept method
     }
 
- @PostMapping(value = "/exportToS3", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String exportToS3(@RequestBody ExportRequest exportRequest) throws IOException {
-        JsonNode jsonQuery = exportRequest.getQuery();
-        JsonNode jsonProjection = exportRequest.getProjection();
-        log.debug("select: " + jsonQuery.toPrettyString());
-        Document query = Document.parse(jsonQuery.toString());
-        Document projection = Document.parse(jsonProjection.toString());
-
-        exportService.exportData(query.toBsonDocument(), projection.toBsonDocument() );
-        return jsonQuery.toPrettyString();
-    }
-
     @PostMapping(value = "/preexport", consumes = APPLICATION_JSON_VALUE)
-    @ResponseBody
     public String prepareExport(@RequestBody ExportRequest exportRequest) throws IOException {
         JsonNode jsonQuery = exportRequest.getQuery();
         JsonNode jsonProjection = exportRequest.getProjection();
@@ -97,8 +88,8 @@ public class ExportController {
         long estimatedSize = count * sample.getBytes().length;
 
         Map<String, Object> map = new TreeMap<>();
-        map.put("Example data", sample);
         map.put("Count of matching documents", count);
+        map.put("Example data", sample);
         map.put("Estimated size of one document in bytes", estimatedSize);
         map.put("Estimated total size in MiB", estimatedSize / 1024 / 1024);
 
@@ -107,5 +98,4 @@ public class ExportController {
         log.info(outputJson);
         return outputJson;
     }
-
 }

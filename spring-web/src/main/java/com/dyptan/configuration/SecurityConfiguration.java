@@ -22,21 +22,20 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterSecurity(HttpSecurity http) throws Exception {
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         http.cors(AbstractHttpConfigurer::disable);
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/registration").permitAll()
-                )
-                .authorizeHttpRequests((authorize) ->
-                        authorize.anyRequest().authenticated()
-                ).formLogin(
-                        form -> form
-                                .defaultSuccessUrl("/home", true)
-                                .permitAll()
-                ).logout(
-                        logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .permitAll()
-                );
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests((authorize) ->
+                authorize.anyRequest().permitAll()
+        );
+        http.formLogin(
+                form -> form
+                        .defaultSuccessUrl("/home", true)
+                        .permitAll()
+        );
+        http.logout(
+                logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .permitAll()
+        );
         return http.build();
     }
 }

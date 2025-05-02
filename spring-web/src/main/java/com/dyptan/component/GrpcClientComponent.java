@@ -1,3 +1,4 @@
+/*
 package com.dyptan.component;
 
 import com.dyptan.gen.proto.ExportStatus;
@@ -37,3 +38,4 @@ public class GrpcClientComponent {
         System.out.println("Response: " + response);
     }
 }
+*/

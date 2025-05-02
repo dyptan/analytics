@@ -232,6 +232,8 @@
             filterInput.value = JSON.stringify(filter);
             form.appendChild(filterInput);
 
+            let preparedJson = JSON.stringify(filter); // Store the JSON request
+
             for (const key in fromPreexport) {
                 const label = document.createElement("label");
                 label.textContent = key + ': ';
@@ -279,7 +281,7 @@
             form.appendChild(dataFormatContainer);
 
             const submitButton = document.createElement('button');
-            submitButton.setAttribute('type', 'submit');
+            submitButton.setAttribute('type', 'button'); // Change to 'button' to prevent default form submission
             submitButton.textContent = 'Submit';
             form.appendChild(submitButton);
 
@@ -293,16 +295,19 @@
                 }
             });
 
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
+            submitButton.addEventListener('click', function () {
                 const destination = destinationSelect.value;
 
+                
                 if (destination === "S3") {
+                    // Build unified request body including the file format and query parameters
                     const requestBody = {
-                        file_format: dataFormatSelect.value
+                        mongoCollection: "advertisementCopy", // Example collection name
+                        s3Bucket: "export-bucket", // Example bucket name
+                        outputFormat: "csv" // Convert format to integer
                     };
-
-                    fetch('/exportToS3', {
+                    console.log("Request Body:", requestBody); // Log the request body for debugging
+                    fetch('/exportToS3', { // Use local server endpoint
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -310,19 +315,26 @@
                         body: JSON.stringify(requestBody),
                     })
                         .then(response => response.json())
-                        .then(data => console.log(data))
+                        .then(data => console.log("S3 Response:", data))
                         .catch(error => console.error('Error:', error));
                 }
                 else if (destination === "Mongo") {
-                    fetch('/exportToCollection', {
+                     // Build unified request body including the file format and query parameters
+                     const requestBody = {
+                        query: preparedJson, // Example collection name
+                        format: "JSON", // Example bucket name
+                        export_name: "example_export",
+                        user: "test_user"
+                    };
+                    fetch('/exportToCollection', { // Use local server endpoint
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: filterInput.value,
+                        body: JSON.stringify(requestBody),
                     })
                         .then(response => response.json())
-                        .then(data => console.log(data))
+                        .then(data => console.log("Mongo Response:", data))
                         .catch(error => console.error('Error:', error));
                 }
                 else {

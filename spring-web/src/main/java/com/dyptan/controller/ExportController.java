@@ -1,8 +1,5 @@
 package com.dyptan.controller;
 
-import com.dyptan.generated.exporter.Client;
-import com.dyptan.generated.exporter.DoExportResponse;
-import com.dyptan.generated.exporter.definitions.ProcessRequest;
 import com.dyptan.model.ExportRequest;
 import com.dyptan.utils.AvroSchemaConverter;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -39,17 +35,6 @@ public class ExportController {
     @Autowired
     private ReactiveMongoTemplate mongoTemplate;
 
-    private static String accept(DoExportResponse response, Throwable throwable) {
-        return throwable != null
-            ? "Request failed: %s".formatted(throwable.getMessage())
-            : switch (response) {
-                case DoExportResponse.Ok ok -> "Success: %s".formatted(ok.getValue());
-                case DoExportResponse.BadRequest bad -> "Bad Request: %s".formatted(bad.toString());
-                case DoExportResponse.InternalServerError ignored -> "Internal Server Error";
-                default -> "Unexpected response";
-            };
-    }
-
     @GetMapping("/export")
     public String exportpage() {
         return "export";
@@ -60,15 +45,6 @@ public class ExportController {
     public String getSchema() {
         String json = AvroSchemaConverter.schemaToJson(Advertisement.getClassSchema());
         return json;
-    }
-
-    @ResponseBody
-    @PostMapping(value = "/exportToS3", consumes = APPLICATION_JSON_VALUE)
-    public String exportToS3(@RequestBody ProcessRequest exportRequest) throws IOException {
-        var client = new Client.Builder(URI.create("http://localhost:8082")).build();
-        var exporterResponse = client.doExport(exportRequest).call();
-        var result = exporterResponse.toCompletableFuture().join(); // Blocking call to get the result
-        return ExportController.accept(result, null); // Pass the result to the accept method
     }
 
     @ResponseBody

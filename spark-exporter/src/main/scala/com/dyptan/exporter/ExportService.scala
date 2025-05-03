@@ -1,5 +1,6 @@
 package com.dyptan.exporter
 
+import com.dyptan.generated.exporter.definitions.{ProcessRequest, ProcessResponse}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
@@ -21,19 +22,23 @@ class ExportService {
     .getOrCreate()
 
 
-  def exportToS3() = {
-    val dataFrame = spark.read
-      .format("mongodb")
-      .option("database", "ria")
-      .option("collection", "advertisementCopy")
-      .load();
+  def exportToS3(body: ProcessRequest) = {
+    try {
+      val dataFrame = spark.read
+        .format("mongodb")
+        .option("database", "ria")
+        .option("collection", body.mongoCollection)
+        .load();
 
-//    spark.sparkContext.setLogLevel("DEBUG")
+      dataFrame.write
+        .format(body.outputFormat.value)
+        .option("header", true)
+        .save(s"s3a://export-bucket/${body.s3Bucket}/")
 
-    dataFrame.write
-      .format("json")
-      .option("header", true)
-      .save(s"s3a://export-bucket/tenant/")
+      ProcessResponse(Some(ProcessResponse.Status.Success), Some("congrats!"), None)
+    } catch {
+      case e =>  ProcessResponse(Some(ProcessResponse.Status.Error), Some("somethign went wrong!"), Some(e.getMessage))
+    }
 
   }
 }

@@ -48,25 +48,47 @@ public class ExportController {
     }
 
     @ResponseBody
-    @PostMapping(value = "/preexport", consumes = APPLICATION_JSON_VALUE)
-    public String prepareExport(@RequestBody ExportRequest exportRequest) throws IOException {
-        JsonNode jsonQuery = exportRequest.getQuery();
-        JsonNode jsonProjection = exportRequest.getProjection();
-        log.info("select: " + jsonQuery.toPrettyString());
+    @PostMapping(value = "/preview", consumes = APPLICATION_JSON_VALUE)
+    public String preview(@RequestBody ExportRequest exportRequest) throws IOException {
+        log.info("Received preview request: " + exportRequest);
+        JsonNode jsonQuery = exportRequest.getFilter().getQuery();
+        JsonNode jsonProjection = exportRequest.getFilter().getProjection();
+
+        if (jsonQuery == null) {
+            log.warn("Query is null in the request");
+            return "Error: Query cannot be null";
+        }
+
+        if (jsonProjection == null) {
+            log.warn("Projection is null in the request");
+            return "Error: Projection cannot be null";
+        }
+
+        log.info("Parsed query: " + jsonQuery.toPrettyString());
+        log.info("Parsed projection: " + jsonProjection.toPrettyString());
+
         Document query = Document.parse(jsonQuery.toString());
         Document projection = Document.parse(jsonProjection.toString());
         BasicQuery filter = new BasicQuery(query, projection);
 
-        var count = mongoTemplate.count(filter, Advertisement.class).block();
-        var one = mongoTemplate.findOne(filter, Advertisement.class).blockOptional();
+        log.info("Executing MongoDB query with filter: " + filter);
+
+        var count = mongoTemplate.count(filter, exportRequest.getCollectionName()).block();
+        log.info("Count of matching documents: " + count);
+
+        var one = mongoTemplate.findOne(filter, Advertisement.class, exportRequest.getCollectionName()).blockOptional();
 
         String sample = one.map(Advertisement::toString).orElse("No matching documents");
+        log.info("Sample document: " + sample);
+
         long estimatedSize = count * sample.getBytes().length;
+        log.info("Estimated size of one document in bytes: " + sample.getBytes().length);
+        log.info("Estimated total size in MiB: " + estimatedSize / 1024 / 1024);
 
         Map<String, Object> map = new TreeMap<>();
         map.put("Count of matching documents", count);
         map.put("Example data", sample);
-        map.put("Estimated size of one document in bytes", estimatedSize);
+        map.put("Estimated size of one document in bytes", sample.getBytes().length);
         map.put("Estimated total size in MiB", estimatedSize / 1024 / 1024);
 
         ObjectMapper mapper = new ObjectMapper();

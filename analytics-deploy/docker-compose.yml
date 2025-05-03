@@ -100,6 +100,29 @@ services:
     ports:
       - 5432:5432
 
+  init-db:
+    image: postgres
+    depends_on:
+      - db
+    environment:
+      PGUSER: ivan
+      PGPASSWORD : ivan123
+    volumes:
+      - ./postgres/backup.sql:/docker-entrypoint-initdb.d/backup.sql
+    command: >
+      bash -c "
+      until pg_isready -h db -U ivan; do
+        echo 'Waiting for PostgreSQL to be ready...';
+        sleep 2;
+      done;
+      psql -h db -U ivan -f /docker-entrypoint-initdb.d/backup.sql
+      "
+
+  adminer:
+    image: adminer
+    ports:
+      - 8085:8080
+
   spring-web:
     build: ../spring-web
     ports:
@@ -136,8 +159,7 @@ services:
   spark-exporter:
     build: ../spark-exporter
     ports:
-      - 8082
-      - 4040
+      - 8082:8082
     depends_on:
       - minio
       - mongo

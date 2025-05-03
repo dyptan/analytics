@@ -31,7 +31,7 @@
             border: 1px solid #ccc;
             padding: 20px;
             border-radius: 5px;
-            max-width: 400px;
+            max-width: 600px;
             margin: auto;
         }
 
@@ -80,6 +80,22 @@
             const form = document.getElementById('form-container');
             form.innerHTML = '';
             form.setAttribute('method', 'post');
+
+            const collectionForm = document.createElement('form');
+            collectionForm.id = 'collection-form';
+
+            const collectionLabel = document.createElement('label');
+            collectionLabel.textContent = 'Mongo Collection Name:';
+            const collectionInput = document.createElement('input');
+            collectionInput.type = 'text';
+            collectionInput.name = 'mongo_collection';
+            collectionInput.defaultValue = 'advertisementCopy';
+
+            collectionForm.appendChild(collectionLabel);
+            collectionForm.appendChild(collectionInput);
+            form.parentNode.insertBefore(collectionForm, form);
+
+           
 
             function generateFields(container, nestedSchema, parentFieldName = '') {
                 for (const fieldName in nestedSchema) {
@@ -137,7 +153,7 @@
 
                 const submitButton = document.createElement('button');
                 submitButton.setAttribute('type', 'submit');
-                submitButton.textContent = 'Prepare';
+                submitButton.textContent = 'Preview';
                 form.appendChild(submitButton);
 
                 form.addEventListener('submit', function (event) {
@@ -155,17 +171,31 @@
 
                     filter = generateBSONQuery(formData);
                     console.log("filter generated:", filter);
-                    fetch('/preexport', {
+
+                    const collectionName = document.querySelector('#collection-form input[name="mongo_collection"]').value;
+                    const requestBody = {
+                        filter,
+                        collectionName // Add collection name as a separate parameter
+                    };
+
+                    fetch('/preview', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify(filter),
+                        body: JSON.stringify(requestBody),
                     })
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            console.log('Response Status:', response.status); // Debugging log
+                            return response.json();
+                        })
                         .then(data => {
-                            generateForm2(data, filter);
-                            console.log("form 2 generated");
+                            console.log("Response Data:", data);
+                            generateForm2(data, filter, collectionName); // Pass collectionName to generateForm2
+                            console.log('Form 2 generated');
                         })
                         .catch(error => console.error('Error:', error));
                 });
@@ -220,7 +250,7 @@
             return { query: resultQuery, projection: finalProjection };
         }
 
-        function generateForm2(fromPreexport, filter) {
+        function generateForm2(fromPreexport, filter, collectionName) {
             const formContainer = document.getElementById("form-container2");
             formContainer.innerHTML = '';
             const form = document.createElement("form");
@@ -269,9 +299,9 @@
             dataFormatSelect.name = "data_format";
 
             const dataFormatOptions = ["JSON", "CSV", "PARQUET", "AVRO"];
-            dataFormatOptions.forEach((option, index) => {
+            dataFormatOptions.forEach((option) => {
                 const optionElement = document.createElement("option");
-                optionElement.value = index;
+                optionElement.value = option.toLowerCase();
                 optionElement.textContent = option;
                 dataFormatSelect.appendChild(optionElement);
             });
@@ -280,52 +310,87 @@
             dataFormatContainer.appendChild(dataFormatSelect);
             form.appendChild(dataFormatContainer);
 
-            const submitButton = document.createElement('button');
-            submitButton.setAttribute('type', 'button'); // Change to 'button' to prevent default form submission
-            submitButton.textContent = 'Submit';
-            form.appendChild(submitButton);
+            const s3BucketContainer = document.createElement("div");
+            s3BucketContainer.style.display = "none";
 
-            formContainer.appendChild(form);
+            const s3BucketLabel = document.createElement("label");
+            s3BucketLabel.textContent = "S3 Bucket Name:";
+            const s3BucketInput = document.createElement("input");
+            s3BucketInput.type = "text";
+            s3BucketInput.name = "s3_bucket";
+
+            s3BucketContainer.appendChild(s3BucketLabel);
+            s3BucketContainer.appendChild(s3BucketInput);
+            form.appendChild(s3BucketContainer);
 
             destinationSelect.addEventListener('change', function () {
                 if (this.value === "S3") {
                     dataFormatContainer.style.display = "block";
+                    s3BucketContainer.style.display = "block";
                 } else {
                     dataFormatContainer.style.display = "none";
+                    s3BucketContainer.style.display = "none";
                 }
             });
 
-            submitButton.addEventListener('click', function () {
-                const destination = destinationSelect.value;
+            const submitButton = document.createElement('button');
+            submitButton.setAttribute('type', 'button'); // Change to 'button' to prevent default form submission
+            submitButton.textContent = 'Export';
+            form.appendChild(submitButton);
 
-                
+            formContainer.appendChild(form);
+
+            submitButton.addEventListener('click', function () {
+                console.log('Export button clicked'); // Debugging log
+                const destination = destinationSelect.value;
+                console.log('Selected destination:', destination); // Debugging log
+
+                const statusMessage = document.createElement('p');
+                statusMessage.id = 'status-message';
+                formContainer.appendChild(statusMessage);
+
                 if (destination === "S3") {
-                    // Build unified request body including the file format and query parameters
                     const requestBody = {
-                        mongoCollection: "advertisementCopy", // Example collection name
-                        s3Bucket: "export-bucket", // Example bucket name
-                        outputFormat: "csv" // Convert format to integer
+                        mongoCollection: collectionName, // Use collectionName passed as a parameter
+                        s3Bucket: s3BucketInput.value, // Take value from the S3 bucket input field
+                        outputFormat: dataFormatSelect.value // Use selected format from dropdown
                     };
-                    console.log("Request Body:", requestBody); // Log the request body for debugging
-                    fetch('/exportToS3', { // Use local server endpoint
+                    console.log("Request Body for S3:", requestBody); // Debugging log
+                    statusMessage.textContent = 'Sending request to S3...';
+                    fetch('/process', { // Use local server endpoint
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(requestBody),
                     })
-                        .then(response => response.json())
-                        .then(data => console.log("S3 Response:", data))
-                        .catch(error => console.error('Error:', error));
-                }
-                else if (destination === "Mongo") {
-                     // Build unified request body including the file format and query parameters
-                     const requestBody = {
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            console.log('Response Status:', response.status); // Debugging log
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("Response Data:", data);
+                            if (data.status.toLowerCase() === 'error') {
+                                throw new Error(data.message || 'An error occurred during the request.');
+                            }
+                            statusMessage.textContent = 'Export to S3 completed successfully.';
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            statusMessage.textContent = `Error occurred during export to S3: ${error.message}`;
+                        });
+                } else if (destination === "Mongo") {
+                    const requestBody = {
                         query: preparedJson, // Example collection name
                         format: "JSON", // Example bucket name
                         export_name: "example_export",
                         user: "test_user"
                     };
+                    console.log("Request Body for Mongo:", requestBody); // Debugging log
+                    statusMessage.textContent = 'Sending request to Mongo...';
                     fetch('/exportToCollection', { // Use local server endpoint
                         method: 'POST',
                         headers: {
@@ -333,12 +398,27 @@
                         },
                         body: JSON.stringify(requestBody),
                     })
-                        .then(response => response.json())
-                        .then(data => console.log("Mongo Response:", data))
-                        .catch(error => console.error('Error:', error));
-                }
-                else {
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            console.log('Response Status:', response.status); // Debugging log
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("Response Data:", data);
+                            if (data.status.toLowerCase() === 'error') {
+                                throw new Error(data.message || 'An error occurred during the request.');
+                            }
+                            statusMessage.textContent = 'Export to Mongo completed successfully.';
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            statusMessage.textContent = `Error occurred during export to Mongo: ${error.message}`;
+                        });
+                } else {
                     console.error('Invalid destination selected');
+                    statusMessage.textContent = 'Invalid destination selected. Please choose a valid option.';
                 }
             });
         }

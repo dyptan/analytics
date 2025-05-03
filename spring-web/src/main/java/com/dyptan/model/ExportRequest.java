@@ -5,27 +5,47 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.Table;
 
 @Embeddable
-@Table(name = "Roles")
+@Table(name = "ExportRequest")
 public class ExportRequest {
-    JsonNode query;
+    private Filter filter;
+    private String collectionName;
 
-    public JsonNode getQuery() {
-        return query;
+    public Filter getFilter() {
+        return filter;
     }
 
-    public void setQuery(JsonNode query) {
-        this.query = query;
+    public void setFilter(Filter filter) {
+        this.filter = filter;
     }
 
-    public JsonNode getProjection() {
-        return projection;
+    public String getCollectionName() {
+        return collectionName;
     }
 
-    public void setProjection(JsonNode projection) {
-        this.projection = projection;
+    public void setCollectionName(String collectionName) {
+        this.collectionName = collectionName;
     }
 
-    JsonNode projection;
+    public static class Filter {
+        private JsonNode query;
+        private JsonNode projection;
 
-    public ExportRequest(){}
+        public JsonNode getQuery() {
+            return query;
+        }
+
+        public void setQuery(JsonNode query) {
+            this.query = query;
+        }
+
+        public JsonNode getProjection() {
+            return projection;
+        }
+
+        public void setProjection(JsonNode projection) {
+            this.projection = projection;
+        }
+    }
+
+    public ExportRequest() {}
 }

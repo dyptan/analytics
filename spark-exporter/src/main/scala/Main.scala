@@ -3,7 +3,6 @@ package com.dyptan.exporter
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives
-import com.dyptan.exporter.ExportController
 import com.typesafe.config.ConfigFactory
 import org.slf4j.{Logger, LoggerFactory}
 

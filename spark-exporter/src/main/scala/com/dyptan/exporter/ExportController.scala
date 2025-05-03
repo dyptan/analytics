@@ -14,10 +14,9 @@ class ExportController(exportService: ExportService)(implicit
 ) {
   val exportHandler = new Handler {
     override def doExport(respond: Resource.DoExportResponse.type)(body: ProcessRequest): Future[Resource.DoExportResponse] = {
-      exportService.exportToS3()
       Future {
         respond.OK(
-          ProcessResponse(Some(ProcessResponse.Status.Success), Some("congrats!"), None)
+          exportService.exportToS3(body)
         )
       }
     }

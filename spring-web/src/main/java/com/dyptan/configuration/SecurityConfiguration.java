@@ -24,7 +24,10 @@ public class SecurityConfiguration {
         http.cors(AbstractHttpConfigurer::disable);
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((authorize) ->
-                authorize.anyRequest().permitAll()
+            authorize
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/registration").hasAuthority("ROLE_ADMIN")
+                .anyRequest().authenticated()
         );
         http.formLogin(
                 form -> form

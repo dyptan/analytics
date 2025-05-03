@@ -47,7 +47,7 @@ components:
           description: Name of the S3 bucket to upload the processed data
         outputFormat:
           type: string
-          enum: [csv, parquet]
+          enum: [csv, parquet, json, avro]
           description: Format of the output file
 
     ProcessResponse:

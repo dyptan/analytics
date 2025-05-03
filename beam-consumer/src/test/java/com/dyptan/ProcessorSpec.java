@@ -1,6 +1,5 @@
 package com.dyptan;
 
-import com.ria.avro.Advertisement;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.kafka.clients.consumer.*;
@@ -8,8 +7,6 @@ import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class ProcessorSpec {
@@ -26,21 +23,6 @@ public class ProcessorSpec {
         props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-//        Main consumer = new Main(props);
-
-//        String topic = "ria";
-//        consumer.subscribe(Arrays.asList(topic));
-//
-//        while (true) {
-//            consumer.seekToBeginning(consumer.assignment());
-//            ConsumerRecords<Integer, Advertisement> records = consumer.poll(Duration.ofSeconds(1));
-//
-//            for (ConsumerRecord<Integer, Advertisement> record : records) {
-//                logger.error(String.valueOf(record.value()));
-//                logger.error(String.valueOf(record.key()));
-//            }
-//            consumer.commitSync();
-//        }
     }
 }
 

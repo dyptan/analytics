@@ -20,7 +20,7 @@ public class AvroSchemaConverter {
         switch (field.schema().getType()) {
             case RECORD:
                 ObjectNode node = mapper.createObjectNode();
-                List<ObjectNode> subNodes = field.schema().getFields().stream()
+                field.schema().getFields().stream()
                         .map(f -> recHelper(f, mapper, node))
                         .collect(Collectors.toList());
                 output.set(field.name(), node);

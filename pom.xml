@@ -31,6 +31,7 @@
         <module>avro-schema</module>
         <module>scio-exporter</module>
         <module>spark-exporter</module>
+        <module>flink-consumer</module>
     </modules>
 
     <dependencyManagement>

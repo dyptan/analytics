@@ -48,7 +48,7 @@ services:
           mc admin policy attach myminio readwrite --user=myuserserviceaccount
         #mc admin user svcacct add myminio myuserserviceaccount
   kafka:
-    image: bitnami/kafka:3.6
+    image: bitnami/kafka:latest
     restart: always
     ports:
       - 9092:9092
@@ -77,7 +77,7 @@ services:
         kafka-topics.sh --bootstrap-server kafka:9092 --list
 
   schema-registry:
-    image: bitnami/schema-registry:7.5
+    image: bitnami/schema-registry:latest
     ports:
       - 8081:8081
     environment:
@@ -140,8 +140,8 @@ services:
     environment:
       - RIA_DOMAIN=http://mock-api:3000
 
-  beam-consumer:
-    build: ../beam-consumer
+  flink-consumer:
+    build: ../flink-consumer
     deploy:
       resources:
         limits:

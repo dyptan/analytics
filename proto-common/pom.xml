@@ -5,7 +5,7 @@
 		 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>avro-schema</artifactId>
+    <artifactId>proto-common</artifactId>
     <version>1.10</version>
 
     <parent>

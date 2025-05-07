@@ -27,8 +27,7 @@
     <modules>
         <module>spring-web</module>
         <module>zio-producer</module>
-        <module>beam-consumer</module>
-        <module>avro-schema</module>
+        <module>proto-common</module>
         <module>scio-exporter</module>
         <module>spark-exporter</module>
         <module>flink-consumer</module>

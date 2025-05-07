@@ -6,12 +6,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.ria.avro.Advertisement;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -63,7 +60,7 @@ public class FlinkConsumer {
             .setBootstrapServers(kafkaBootstrapServers)
             .setTopics(kafkaTopic)
             .setGroupId("flink-consumer-group")
-            .setStartingOffsets(OffsetsInitializer.earliest())
+            .setStartingOffsets(OffsetsInitializer.latest())
             .setValueOnlyDeserializer(new AdvertisementDeserializationSchema(schemaRegistryUrl))
             .build();
 

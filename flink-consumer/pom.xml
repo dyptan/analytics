@@ -83,7 +83,7 @@
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
-            <artifactId>avro-schema</artifactId>
+            <artifactId>proto-common</artifactId>
             <version>1.10</version>
         </dependency>
         <!-- Use only slf4j-simple for logging -->

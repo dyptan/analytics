@@ -100,7 +100,7 @@
                             <language>scala</language>
                             <kind>server</kind>
                             <framework>akka-http</framework>
-                            <specPath>../avro-schema/src/main/openapi/openapi.yaml</specPath>
+                            <specPath>../proto-common/src/main/openapi/openapi.yaml</specPath>
                             <packageName>com.dyptan.generated.exporter</packageName>
                         </configuration>
                     </execution>
@@ -142,7 +142,6 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
                 </executions>

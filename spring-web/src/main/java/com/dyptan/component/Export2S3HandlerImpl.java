@@ -1,10 +1,10 @@
 package com.dyptan.component;
 
-import com.dyptan.generated.exporter.Client;
-import com.dyptan.generated.exporter.ClientException;
-import com.dyptan.generated.exporter.DoExportResponse.*;
-import com.dyptan.generated.exporter.Handler;
-import com.dyptan.generated.exporter.definitions.*;
+import com.dyptan.openapi.generated.exporter.Client;
+import com.dyptan.openapi.generated.exporter.ClientException;
+import com.dyptan.openapi.generated.exporter.DoExportResponse.*;
+import com.dyptan.openapi.generated.exporter.Handler;
+import com.dyptan.openapi.generated.exporter.definitions.*;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -13,7 +13,7 @@ import java.util.concurrent.CompletionStage;
 
 @Component
 public class Export2S3HandlerImpl implements Handler {
-    private static String accept(com.dyptan.generated.exporter.DoExportResponse response) {
+    private static String accept(com.dyptan.openapi.generated.exporter.DoExportResponse response) {
         return  switch (response) {
                         case Ok ok -> "Success: %s".formatted(ok.getValue());
                         case BadRequest bad -> "Bad Request: %s".formatted(bad.toString());

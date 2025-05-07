@@ -147,7 +147,8 @@
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
-            <artifactId>avro-schema</artifactId>
+            <artifactId>proto-common</artifactId>
+            <version>1.10</version>
         </dependency>
     </dependencies>
 
@@ -166,7 +167,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <sourceDirectory>../avro-schema/src/main/avro</sourceDirectory>
+                    <sourceDirectory>../proto-common/src/main/avro</sourceDirectory>
                     <outputDirectory>target/generated-sources</outputDirectory>
                 </configuration>
             </plugin>

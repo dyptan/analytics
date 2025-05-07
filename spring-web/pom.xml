@@ -99,7 +99,7 @@
         </dependency>
         <dependency>
             <groupId>com.dyptan</groupId>
-            <artifactId>avro-schema</artifactId>
+            <artifactId>proto-common</artifactId>
             <version>1.10</version>
             <exclusions>
                 <exclusion>
@@ -165,12 +165,12 @@
                             <goal>generate-sources</goal>
                         </goals>
                         <configuration>
-                            <specPath>${project.basedir}/../avro-schema/src/main/openapi/openapi.yaml</specPath>
+                            <specPath>../proto-common/src/main/openapi/openapi.yaml</specPath>
                             <language>java</language>
                             <framework>spring-mvc</framework>
                             <kind>server</kind>
                             <outputPath>${project.build.directory}/generated-sources/guardrail</outputPath>
-                            <packageName>com.dyptan.generated.exporter</packageName>
+                            <packageName>com.dyptan.openapi.generated.exporter</packageName>
                         </configuration>
                     </execution>
                     <execution>
@@ -179,12 +179,12 @@
                             <goal>generate-sources</goal>
                         </goals>
                         <configuration>
-                            <specPath>${project.basedir}/../avro-schema/src/main/openapi/openapi.yaml</specPath>
+                            <specPath>../proto-common/src/main/openapi/openapi.yaml</specPath>
                             <language>java</language>
                             <framework>spring-mvc</framework>
                             <kind>client</kind>
                             <outputPath>${project.build.directory}/generated-sources/guardrail</outputPath>
-                            <packageName>com.dyptan.generated.exporter</packageName>
+                            <packageName>com.dyptan.openapi.generated.exporter</packageName>
                         </configuration>
                     </execution>
                 </executions>

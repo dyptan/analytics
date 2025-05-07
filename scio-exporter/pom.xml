@@ -61,6 +61,11 @@
             <artifactId>beam-sdks-java-io-mongodb</artifactId>
             <version>${beam.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.dyptan</groupId>
+            <artifactId>proto-common</artifactId>
+            <version>1.10</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -80,7 +85,7 @@
                     <protocArtifact>com.google.protobuf:protoc:${protobuf-java.version}:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
-                    <protoSourceRoot>${project.basedir}/src/main/proto</protoSourceRoot>
+                    <protoSourceRoot>../proto-common/src/main/proto</protoSourceRoot>
                 </configuration>
                 <executions>
                     <execution>

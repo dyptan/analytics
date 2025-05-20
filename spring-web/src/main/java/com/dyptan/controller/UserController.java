@@ -3,6 +3,7 @@ package com.dyptan.controller;
 import com.dyptan.model.User;
 import com.dyptan.repository.UserRepository;
 import com.dyptan.service.AuthService;
+import com.dyptan.service.ScoutGraphQLService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class UserController {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    ScoutGraphQLService scoutGraphQLService;
 
     @GetMapping("/users")
     public List<User> getAllUsers(){
@@ -50,5 +54,10 @@ public class UserController {
     @DeleteMapping("/user/{name}")
     public void deleteUser(@PathVariable String name){
         userRepository.delete(getUser(name));
+    }
+
+    @GetMapping("/scout/cars")
+    public String getScoutCars() {
+        return scoutGraphQLService.fetchAllCars();
     }
 }

@@ -31,7 +31,6 @@ services:
       - '9001:9001'
 #    volumes:
 #      - 'minio_data:/bitnami/minio/data'
-
   init-minio:
       image: docker.io/bitnami/minio-client
       environment:
@@ -61,7 +60,6 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-
   init-kafka:
     image: bitnami/kafka:3.6
     depends_on:
@@ -75,7 +73,6 @@ services:
         kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic ria --replication-factor 1 --partitions 1
         echo -e 'Successfully created the following topics:'
         kafka-topics.sh --bootstrap-server kafka:9092 --list
-
   schema-registry:
     image: bitnami/schema-registry:latest
     ports:
@@ -86,12 +83,10 @@ services:
       - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081
     depends_on:
       - kafka
-
   mongo:
     build: ./mongo
     ports:
       - 27017:27017
-
   db:
     image: postgres
     environment:
@@ -99,7 +94,6 @@ services:
       POSTGRES_PASSWORD: ivan123
     ports:
       - 5432:5432
-
   init-db:
     image: postgres
     depends_on:
@@ -117,19 +111,16 @@ services:
       done;
       psql -h db -U ivan -f /docker-entrypoint-initdb.d/backup.sql
       "
-
   adminer:
     image: adminer
     ports:
       - 8085:8080
-
   spring-web:
     build: ../spring-web
     ports:
       - 8080:8080
     depends_on:
       - db
-
   zio-producer:
     build: ../zio-producer
     ports:
@@ -139,7 +130,6 @@ services:
       - schema-registry
     environment:
       - RIA_DOMAIN=http://mock-api:3000
-
   flink-consumer:
     build: ../flink-consumer
     deploy:
@@ -150,12 +140,10 @@ services:
       - kafka
       - mongo
       - schema-registry
-
   scio-exporter:
     build: ../scio-exporter
     depends_on:
       - mongo
-
   spark-exporter:
     build: ../spark-exporter
     ports:
@@ -163,3 +151,11 @@ services:
     depends_on:
       - minio
       - mongo
+  autoscout-scraper:
+      image: diptan/autoscout24-scraper
+      environment:
+        - MONGO_URI=mongodb://mongo:27017/autoscout24
+      ports:
+        - 8086:8086
+      depends_on:
+        - mongo

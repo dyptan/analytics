@@ -25,6 +25,7 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((authorize) ->
             authorize
+                .requestMatchers("/autoscout").permitAll()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/registration").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()

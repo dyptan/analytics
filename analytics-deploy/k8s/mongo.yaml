@@ -15,7 +15,7 @@ spec:
         name: mongo
     spec:
       containers:
-      - image: diptan/mongo
+      - image: mongo:latest
         name: mongo
         ports:
         - containerPort: 27017
@@ -31,4 +31,3 @@ spec:
       targetPort: 27017
     selector:
       name: mongo
-  

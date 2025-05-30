@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zio-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zio-producer
+  template:
+    metadata:
+      labels:
+        app: zio-producer
+    spec:
+      containers:
+        - name: zio-producer
+          image: diptan/zio-producer:latest
+          ports:
+            - containerPort: 8083
+          env:
+            - name: RIA_DOMAIN
+              value: http://mock-api:8086
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zio-producer
+spec:
+  selector:
+    app: zio-producer
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083

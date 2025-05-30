@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export repo=diptan
-default_modules=("beam-consumer" "scio-exporter" "spark-exporter" "zio-producer" "spring-web")
+default_modules=("flink-consumer" "scio-exporter" "spark-exporter" "zio-producer" "spring-web")
 
 # Use provided arguments if any, otherwise use default modules
 if [ $# -eq 0 ]; then

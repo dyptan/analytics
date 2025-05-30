@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark-exporter
+  template:
+    metadata:
+      labels:
+        app: spark-exporter
+    spec:
+      containers:
+        - name: spark-exporter
+          image: diptan/spark-exporter:latest
+          ports:
+            - containerPort: 8082
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-exporter
+spec:
+  selector:
+    app: spark-exporter
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082

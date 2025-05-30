@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scio-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scio-exporter
+  template:
+    metadata:
+      labels:
+        app: scio-exporter
+    spec:
+      containers:
+        - name: scio-exporter
+          image: diptan/scio-exporter:latest
+      restartPolicy: Always

@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-kafka
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: init-kafka
+          image: bitnami/kafka:3.6
+          command:
+            - bash
+            - -c
+            - |
+              kafka-topics.sh --bootstrap-server kafka:9092 --list
+              echo 'Creating kafka topics'
+              kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic ria --replication-factor 1 --partitions 1
+              echo 'Successfully created the following topics:'
+              kafka-topics.sh --bootstrap-server kafka:9092 --list

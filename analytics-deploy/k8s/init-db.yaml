@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-db
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: init-db
+          image: postgres:latest
+          env:
+            - name: PGUSER
+              value: "ivan"
+            - name: PGPASSWORD
+              value: "ivan123"
+          volumeMounts:
+            - name: backup-sql
+              mountPath: /docker-entrypoint-initdb.d/backup.sql
+              subPath: backup.sql
+          command:
+            - bash
+            - -c
+            - |
+              until pg_isready -h db -U ivan; do
+                echo 'Waiting for PostgreSQL to be ready...';
+                sleep 2;
+              done;
+              psql -h db -U ivan -f /docker-entrypoint-initdb.d/backup.sql
+      volumes:
+        - name: backup-sql
+          configMap:
+            name: backup-sql

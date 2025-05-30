@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-consumer
+  template:
+    metadata:
+      labels:
+        app: flink-consumer
+    spec:
+      containers:
+        - name: flink-consumer
+          image: diptan/flink-consumer:latest
+          resources:
+            limits:
+              cpu: "0.5"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flink-consumer
+spec:
+  selector:
+    app: flink-consumer
+  ports:
+    - protocol: TCP
+      port: 8087
+      targetPort: 8087

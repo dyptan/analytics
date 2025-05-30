@@ -9,7 +9,7 @@ services:
     build:
       context: ./mock-api
     ports:
-      - 3000:3000
+      - 8086:8086
   kafka-ui:
     container_name: kafka-ui
     restart: always
@@ -129,7 +129,7 @@ services:
       - kafka
       - schema-registry
     environment:
-      - RIA_DOMAIN=http://mock-api:3000
+      - RIA_DOMAIN=http://mock-api:8086
   flink-consumer:
     build: ../flink-consumer
     deploy:

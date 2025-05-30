@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-web
+  template:
+    metadata:
+      labels:
+        app: spring-web
+    spec:
+      containers:
+        - name: spring-web
+          image: diptan/spring-web:latest
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-web
+spec:
+  selector:
+    app: spring-web
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

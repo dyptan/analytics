@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoscout-scraper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autoscout-scraper
+  template:
+    metadata:
+      labels:
+        app: autoscout-scraper
+    spec:
+      containers:
+        - name: autoscout-scraper
+          image: diptan/autoscout24-scraper
+          env:
+            - name: MONGO_URI
+              value: mongodb://mongo:27017/autoscout24
+          ports:
+            - containerPort: 8086
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: autoscout-scraper
+spec:
+  selector:
+    app: autoscout-scraper
+  ports:
+    - protocol: TCP
+      port: 8086
+      targetPort: 8086

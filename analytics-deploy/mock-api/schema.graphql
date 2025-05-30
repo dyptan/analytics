@@ -1,0 +1,82 @@
+# GraphQL schema definition file
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type ScraperStatus {
+    make: String
+    model: String
+    interval: Int
+    running: Boolean
+    documentsSaved: Int
+    documentsFetched: Int
+    job_id: String
+    start_time: String
+    launch_count: Int
+    next_run_time: String
+}
+
+type Query {
+    status: [ScraperStatus]
+    fetchJobData(job_id: String!): [JobData]
+    fetchSavedDocuments(
+        page: Int, 
+        pageSize: Int, 
+        model: String, 
+        mileageMin: Int, 
+        mileageMax: Int, 
+        yearMin: Int, 
+        yearMax: Int, 
+        priceMin: Int, 
+        priceMax: Int, 
+        createdAfter: ZonedDateTime,
+        collectionName: String
+    ): [SavedDocument]
+}
+
+type Mutation {
+    startScraper(
+        make: String!, 
+        model: String!, 
+        interval: Int!, 
+        version: String, 
+        yearFrom: Int, 
+        yearTo: Int, 
+        powerFrom: Int, 
+        powerTo: Int, 
+        powerType: String, 
+        zip: String, 
+        zipRadius: Int, 
+        priceTo: Int
+    ): Boolean
+    stopScraper(job_id: String!): Boolean
+}
+
+type JobData {
+    job_id: String
+    make: String
+    model: String
+    mileage: Int
+    fuel_type: String
+    first_registration: String
+    price: Int
+    zip: Int
+    ad_link: String
+}
+
+type SavedDocument {
+    id: String
+    make: String
+    model: String
+    price: Int
+    mileage: Int
+    location: String
+    createdAt: String
+    first_registration: String
+    fuel_type: String
+    zip: Int
+    ad_link: String
+}
+
+scalar ZonedDateTime

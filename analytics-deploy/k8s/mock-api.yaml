@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mock-api
+  template:
+    metadata:
+      labels:
+        app: mock-api
+    spec:
+      containers:
+        - name: mock-api
+          image: diptan/mock-api:latest
+          ports:
+            - containerPort: 8086
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mock-api
+spec:
+  selector:
+    app: mock-api
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

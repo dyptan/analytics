@@ -37,7 +37,7 @@ class ExportService {
 
       ProcessResponse(Some(ProcessResponse.Status.Success), Some("congrats!"), None)
     } catch {
-      case e =>  ProcessResponse(Some(ProcessResponse.Status.Error), Some("somethign went wrong!"), Some(e.getMessage))
+      case e: Throwable =>  ProcessResponse(Some(ProcessResponse.Status.Error), Some("somethign went wrong!"), Some(e.getMessage))
     }
 
   }

@@ -16,11 +16,11 @@ spec:
     spec:
       containers:
       - env:
-        - name: POSTGRES_PASSWORD
-          value: ivan123
         - name: POSTGRES_USER
           value: ivan
-        image: postgres
+        - name: POSTGRES_PASSWORD
+          value: ivan123
+        image: postgres:latest
         name: db
         ports:
         - containerPort: 5432
@@ -36,4 +36,4 @@ spec:
       targetPort: 5432
     selector:
       name: db
-  
+

@@ -11,6 +11,6 @@
   "license": "ISC",
   "description": "Mock car API server for analytics project",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.22.1"
   }
 }

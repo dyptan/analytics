@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: minio
-          image: docker.io/bitnami/minio:2024
+          image: docker.io/soldevelo/minio:2024.12
           ports:
             - containerPort: 9000
             - containerPort: 9001

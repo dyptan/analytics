@@ -21,7 +21,7 @@ services:
     volumes:
       - ./config/dynamic_config.yaml:/etc/kafkaui/dynamic_config.yaml
   minio:
-    image: docker.io/bitnami/minio:2024
+    image: docker.io/soldevelo/minio:2024.12
     environment:
       - MINIO_ROOT_USER=minio-root-user
       - MINIO_ROOT_PASSWORD=minio-root-password
@@ -47,7 +47,7 @@ services:
           mc admin policy attach myminio readwrite --user=myuserserviceaccount
         #mc admin user svcacct add myminio myuserserviceaccount
   kafka:
-    image: bitnami/kafka:latest
+    image: soldevelo/kafka:latest
     restart: always
     ports:
       - 9092:9092
@@ -61,7 +61,7 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
   init-kafka:
-    image: bitnami/kafka:3.6
+    image: soldevelo/kafka:3.6
     depends_on:
       - kafka
     command:
@@ -74,7 +74,7 @@ services:
         echo -e 'Successfully created the following topics:'
         kafka-topics.sh --bootstrap-server kafka:9092 --list
   schema-registry:
-    image: bitnami/schema-registry:latest
+    image: soldevelo/schema-registry:latest
     ports:
       - 8081:8081
     environment:
